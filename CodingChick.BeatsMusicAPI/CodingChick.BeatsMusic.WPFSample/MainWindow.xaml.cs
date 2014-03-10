@@ -33,37 +33,49 @@ namespace CodingChick.BeatsMusic.WPFSample
         public MainWindow()
         {
             InitializeComponent();
+            this.StretchToMaximum();
+            
+            // hack: we use ToString in a partial class that isn't checked in to set ClientId, ClientSecret and RedirectUri
+            this.ToString();
 
+            // *** uncomment the next three lines and fill your Beats Music app details here! *** 
+            //this.ClientId = "<your Beats Music app client ID here>";
+            //this.ClientSecret = "<your Beats Music app client Secret here>";
+            //this.RedirectUrl = "<your Beats Music app Redirect Uri here>";
+
+            
+
+            client = new BeatsMusicClient(ClientId, RedirectUrl, ClientSecret);
+            BeatsMusicWebBrowser.Source = new Uri(client.UriAddressToNavigateForPermissions());
+            BeatsMusicWebBrowser.Navigating += BeatsMusicWebBrowser_Navigating;
         }
+
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
+        public string RedirectUrl { get; set; }
 
         public async void BeatsMusicWebBrowser_Navigating(object sender, NavigatingCancelEventArgs e)
         {
-            if (e.Uri.AbsoluteUri.Contains("code"))
+            if (e.Uri != null && e.Uri.AbsoluteUri.Contains("code"))
             {
                 var queryStringParams = HttpUtility.ParseQueryString(e.Uri.Query);
-                //if (queryStringParams.AllKeys.Contains("access_token"))
+                //if (queryStringParams.AllKeys.Contains    ("access_token"))
                 if (queryStringParams.AllKeys.Contains("code"))
                 {
+                    BeatsMusicWebBrowser.NavigateToString(@"<html><body style=""background: #F2F3F5"" /></html>");
+
                     //client.ReadOnlyAccessToken = queryStringParams.GetValues("access_token").FirstOrDefault();
                     client.Code = queryStringParams.GetValues("code").FirstOrDefault();
 
-                    //var result = await client.Search.SearchByArtist("Sting");
+                    var result = await client.Search.SearchByArtist("Sting");
                     //var result2 = await client.Search.SearchByTrack("What's My Name");
 
-                    var result = await client.PlaylistsEndpoint.CreatePlaylist("My new Playlist", "test");
-                    Debug.Assert(true);
+                    //var result = await client.PlaylistsEndpoint.CreatePlaylist("My new Playlist", "test");
+                    //Debug.Assert(true);
 
                     //beatsAccessor.GetToken()
                 }
             }
         }
-
-        private void Browse_OnClick(object sender, RoutedEventArgs e)
-        {
-            client = new BeatsMusicClient(ClientId.Text, RedirectUrl.Text, ClientSecret.Text);
-            BeatsMusicWebBrowser.Source = new Uri(client.UriAddressToNavigateForPermissions());
-            BeatsMusicWebBrowser.Navigating += BeatsMusicWebBrowser_Navigating;
-        }
     }
-
 }

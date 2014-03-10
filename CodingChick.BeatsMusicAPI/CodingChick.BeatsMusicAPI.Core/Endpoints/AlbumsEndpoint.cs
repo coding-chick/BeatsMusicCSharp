@@ -37,6 +37,13 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             return await _beatsHttpData.GetMultipleParsedResult<AlbumData>("albums", searchParams);
         }
+
+        public async Task<SingleRootObject<AlbumData>> GetAlbumById(string albumId)
+        {
+            return
+                await
+                _beatsHttpData.GetSingleParsedResult<AlbumData>("albums/" + albumId, new Dictionary<string, string>());
+        }
     }
 
   

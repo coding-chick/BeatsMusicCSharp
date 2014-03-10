@@ -45,12 +45,12 @@ namespace CodingChick.BeatsMusicAPI.Core
         private Lazy<PlaylistsEndpoint> _playlists;
         private string _code;
 
-        public SearchEndpoint SearchEndpoint
+        public SearchEndpoint Search
         {
             get { return _search.Value; }
         }
 
-        public PlaylistsEndpoint PlaylistsEndpoint
+        public PlaylistsEndpoint Playlists
         {
             get { return _playlists.Value; }
         }
