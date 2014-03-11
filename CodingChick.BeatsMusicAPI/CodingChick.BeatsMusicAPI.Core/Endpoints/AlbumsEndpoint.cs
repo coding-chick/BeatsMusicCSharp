@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CodingChick.BeatsMusicAPI.Core.Base;
 using CodingChick.BeatsMusicAPI.Core.Data;
 using CodingChick.BeatsMusicAPI.Core.Data.Albums;
+using CodingChick.BeatsMusicAPI.Core.Data.Artists;
+using CodingChick.BeatsMusicAPI.Core.Data.Reviews;
+using CodingChick.BeatsMusicAPI.Core.Data.Tracks;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
 using CodingChick.BeatsMusicAPI.Core.Helpers;
 
 namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 {
-    //TODO: add the rest of the API
-    public class AlbumsEndpoint 
+    public class AlbumsEndpoint : BaseEndpoint
     {
-        private readonly BeatsHttpData _beatsHttpData;
 
-        internal AlbumsEndpoint(BeatsHttpData beatsHttpData)
+        internal AlbumsEndpoint(BeatsHttpData beatsHttpData) : base(beatsHttpData)
         {
-            _beatsHttpData = beatsHttpData;
         }
 
         public async Task<MultipleRootObject<AlbumData>> GetAlbumCollection(OrderBy orderBy, int limit, int offset)
@@ -35,16 +36,53 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
                     {"offset", offset.ToString()}
                 };
 
-            return await _beatsHttpData.GetMultipleParsedResult<AlbumData>("albums", searchParams);
+            return await BeatsHttpData.GetMultipleParsedResult<AlbumData>("albums", searchParams);
         }
 
         public async Task<SingleRootObject<AlbumData>> GetAlbumById(string albumId)
         {
+            //Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(albumId));
+
             return
                 await
-                _beatsHttpData.GetSingleParsedResult<AlbumData>("albums/" + albumId, new Dictionary<string, string>());
+                    BeatsHttpData.GetSingleParsedResult<AlbumData>(GetSingleFirstLevelMethod(albumId), null);
+        }
+
+        public async Task<MultipleRootObject<ArtistData>> GetArtistsInAlbumId(string albumId)
+        {
+            return
+                await
+                    BeatsHttpData.GetMultipleParsedResult<ArtistData>(GetSingleFirstLevelMethod(albumId) + "/artists", null);
+        }
+
+        public async Task<MultipleRootObject<TrackData>> GetTracksInAlbum(string albumId)
+        {
+            return
+               await
+                   BeatsHttpData.GetMultipleParsedResult<TrackData>(GetSingleFirstLevelMethod(albumId) + "/tracks", null);
+        }
+
+        public async Task<SingleRootObject<ReviewData>> GetReviewDataForAlbum(string albumId)
+        {
+            return
+             await
+                 BeatsHttpData.GetSingleParsedResult<ReviewData>(GetSingleFirstLevelMethod(albumId) + "/review", null);
+        }
+
+        public async Task<MultipleRootObject<AlbumData>> GetAllCompanionAlbums(string albumId)
+        {
+            return
+                await
+                    BeatsHttpData.GetMultipleParsedResult<AlbumData>(GetSingleFirstLevelMethod(albumId) + "/companion_albums", null);
+        }
+
+        private string GetSingleFirstLevelMethod(string albumId)
+        {
+            return "albums/" + albumId;
         }
     }
 
-  
+
+
+
 }

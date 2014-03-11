@@ -7,13 +7,10 @@ using CodingChick.BeatsMusicAPI.Core.Data.Search;
 
 namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 {
-    public class SearchEndpoint
+    public class SearchEndpoint : BaseEndpoint
     {
-        private readonly BeatsHttpData _beatsHttpData;
-
-        internal SearchEndpoint(BeatsHttpData beatsHttpData)
+        internal SearchEndpoint(BeatsHttpData beatsHttpData) : base(beatsHttpData)
         {
-            _beatsHttpData = beatsHttpData;
         }
 
         public async Task<MultipleRootObject<SearchData>> SearchByArtist(string artistName)
@@ -54,7 +51,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
                     {"type", queryType}
                 };
 
-            return await _beatsHttpData.GetMultipleParsedResult<SearchData>("search", searchParams);
+            return await BeatsHttpData.GetMultipleParsedResult<SearchData>("search", searchParams);
         }
     }
 }

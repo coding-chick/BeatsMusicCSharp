@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,10 +39,15 @@
     <Compile Include="BeatsMusicClient.cs" />
     <Compile Include="Data\Albums\AlbumData.cs" />
     <Compile Include="Data\Albums\AlbumRefs.cs" />
+    <Compile Include="Data\Artists\ArtistData.cs" />
+    <Compile Include="Data\Artists\ArtistRefs.cs" />
     <Compile Include="Data\Playlists\PlaylistData.cs" />
     <Compile Include="Data\Playlists\PlaylistsRefs.cs" />
     <Compile Include="Data\RefTypeInfo.cs" />
+    <Compile Include="Data\Reviews\ReviewData.cs" />
     <Compile Include="Data\SingleRootObject.cs" />
+    <Compile Include="Data\Tracks\TrackData.cs" />
+    <Compile Include="Data\Tracks\TrackRefs.cs" />
     <Compile Include="Endpoints\ActivitiesEndpoint.cs" />
     <Compile Include="Authorization.cs" />
     <Compile Include="Base\BeatsHttpData.cs" />
@@ -50,6 +56,7 @@
     <Compile Include="Base\HttpBeatsMusicEngine.cs" />
     <Compile Include="Base\HttpClientAccessor.cs" />
     <Compile Include="Endpoints\AlbumsEndpoint.cs" />
+    <Compile Include="Endpoints\BaseEndpoint.cs" />
     <Compile Include="Endpoints\PlaylistsEndpoint.cs" />
     <Compile Include="Helpers\HttpUtilityHelper.cs" />
     <Compile Include="Endpoints\Enums\OrderBy.cs" />

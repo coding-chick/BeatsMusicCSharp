@@ -9,13 +9,12 @@ using CodingChick.BeatsMusicAPI.Core.Data.Playlists;
 
 namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 {
-    public class PlaylistsEndpoint
+    //TODO: add the rest of the api
+    public class PlaylistsEndpoint : BaseEndpoint
     {
-        private readonly BeatsHttpData _beatsHttpData;
 
-        internal PlaylistsEndpoint(BeatsHttpData beatsHttpData)
+        internal PlaylistsEndpoint(BeatsHttpData beatsHttpData): base(beatsHttpData)
         {
-            _beatsHttpData = beatsHttpData;
         }
 
         //TODO: Add access privlidges
@@ -34,7 +33,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
                     {"access", "public"}
                 };
             
-            return await _beatsHttpData.PostData<PlaylistData>("playlists", dataParams);
+            return await BeatsHttpData.PostData<PlaylistData>("playlists", dataParams);
         }
     }
 }

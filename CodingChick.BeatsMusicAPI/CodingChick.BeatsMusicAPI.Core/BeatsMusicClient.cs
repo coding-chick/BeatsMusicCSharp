@@ -29,6 +29,7 @@ namespace CodingChick.BeatsMusicAPI.Core
             _beatsHttpData = new BeatsHttpData(_httpBeatsMusicEngine);
             _search = new Lazy<SearchEndpoint>(() => new SearchEndpoint(_beatsHttpData));
             _playlists = new Lazy<PlaylistsEndpoint>(() => new PlaylistsEndpoint(_beatsHttpData));
+            _albums = new Lazy<AlbumsEndpoint>(() => new AlbumsEndpoint(_beatsHttpData));
         }
 
         public BeatsMusicClient(string clientId, string redirectUri, string clientSecret)
@@ -44,6 +45,12 @@ namespace CodingChick.BeatsMusicAPI.Core
 
         private Lazy<PlaylistsEndpoint> _playlists;
         private string _code;
+        private Lazy<AlbumsEndpoint> _albums;
+
+        public AlbumsEndpoint Albums
+        {
+            get { return _albums.Value; }
+        }
 
         public SearchEndpoint Search
         {

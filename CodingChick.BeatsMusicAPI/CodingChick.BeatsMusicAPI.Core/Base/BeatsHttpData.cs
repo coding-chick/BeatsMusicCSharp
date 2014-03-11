@@ -34,6 +34,9 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
 
         private async Task<string> GetDataResponse(string methodName, Dictionary<string, string> methodParams)
         {
+            if (methodParams == null)
+                methodParams = new Dictionary<string, string>();
+
             var contentResult =
                 await _httpBeatsMusicEngine.GetAsyncNoToken(methodName, methodParams);
 
