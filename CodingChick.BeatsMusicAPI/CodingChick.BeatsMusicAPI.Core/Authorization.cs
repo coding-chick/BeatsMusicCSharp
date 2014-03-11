@@ -40,6 +40,9 @@ namespace CodingChick.BeatsMusicAPI.Core
 
         public string AuthorizatioUri { get { return "oauth2/authorize?"; } }
 
+        public string TokenUri { get { return "/oauth2/token"; } }
+
+
         public string ReadOnlyAccessToken { get; set; }
 
         public string ReadWriteAccessToken { get; set; }
@@ -47,15 +50,15 @@ namespace CodingChick.BeatsMusicAPI.Core
         public string Code { get; set; }
 
 
-        public Dictionary<string, string> CreateAuthorizatioUriParams(ResponseType responseType)
+        public List<KeyValuePair<string, string>> CreateAuthorizatioUriParams(ResponseType responseType)
         {
             var responseTypeString = ParamValueAttributeHelper.GetParamValueOfEnumAttribute<ResponseType>(responseType);
 
-            Dictionary<string, string> authParams = new Dictionary<string, string>()
+            List<KeyValuePair<string, string>> authParams = new List<KeyValuePair<string, string>>()
                 {
-                    {"response_type", responseTypeString},
-                    {"redirect_uri", RedirectUri},
-                    {"client_id", ClientId}
+                    new KeyValuePair<string, string>("response_type", responseTypeString),
+                     new KeyValuePair<string, string>("redirect_uri", RedirectUri),
+                     new KeyValuePair<string, string>("client_id", ClientId)
                 };
 
             return authParams;

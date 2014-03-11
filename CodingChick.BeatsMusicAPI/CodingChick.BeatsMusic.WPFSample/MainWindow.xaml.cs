@@ -34,16 +34,15 @@ namespace CodingChick.BeatsMusic.WPFSample
         {
             InitializeComponent();
             this.StretchToMaximum();
-            
-            // hack: we use ToString in a partial class that isn't checked in to set ClientId, ClientSecret and RedirectUri
-            this.ToString();
+
 
             // *** uncomment the next three lines and fill your Beats Music app details here! *** 
             //this.ClientId = "<your Beats Music app client ID here>";
             //this.ClientSecret = "<your Beats Music app client Secret here>";
             //this.RedirectUrl = "<your Beats Music app Redirect Uri here>";
+          
 
-            
+
 
             client = new BeatsMusicClient(ClientId, RedirectUrl, ClientSecret);
             BeatsMusicWebBrowser.Source = new Uri(client.UriAddressToNavigateForPermissions());
@@ -67,11 +66,11 @@ namespace CodingChick.BeatsMusic.WPFSample
                     //client.ReadOnlyAccessToken = queryStringParams.GetValues("access_token").FirstOrDefault();
                     client.Code = queryStringParams.GetValues("code").FirstOrDefault();
 
-                    var result = await client.Search.SearchByArtist("Sting");
+                    //var result = await client.Albums.GetAlbumById(string.Empty);
                     //var result2 = await client.Search.SearchByTrack("What's My Name");
 
-                    //var result = await client.PlaylistsEndpoint.CreatePlaylist("My new Playlist", "test");
-                    //Debug.Assert(true);
+                    var result = await client.Playlists.GetMultiplePlaylists(new string[] { "pl157622068769194496", "pl157588227841065472" });
+                    Debug.Assert(true);
 
                     //beatsAccessor.GetToken()
                 }

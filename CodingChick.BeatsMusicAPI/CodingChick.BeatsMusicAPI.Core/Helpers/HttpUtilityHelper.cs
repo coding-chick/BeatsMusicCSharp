@@ -6,7 +6,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Helpers
 {
     public class HttpUtilityHelper
     {
-        public static string ToQueryString(Dictionary<string, string> queryParams)
+        public static string ToQueryString(List<KeyValuePair<string, string>> queryParams)
         {
             StringBuilder queryParamsBuilder = new StringBuilder();
 
@@ -19,7 +19,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Helpers
             return queryParamsBuilder.ToString();
         }
 
-        public static string CreateFullAddess(string baseAddress, string method, Dictionary<string, string> queryParams)
+        public static string CreateFullAddess(string baseAddress, string method, List<KeyValuePair<string, string>> queryParams)
         {
             StringBuilder addressCallBuilder = new StringBuilder();
             addressCallBuilder.Append(baseAddress);

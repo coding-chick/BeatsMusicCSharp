@@ -2,7 +2,7 @@
 
 namespace CodingChick.BeatsMusicAPI.Core.Endpoints.Enums
 {
-    public enum OrderBy
+    public enum AlbumsOrderBy
     {
         [ParamValue("title")]
         Title,

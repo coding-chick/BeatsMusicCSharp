@@ -8,6 +8,7 @@ using CodingChick.BeatsMusicAPI.Core.Data.Activities;
 
 namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 {
+    //TODO: add comments
     public class ActivitiesEndpoint : BaseEndpoint
     {
 
@@ -22,7 +23,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
         public async Task<SingleRootObject<ActivityData>> GetActivityById(string activityId)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(activityId));
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(activityId), "activityId should contain a value");
+
             return await BeatsHttpData.GetSingleParsedResult<ActivityData>("activities/" + activityId, new Dictionary<string, string>());
         }
     }

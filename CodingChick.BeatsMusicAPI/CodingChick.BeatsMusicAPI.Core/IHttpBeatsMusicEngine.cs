@@ -8,8 +8,9 @@ namespace CodingChick.BeatsMusicAPI.Core
     public interface IHttpBeatsMusicEngine
     {
         //Task<HttpContent> GetAsyncWithToken(string methodAndParamethers);
-        Task<HttpContent> GetAsyncNoToken(string method, Dictionary<string, string> queryParams);
+        Task<HttpContent> GetAsyncNoToken(string method, List<KeyValuePair<string, string>> queryParams);
         string UriAddressToNavigateForPermissions(ResponseType responseType);
-        Task<HttpContent> PostAsync(string method, Dictionary<string, string> dataParams);
+        Task<HttpContent> PostAsync(string method, List<KeyValuePair<string, string>> dataParams);
+        Task<HttpContent> GetAsyncWithToken(string method, List<KeyValuePair<string, string>> queryParams);
     }
 }

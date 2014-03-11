@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using CodingChick.BeatsMusicAPI.Core.Data;
 using Newtonsoft.Json;
@@ -14,38 +16,41 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             _httpBeatsMusicEngine = httpBeatsMusicEngine;
         }
 
-        public async Task<MultipleRootObject<T>> GetMultipleParsedResult<T>(string methodName, Dictionary<string, string> methodParams)
+        public async Task<MultipleRootObject<T>> GetMultipleParsedResult<T>(string methodName, List<KeyValuePair<string, string>> methodParams, bool useToken = false)
         {
-            var dataResponse = await GetDataResponse(methodName, methodParams);
+            var dataResponse = await GetDataResponse(methodName, methodParams, useToken);
 
             var parsedDataResponse = JsonConvert.DeserializeObject<MultipleRootObject<T>>(dataResponse);
 
             return parsedDataResponse;
         }
 
-        public async Task<SingleRootObject<T>> GetSingleParsedResult<T>(string methodName, Dictionary<string, string> methodParams)
+        public async Task<SingleRootObject<T>> GetSingleParsedResult<T>(string methodName, Dictionary<string, string> methodParams, bool useToken = false)
         {
-            var dataResponse = await GetDataResponse(methodName, methodParams);
+            var dataResponse = await GetDataResponse(methodName, methodParams.ToList(), useToken);
 
             var parsedDataResponse = JsonConvert.DeserializeObject<SingleRootObject<T>>(dataResponse);
 
             return parsedDataResponse;
         }
 
-        private async Task<string> GetDataResponse(string methodName, Dictionary<string, string> methodParams)
+        private async Task<string> GetDataResponse(string methodName, List<KeyValuePair<string, string>> methodParams, bool useToken = false)
         {
             if (methodParams == null)
-                methodParams = new Dictionary<string, string>();
+                methodParams = new List<KeyValuePair<string, string>>();
 
-            var contentResult =
-                await _httpBeatsMusicEngine.GetAsyncNoToken(methodName, methodParams);
+            HttpContent contentResult;
+            if (useToken)
+                contentResult = await _httpBeatsMusicEngine.GetAsyncWithToken(methodName, methodParams);
+            else
+                contentResult = await _httpBeatsMusicEngine.GetAsyncNoToken(methodName, methodParams);
 
             var dataResponse = await contentResult.ReadAsStringAsync();
             return dataResponse;
         }
 
 
-        public async Task<SingleRootObject<T>> PostData<T>(string methodName, Dictionary<string, string> dataParams)
+        public async Task<SingleRootObject<T>> PostData<T>(string methodName, List<KeyValuePair<string, string>> dataParams)
         {
             var httpResponse = await _httpBeatsMusicEngine.PostAsync(methodName, dataParams);
             var dataResponse = await httpResponse.ReadAsStringAsync();

@@ -18,16 +18,24 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
     public class AlbumsEndpoint : BaseEndpoint
     {
 
-        internal AlbumsEndpoint(BeatsHttpData beatsHttpData) : base(beatsHttpData)
+        internal AlbumsEndpoint(BeatsHttpData beatsHttpData)
+            : base(beatsHttpData)
         {
         }
 
-        public async Task<MultipleRootObject<AlbumData>> GetAlbumCollection(OrderBy orderBy, int limit, int offset)
+        /// <summary>
+        /// You can retrieve part or all of the collection of albums in Beats, including those not available for streaming.
+        /// </summary>
+        /// <param name="albumsOrderBy">Indicates how the results set should be sorted.</param>
+        /// <param name="limit">Specifies the maximum number of records to retrieve. The number of results returned will be less than or equal to this value. No results are returned if it is set to zero or less. The maximum permitted value is 200. If a value higher than 200 is specified, no more 200 results will be returned. Default 20</param>
+        /// <param name="offset">A zero-based integer offset into the results. Default 0.</param>
+        /// <returns>A Task containing a list of AlbumData</returns>
+        public async Task<MultipleRootObject<AlbumData>> GetAlbumCollection(AlbumsOrderBy albumsOrderBy, int offset = 0, int limit = 20)
         {
-            var orderByParamValue = ParamValueAttributeHelper.GetParamValueOfEnumAttribute<OrderBy>(orderBy);
+            Contract.Requires<ArgumentOutOfRangeException>(limit >= 0, "limit can only be a positive number");
+            Contract.Requires<ArgumentOutOfRangeException>(offset >= 0, "offset can only be a positive number");
 
-            if (limit > 200)
-                limit = 200;
+            var orderByParamValue = ParamValueAttributeHelper.GetParamValueOfEnumAttribute<AlbumsOrderBy>(albumsOrderBy);
 
             Dictionary<string, string> searchParams = new Dictionary<string, string>()
                 {
@@ -36,12 +44,18 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
                     {"offset", offset.ToString()}
                 };
 
-            return await BeatsHttpData.GetMultipleParsedResult<AlbumData>("albums", searchParams);
+            return await BeatsHttpData.GetMultipleParsedResult<AlbumData>("albums", searchParams.ToList());
         }
 
+        /// <summary>
+        /// You can retrieve a single album from the collection of available albums.
+        /// </summary>
+        /// <param name="albumId">The unique ID of the album.</param>
+        /// <returns></returns>
+        //TODO: add the other two parameters (fields and refs)
         public async Task<SingleRootObject<AlbumData>> GetAlbumById(string albumId)
         {
-            //Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(albumId));
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(albumId), "albumId is null or empty");
 
             return
                 await
@@ -50,6 +64,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
         public async Task<MultipleRootObject<ArtistData>> GetArtistsInAlbumId(string albumId)
         {
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(albumId), "albumId is null or empty");
+
             return
                 await
                     BeatsHttpData.GetMultipleParsedResult<ArtistData>(GetSingleFirstLevelMethod(albumId) + "/artists", null);
@@ -57,6 +73,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
         public async Task<MultipleRootObject<TrackData>> GetTracksInAlbum(string albumId)
         {
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(albumId), "albumId is null or empty");
+
             return
                await
                    BeatsHttpData.GetMultipleParsedResult<TrackData>(GetSingleFirstLevelMethod(albumId) + "/tracks", null);
@@ -64,6 +82,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
         public async Task<SingleRootObject<ReviewData>> GetReviewDataForAlbum(string albumId)
         {
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(albumId), "albumId is null or empty");
+
             return
              await
                  BeatsHttpData.GetSingleParsedResult<ReviewData>(GetSingleFirstLevelMethod(albumId) + "/review", null);
@@ -71,6 +91,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
         public async Task<MultipleRootObject<AlbumData>> GetAllCompanionAlbums(string albumId)
         {
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(albumId), "albumId is null or empty");
+
             return
                 await
                     BeatsHttpData.GetMultipleParsedResult<AlbumData>(GetSingleFirstLevelMethod(albumId) + "/companion_albums", null);
