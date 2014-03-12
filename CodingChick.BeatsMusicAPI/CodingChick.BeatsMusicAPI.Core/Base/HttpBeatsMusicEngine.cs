@@ -52,12 +52,35 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             return result;
         }
 
-        private async Task<HttpContent> CallGetAsync(string method, List<KeyValuePair<string, string>> queryParams)
+        public async Task<HttpContent> PostAsync(string method, List<KeyValuePair<string, string>> dataParams)
         {
-            string finalAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, queryParams);
-            var result = await _clientAccessor.GetAsync(finalAddress);
+            await AddAccessTokenToCall(dataParams);
+            var fullAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, dataParams);
+            var httpContent = new StringContent(string.Empty);
+
+            var result = await _clientAccessor.PostAsync(fullAddress, httpContent);
             return result;
         }
+
+        public async Task<HttpContent> PutAsync(string method, List<KeyValuePair<string, string>> dataParams)
+        {
+            await AddAccessTokenToCall(dataParams);
+            var fullAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, dataParams);
+            var httpContent = new StringContent(string.Empty);
+
+            var result = await _clientAccessor.PutAsync(fullAddress, httpContent);
+            return result;
+        }
+
+        public async Task<HttpContent> DeleteAsync(string method, List<KeyValuePair<string, string>> dataParams)
+        {
+            await AddAccessTokenToCall(dataParams);
+            var fullAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, dataParams);
+
+            var result = await _clientAccessor.DeleteAsync(fullAddress);
+            return result;
+        }
+
 
         public string UriAddressToNavigateForPermissions(ResponseType responseType)
         {
@@ -66,13 +89,10 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             return BaseApiAddress + _authorization.AuthorizatioUri + HttpUtilityHelper.ToQueryString(authParams);
         }
 
-        public async Task<HttpContent> PostAsync(string method, List<KeyValuePair<string, string>> dataParams)
+        private async Task<HttpContent> CallGetAsync(string method, List<KeyValuePair<string, string>> queryParams)
         {
-            await AddAccessTokenToCall(dataParams);
-            var fullAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, dataParams);
-            var httpContent = new StringContent(string.Empty);
-
-            var result = await _clientAccessor.PostAsync(fullAddress, httpContent);
+            string finalAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, queryParams);
+            var result = await _clientAccessor.GetAsync(finalAddress);
             return result;
         }
 

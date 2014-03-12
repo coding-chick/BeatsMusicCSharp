@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net.Http;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using CodingChick.BeatsMusicAPI.Core.Data;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
 using CodingChick.BeatsMusicAPI.Core.Helpers;
 using Newtonsoft.Json;
 
-namespace CodingChick.BeatsMusicAPI.Core
+namespace CodingChick.BeatsMusicAPI.Core.Base
 {
     public class Authorization
     {

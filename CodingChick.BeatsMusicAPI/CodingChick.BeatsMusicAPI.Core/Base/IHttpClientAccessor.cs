@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace CodingChick.BeatsMusicAPI.Core
+namespace CodingChick.BeatsMusicAPI.Core.Base
 {
     public interface IHttpClientAccessor
     {
@@ -15,6 +15,11 @@ namespace CodingChick.BeatsMusicAPI.Core
 
         Task<HttpContent> GetWithHeaderAsync(string address, IDictionary<string, IEnumerable<string>> headers);
         Task<HttpContent> GetHeaderAsync(string address, IDictionary<string, IEnumerable<string>> headers);
+        Task<HttpContent> PutAsync(string address, HttpContent content, string charSet = "",
+                                    string mediaType = "");
+
+        Task<HttpContent> DeleteAsync(string address);
+        Task<HttpContent> DeleteAsync(string address, IDictionary<string, IEnumerable<string>> headers);
     }
 
 

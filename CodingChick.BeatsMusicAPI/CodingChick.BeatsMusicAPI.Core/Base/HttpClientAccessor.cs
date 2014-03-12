@@ -30,15 +30,38 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             return response.Content;
         }
 
+
+        public async Task<HttpContent> DeleteAsync(string address)
+        {
+            return await DeleteAsync(address, new Dictionary<string, IEnumerable<string>>());
+        }
+
+        public async Task<HttpContent> DeleteAsync(string address, IDictionary<string, IEnumerable<string>> headers)
+        {
+            foreach (var header in headers)
+            {
+                _httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
+            }
+
+            HttpResponseMessage response = await _httpClient.DeleteAsync(address);
+            return response.Content;
+        }
+
+        public async Task<HttpContent> PutAsync(string address, HttpContent content, string charSet = "",
+            string mediaType = "")
+        {
+            AddHeadersToContent(content, charSet, mediaType);
+
+            HttpResponseMessage response = await _httpClient.PutAsync(address, content);
+            return response.Content;
+        }
+
+
         public async Task<HttpContent> PostAsync(string address, HttpContent content,
             string charSet = "",
             string mediaType = "")
         {
-            if (charSet != string.Empty && mediaType != string.Empty)
-            {
-                content.Headers.ContentType.CharSet = charSet;
-                content.Headers.ContentType.MediaType = mediaType;
-            }
+            AddHeadersToContent(content, charSet, mediaType);
 
             try
             {
@@ -51,6 +74,15 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             {
                 
                 throw;
+            }
+        }
+
+        private static void AddHeadersToContent(HttpContent content, string charSet, string mediaType)
+        {
+            if (charSet != string.Empty && mediaType != string.Empty)
+            {
+                content.Headers.ContentType.CharSet = charSet;
+                content.Headers.ContentType.MediaType = mediaType;
             }
         }
 

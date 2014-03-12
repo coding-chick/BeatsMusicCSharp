@@ -25,7 +25,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         {
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(activityId), "activityId should contain a value");
 
-            return await BeatsHttpData.GetSingleParsedResult<ActivityData>("activities/" + activityId, new Dictionary<string, string>());
+            return await BeatsHttpData.GetSingleParsedResult<ActivityData>("activities/" + activityId, null);
         }
     }
 }

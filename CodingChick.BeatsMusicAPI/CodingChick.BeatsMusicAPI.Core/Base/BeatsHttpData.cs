@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace CodingChick.BeatsMusicAPI.Core.Base
 {
-    internal class BeatsHttpData
+    internal class BeatsHttpData : IBeatsHttpData
     {
         private readonly IHttpBeatsMusicEngine _httpBeatsMusicEngine;
 
@@ -25,9 +25,9 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             return parsedDataResponse;
         }
 
-        public async Task<SingleRootObject<T>> GetSingleParsedResult<T>(string methodName, Dictionary<string, string> methodParams, bool useToken = false)
+        public async Task<SingleRootObject<T>> GetSingleParsedResult<T>(string methodName, List<KeyValuePair<string, string>> methodParams, bool useToken = false)
         {
-            var dataResponse = await GetDataResponse(methodName, methodParams.ToList(), useToken);
+            var dataResponse = await GetDataResponse(methodName, methodParams, useToken);
 
             var parsedDataResponse = JsonConvert.DeserializeObject<SingleRootObject<T>>(dataResponse);
 
@@ -52,10 +52,38 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
 
         public async Task<SingleRootObject<T>> PostData<T>(string methodName, List<KeyValuePair<string, string>> dataParams)
         {
+            if (dataParams == null)
+                dataParams = new List<KeyValuePair<string, string>>();
+
             var httpResponse = await _httpBeatsMusicEngine.PostAsync(methodName, dataParams);
             var dataResponse = await httpResponse.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<SingleRootObject<T>>(dataResponse);
+        }
+
+
+        public async Task<SingleRootObject<T>> PutData<T>(string methodName, List<KeyValuePair<string, string>> dataParams)
+        {
+            if (dataParams == null)
+                dataParams = new List<KeyValuePair<string, string>>();
+
+            var httpResponse = await _httpBeatsMusicEngine.PutAsync(methodName, dataParams);
+            var dataResponse = await httpResponse.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<SingleRootObject<T>>(dataResponse);
+        }
+
+        public async Task<bool> DeleteData(string methodName, List<KeyValuePair<string, string>> dataParams)
+        {
+            if (dataParams == null)
+                dataParams = new List<KeyValuePair<string, string>>();
+
+            var httpResponse = await _httpBeatsMusicEngine.DeleteAsync(methodName, dataParams);
+            var dataResponse = await httpResponse.ReadAsStringAsync();
+
+            if (dataResponse.ToLower().Contains("ok"))
+                return true;
+            return false;
         }
     }
 }

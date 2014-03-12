@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using CodingChick.BeatsMusicAPI.Core;
 using CodingChick.BeatsMusicAPI.Core.Base;
 using CodingChick.BeatsMusicAPI.Core.Endpoints;
+using CodingChick.BeatsMusicAPI.Core.Endpoints.DataFilters;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
 
 namespace CodingChick.BeatsMusic.WPFSample
@@ -40,8 +41,7 @@ namespace CodingChick.BeatsMusic.WPFSample
             //this.ClientId = "<your Beats Music app client ID here>";
             //this.ClientSecret = "<your Beats Music app client Secret here>";
             //this.RedirectUrl = "<your Beats Music app Redirect Uri here>";
-          
-
+        
 
 
             client = new BeatsMusicClient(ClientId, RedirectUrl, ClientSecret);
@@ -68,8 +68,9 @@ namespace CodingChick.BeatsMusic.WPFSample
 
                     //var result = await client.Albums.GetAlbumById(string.Empty);
                     //var result2 = await client.Search.SearchByTrack("What's My Name");
-
-                    var result = await client.Playlists.GetMultiplePlaylists(new string[] { "pl157622068769194496", "pl157588227841065472" });
+                    var filters = new StreamabilityFilters() {Streamable = false};
+                    var result = await client.Playlists.GetTracksInPlaylist("pl157588227841065472", 0, 20, RefType.Artists, AlbumsOrderBy.PopularityAscending,
+                        filters);
                     Debug.Assert(true);
 
                     //beatsAccessor.GetToken()

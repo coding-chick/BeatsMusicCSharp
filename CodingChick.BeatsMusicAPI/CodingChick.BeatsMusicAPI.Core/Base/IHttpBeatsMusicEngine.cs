@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
 
-namespace CodingChick.BeatsMusicAPI.Core
+namespace CodingChick.BeatsMusicAPI.Core.Base
 {
     public interface IHttpBeatsMusicEngine
     {
@@ -12,5 +12,7 @@ namespace CodingChick.BeatsMusicAPI.Core
         string UriAddressToNavigateForPermissions(ResponseType responseType);
         Task<HttpContent> PostAsync(string method, List<KeyValuePair<string, string>> dataParams);
         Task<HttpContent> GetAsyncWithToken(string method, List<KeyValuePair<string, string>> queryParams);
+        Task<HttpContent> PutAsync(string method, List<KeyValuePair<string, string>> dataParams);
+        Task<HttpContent> DeleteAsync(string method, List<KeyValuePair<string, string>> dataParams);
     }
 }

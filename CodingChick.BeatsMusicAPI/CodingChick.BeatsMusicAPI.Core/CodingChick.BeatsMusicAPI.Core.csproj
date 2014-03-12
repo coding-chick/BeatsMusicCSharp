@@ -72,6 +72,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Base\IBeatsHttpData.cs" />
     <Compile Include="BeatsMusicClient.cs" />
     <Compile Include="Data\Albums\AlbumData.cs" />
     <Compile Include="Data\Albums\AlbumRefs.cs" />
@@ -87,7 +88,7 @@
     <Compile Include="Data\Users\UserData.cs" />
     <Compile Include="Endpoints\Enums\AccessPrivilege.cs" />
     <Compile Include="Endpoints\ActivitiesEndpoint.cs" />
-    <Compile Include="Authorization.cs" />
+    <Compile Include="Base\Authorization.cs" />
     <Compile Include="Base\BeatsHttpData.cs" />
     <Compile Include="Data\Activities\ActivityData.cs" />
     <Compile Include="Data\Search\SearchData.cs" />
@@ -97,12 +98,15 @@
     <Compile Include="Endpoints\BaseEndpoint.cs" />
     <Compile Include="Endpoints\PlaylistsEndpoint.cs" />
     <Compile Include="Endpoints\Enums\PlaylistsOrderBy.cs" />
+    <Compile Include="Endpoints\Enums\RefType.cs" />
+    <Compile Include="Endpoints\DataFilters\StreamabilityFilters.cs" />
+    <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Helpers\HttpUtilityHelper.cs" />
     <Compile Include="Endpoints\Enums\AlbumsOrderBy.cs" />
     <Compile Include="Helpers\ParamValueAttribute.cs" />
     <Compile Include="Helpers\ParamValueAttributeHelper.cs" />
-    <Compile Include="IHttpBeatsMusicEngine.cs" />
-    <Compile Include="IHttpClientAccessor.cs" />
+    <Compile Include="Base\IHttpBeatsMusicEngine.cs" />
+    <Compile Include="Base\IHttpClientAccessor.cs" />
     <Compile Include="Data\Info.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Data\Search\Related.cs" />

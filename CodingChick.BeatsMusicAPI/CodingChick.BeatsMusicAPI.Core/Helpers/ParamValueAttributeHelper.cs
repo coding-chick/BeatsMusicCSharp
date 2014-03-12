@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using CodingChick.BeatsMusicAPI.Core.Endpoints;
 
 namespace CodingChick.BeatsMusicAPI.Core.Helpers
 {
