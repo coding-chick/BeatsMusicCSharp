@@ -4,7 +4,7 @@ using CodingChick.BeatsMusicAPI.Core.Helpers;
 namespace CodingChick.BeatsMusicAPI.Core.Endpoints.Enums
 {
     [Flags]
-    public enum RefType
+    public enum PlaylistRefType
     {
         AllRefs = 1,
         [ParamValue("artists")]

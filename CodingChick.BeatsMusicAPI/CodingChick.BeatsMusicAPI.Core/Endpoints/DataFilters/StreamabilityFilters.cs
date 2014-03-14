@@ -4,6 +4,13 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints.DataFilters
 {
     public class StreamabilityFilters
     {
+        public StreamabilityFilters(bool? streamable, bool? futureStreamable, bool? neverStreamable)
+        {
+            Streamable = streamable;
+            FutureStreamable = futureStreamable;
+            NeverStreamable = neverStreamable;
+        }
+
         public bool? Streamable { get; set; }
         public bool? FutureStreamable { get; set; }
         public bool? NeverStreamable { get; set; }

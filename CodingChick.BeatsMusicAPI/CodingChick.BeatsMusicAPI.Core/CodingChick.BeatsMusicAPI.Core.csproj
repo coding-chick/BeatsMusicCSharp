@@ -86,6 +86,8 @@
     <Compile Include="Data\Tracks\TrackData.cs" />
     <Compile Include="Data\Tracks\TrackRefs.cs" />
     <Compile Include="Data\Users\UserData.cs" />
+    <Compile Include="Endpoints\Enums\ArtistOrderBy.cs" />
+    <Compile Include="Endpoints\ArtistsEndpoint.cs" />
     <Compile Include="Endpoints\Enums\AccessPrivilege.cs" />
     <Compile Include="Endpoints\ActivitiesEndpoint.cs" />
     <Compile Include="Base\Authorization.cs" />
@@ -98,7 +100,7 @@
     <Compile Include="Endpoints\BaseEndpoint.cs" />
     <Compile Include="Endpoints\PlaylistsEndpoint.cs" />
     <Compile Include="Endpoints\Enums\PlaylistsOrderBy.cs" />
-    <Compile Include="Endpoints\Enums\RefType.cs" />
+    <Compile Include="Endpoints\Enums\PlaylistRefType.cs" />
     <Compile Include="Endpoints\DataFilters\StreamabilityFilters.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Helpers\HttpUtilityHelper.cs" />

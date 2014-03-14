@@ -34,7 +34,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         /// <returns>Returns the newly created PlaylistData</returns>
         public async Task<SingleRootObject<PlaylistData>> CreatePlaylist(string name, string description, AccessPrivilege accessPrivilege = AccessPrivilege.Public)
         {
-            CheckNameAndDescription(name, description);
+            ValidetaNameAndDescription(name, description);
 
             Dictionary<string, string> dataParams = new Dictionary<string, string>()
                 {
@@ -46,7 +46,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             return await BeatsHttpData.PostData<PlaylistData>("playlists", dataParams.ToList());
         }
 
-        private static void CheckNameAndDescription(string name, string description)
+        private void ValidetaNameAndDescription(string name, string description)
         {
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(name), "name field is null or empty");
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(description), "description field null or empty");
@@ -76,9 +76,9 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         /// <returns>Returns the list of UserData</returns>
         public async Task<MultipleRootObject<UserData>> GetPlaylistSubscribers(string playlistId, int offset = 0, int limit = 20)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(playlistId), "playlistId is null or empty");
-            Contract.Requires<ArgumentOutOfRangeException>(offset >= 0, "offset is set to less then zero");
-            Contract.Requires<ArgumentOutOfRangeException>(limit > 0, "limit is set to zero or less");
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(playlistId), "playlistId field is null");
+            ValidateIdOffsetLimit(offset, limit);
+
 
             return await BeatsHttpData.GetMultipleParsedResult<UserData>("playlists/" + playlistId + "/subscribers", null, true);
         }
@@ -97,17 +97,15 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
                                                                                      PlaylistsOrderBy.NameAscending)
         {
             Contract.Requires<ArgumentNullException>(playlistIds != null, "playlistIds array is null");
-            Contract.Requires<ArgumentOutOfRangeException>(offset >= 0, "offset is set to less then zero");
-            Contract.Requires<ArgumentOutOfRangeException>(limit > 0, "limit is set to zero or less");
 
-            List<KeyValuePair<string, string>> playlistIdsAsParams = new List<KeyValuePair<string, string>>();
-            foreach (string playlistId in playlistIds)
-            {
-                playlistIdsAsParams.Add(new KeyValuePair<string, string>("ids", playlistId));
-            }
+            ValidateIdOffsetLimit(offset, limit);
+            var methodParams = AddOffsetAndLimitParams(offset, limit);
+            methodParams.AddRange(playlistIds.Select(playlistId => new KeyValuePair<string, string>("ids", playlistId)));
 
-            return await BeatsHttpData.GetMultipleParsedResult<PlaylistData>("playlists", playlistIdsAsParams, true);
+            return await BeatsHttpData.GetMultipleParsedResult<PlaylistData>("playlists", methodParams, true);
         }
+
+        
 
         /// <summary>
         /// You can update an existing playlist for the user.
@@ -120,8 +118,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         public async Task<SingleRootObject<PlaylistData>> UpdatePlaylist(string playlistId, string name = "",
                                                                          string description = "", AccessPrivilege accessPrivilege = AccessPrivilege.Public)
         {
-            Contract.Requires<ArgumentNullException>(playlistId != null, "playlistId field is null");
-            CheckNameAndDescription(name, description);
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(playlistId), "playlistId field is null");
+            ValidetaNameAndDescription(name, description);
 
             List<KeyValuePair<string, string>> paramsToUpdate = new List<KeyValuePair<string, string>>()
                 {
@@ -161,41 +159,151 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         /// <param name="playlistId">The unique ID for the playlist.</param>
         /// <param name="offset">A zero-based integer offset into the results. Default 0.</param>
         /// <param name="limit">Specifies the maximum number of records to retrieve. The number of results returned will be less than or equal to this value. No results are returned if it is set to zero or less. The maximum permitted value is 200. If a value higher than 200 is specified, no more 200 results will be returned. Default 20.</param>
-        /// <param name="refType">An array of referenced objects to include in the response. Only the requested ref collections will be returned. Default is to return all refs. Values: artists, album.</param>
+        /// <param name="playlistRefType">An array of referenced objects to include in the response. Only the requested ref collections will be returned. Default is to return all refs. Values: artists, album.</param>
         /// <param name="orderBy">Indicates how the results set should be sorted. Default is popularity desc</param>
         /// <param name="filters">Array of streamability filter operations to apply. Streamability refers to whether an entity, such as a track or album, can be streamed. Each entity can be in one of three states: Streamable, FutureStreamable, NeverStreamable</param>
         /// <returns></returns>
         public async Task<MultipleRootObject<TrackData>> GetTracksInPlaylist(string playlistId, int offset = 0, int limit = 20,
-            RefType refType = RefType.AllRefs, AlbumsOrderBy orderBy = AlbumsOrderBy.PopularityDesc,
+            PlaylistRefType playlistRefType = PlaylistRefType.AllRefs, AlbumsOrderBy orderBy = AlbumsOrderBy.PopularityDesc,
             StreamabilityFilters filters = null)
         {
             Contract.Requires<ArgumentNullException>(playlistId != null, "playlistId field is null");
 
-            var methodParams = new List<KeyValuePair<string, string>>()
-                {
-                    new KeyValuePair<string, string>("offset", offset.ToString()),
-                    new KeyValuePair<string, string>("limit", limit.ToString()),
-                    new KeyValuePair<string, string>("order_by", ParamValueAttributeHelper.GetParamValueOfEnumAttribute<AlbumsOrderBy>(orderBy))
-                };
+            var methodParams = CreateMethodParams(offset, limit, playlistRefType, orderBy);
 
-            var refsValues = EnumHelper.GetFlags<RefType>(refType);
-
-            methodParams.AddRange(
-                from refsValue in refsValues
-                where (RefType)refsValue != RefType.AllRefs
-                select new KeyValuePair<string, string>("refs", ParamValueAttributeHelper.GetParamValueOfEnumAttribute<RefType>(refsValue)));
-
-            if (filters != null)
-            {
-                foreach (string filterParam in filters.BuildParamsFromFilters())
-                {
-                    methodParams.Add(new KeyValuePair<string, string>("filters", filterParam));
-                }
-            }
+            AddStreamabilityFilterParams(filters, methodParams);
 
             return
                 await
                 BeatsHttpData.GetMultipleParsedResult<TrackData>("playlists/" + playlistId + "/tracks", methodParams, true);
         }
+
+        /// <summary>
+        /// You can retrieve a user's playlist collection. If the playlists are not public, they must be owned by the user identified by the access token.
+        /// </summary>
+        /// <param name="userId">The unique ID for the user.</param>
+        /// <param name="offset">A zero-based integer offset into the results. Default 0.</param>
+        /// <param name="limit">Specifies the maximum number of records to retrieve. The number of results returned will be less than or equal to this value. No results are returned if it is set to zero or less. The maximum permitted value is 200. If a value higher than 200 is specified, no more 200 results will be returned. Default 20.</param>
+        /// <param name="orderBy">Indicates how the results set should be sorted. The default value is order alphabetically by name.   </param>
+        /// <returns></returns>
+        public async Task<MultipleRootObject<PlaylistData>> GetPlaylistsByUser(string userId, int offset = 0, int limit = 20,
+            PlaylistsOrderBy orderBy = PlaylistsOrderBy.NameAscending)
+        {
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(userId), "userId field is null");
+            ValidateIdOffsetLimit(offset, limit);
+            var methodParams = AddOffsetAndLimitParams(offset, limit);
+            methodParams.Add(new KeyValuePair<string, string>("order_by",
+                                            ParamValueAttributeHelper.GetParamValueOfEnumAttribute<PlaylistsOrderBy>(
+                                                orderBy)));
+
+            return
+                await
+                BeatsHttpData.GetMultipleParsedResult<PlaylistData>("users/" + userId + "/playlists/", methodParams, true);
+        }
+
+        /// <summary>
+        /// You can subscribe to multiple playlists.
+        /// </summary>
+        /// <param name="userId">The unique ID for the user.</param>
+        /// <param name="playlistsIds">An array of playlist IDs.</param>
+        /// <returns></returns>
+        public async Task<bool> SubscribeToMultiplePlaylists(string userId, string[] playlistsIds)
+        {
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(userId), "userId field is null");
+            Contract.Requires<ArgumentNullException>(playlistsIds != null, "playlistIds array is null");
+
+            var playlistIdsParams = new List<KeyValuePair<string, string>>();
+            foreach (string playlistId in playlistsIds)
+            {
+                playlistIdsParams.Add(new KeyValuePair<string, string>("ids", playlistId));
+            }
+
+            var result =
+                await BeatsHttpData.PostData<UserData>(string.Format("users/{0}/playlist_subscriptions", userId), playlistIdsParams);
+            return (result.Code.ToLower() == "ok");
+        }
+
+        /// <summary>
+        /// You can unsubscribe from multiple playlists.
+        /// </summary>
+        /// <param name="userId">The unique ID for the user.</param>
+        /// <param name="playlistsIds">An array of playlist IDs.</param>
+        /// <returns>true if ok, otherwise false</returns>
+        public async Task<bool> UnsubscribeToMultiplePlaylists(string userId, string[] playlistsIds)
+        {
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(userId), "userId field is null");
+            Contract.Requires<ArgumentNullException>(playlistsIds != null, "playlistIds array is null");
+
+            var playlistIdsParams = new List<KeyValuePair<string, string>>();
+            foreach (string playlistId in playlistsIds)
+            {
+                playlistIdsParams.Add(new KeyValuePair<string, string>("ids", playlistId));
+            }
+
+            return await BeatsHttpData.DeleteData(string.Format("users/{0}/playlist_subscriptions", userId), playlistIdsParams);
+        }
+
+        /// <summary>
+        /// You can subscribe to the specified playlist.
+        /// </summary>
+        /// <param name="userId">The unique ID for the user.</param>
+        /// <param name="playlistId">A playlist ID.</param>
+        /// <returns></returns>
+        public async Task<bool> SubscribeToPlaylist(string userId, string playlistId)
+        {
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(userId), "userId field is null");
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(playlistId), "playlistId field is null");
+
+            var result = await BeatsHttpData.PutData<PlaylistData>(string.Format("users/{0}/playlist_subscriptions/{1}", userId, playlistId), null);
+            return (result.Code.ToLower() == "ok");
+        }
+
+        /// <summary>
+        /// You can unsubscribe from the specified playlist.
+        /// </summary>
+        /// <param name="userId">The unique ID for the playlist.</param>
+        /// <param name="playlistId">A playlist ID.</param>
+        /// <returns></returns>
+        public async Task<bool> UnsubscribeFromPlaylist(string userId, string playlistId)
+        {
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(userId), "userId field is null");
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(playlistId), "playlistId field is null");
+
+            return await BeatsHttpData.DeleteData(string.Format("users/{0}/playlist_subscriptions/{1}", userId, playlistId), null);
+        }
+
+        /// <summary>
+        /// You can retrieve a user's playlist subscriptions.   
+        /// </summary>
+        /// <param name="userId">The unique ID for the user.</param>
+        /// <param name="offset">A zero-based integer offset into the results. Default 0.</param>
+        /// <param name="orderBy">Indicates how the results set should be ordered. The default value is Name Ascending</param>
+        /// <returns></returns>
+        public async Task<MultipleRootObject<PlaylistData>> GetAllUserPlaylistsSubscriptions(string userId,
+                                                                                             int offset = 0,
+                                                                                             PlaylistsOrderBy orderBy =
+                                                                                                 PlaylistsOrderBy
+                                                                                                 .NameAscending)
+        {
+            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(userId), "userId field is null");
+            Contract.Requires<ArgumentOutOfRangeException>(offset >= 0, "offset is set to less then zero");
+
+            var methodParams = new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string, string>("offset", offset.ToString()),
+                    new KeyValuePair<string, string>("order_by",
+                                                     ParamValueAttributeHelper
+                                                         .GetParamValueOfEnumAttribute<PlaylistsOrderBy>(orderBy))
+                };
+
+            return
+                await
+                BeatsHttpData.GetMultipleParsedResult<PlaylistData>(
+                    string.Format("users/{0}/playlist_subscriptions", userId), methodParams, true);
+
+        }
+
+        //TODO: last method Subscriptions: Fetch why do we need it?!?!?!?!?!
+
     }
 }
