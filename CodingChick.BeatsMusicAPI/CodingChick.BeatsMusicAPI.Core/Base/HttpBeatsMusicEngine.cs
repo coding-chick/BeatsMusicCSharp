@@ -9,7 +9,7 @@ using CodingChick.BeatsMusicAPI.Core.Helpers;
 namespace CodingChick.BeatsMusicAPI.Core.Base
 {
     //TODO: add assersions, lots of assersions
-    public class HttpBeatsMusicEngine : IHttpBeatsMusicEngine
+    internal class HttpBeatsMusicEngine : IHttpBeatsMusicEngine
     {
         private readonly IHttpClientAccessor _clientAccessor;
         private readonly Authorization _authorization;
@@ -98,7 +98,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
 
         private async Task AddAccessTokenToCall(List<KeyValuePair<string, string>> dataParams)
         {
-            if (_authorization.ReadWriteAccessToken == null)
+            if (_authorization.ReadWriteAccessToken == null || _authorization.NeedToRenewAccessToken)
             {
                 var succeed = await RenewReadWriteAccessToken();
             }

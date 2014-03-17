@@ -10,19 +10,19 @@ namespace CodingChick.BeatsMusicAPI.Core
 {
     public class BeatsMusicClient
     {
-        private readonly string _clientSecret;
-        private readonly string _clientId;
-        private readonly string _redirectUri;
+   
 
         private Authorization _authorization;
         private IHttpBeatsMusicEngine _httpBeatsMusicEngine;
         private BeatsHttpData _beatsHttpData;
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="BeatsMusicClient"/> for read-only operations. 
+        /// </summary>
+        /// <param name="clientId">Beats Music API client ID.</param>
+        /// <param name="redirectUri">Beats Music Redirect Uri.</param>
         public BeatsMusicClient(string clientId, string redirectUri)
         {
-            _clientId = clientId;
-            _redirectUri = redirectUri;
-
             _authorization = new Authorization(redirectUri, clientId);
 
             _httpBeatsMusicEngine = new HttpBeatsMusicEngine(new HttpClientAccessor(), _authorization);
@@ -32,19 +32,21 @@ namespace CodingChick.BeatsMusicAPI.Core
             _albums = new Lazy<AlbumsEndpoint>(() => new AlbumsEndpoint(_beatsHttpData));
         }
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="BeatsMusicClient"/> for read-write and user specific operations. 
+        /// </summary>
+        /// <param name="clientId">Beats Music API client ID.</param>
+        /// <param name="redirectUri">Beats Music API Redirect Uri.</param>
+        /// <param name="clientSecret">Beats Music API client secret</param>
         public BeatsMusicClient(string clientId, string redirectUri, string clientSecret)
             : this(clientId, redirectUri)
         {
-            _clientSecret = clientSecret;
-            _authorization.ClientSecret = _clientSecret;
+            _authorization.ClientSecret = clientSecret;
         }
 
         private Lazy<SearchEndpoint> _search;
-        private string _readOnlyAccessToken;
-        private string _readWriteAccessToken;
 
         private Lazy<PlaylistsEndpoint> _playlists;
-        private string _code;
         private Lazy<AlbumsEndpoint> _albums;
 
         public AlbumsEndpoint Albums
@@ -62,41 +64,33 @@ namespace CodingChick.BeatsMusicAPI.Core
             get { return _playlists.Value; }
         }
 
-        public string ReadOnlyAccessToken
+        public string ReadWriteAccessToken
         {
-            get { return _readOnlyAccessToken; }
-            set
-            {
-                _readOnlyAccessToken = value;
-                _authorization.ReadOnlyAccessToken = _readOnlyAccessToken;
-            }
+            get { return _authorization.ReadWriteAccessToken; }
+            set { _authorization.ReadWriteAccessToken = value; }
         }
 
-       
-
-        public string ClientSecret
-        {
-            get { return _clientSecret; }
-        }
-
+      
         public string Code
         {
-            get { return _code; }
-            set
-            {
-                _code = value;
-                _authorization.Code = _code;
-            }
+            get { return _authorization.Code; }
+            set { _authorization.Code = value; }
         }
 
         public string UriAddressToNavigateForPermissions()
         {
-            if (_clientSecret == null)
+            if (_authorization.ClientSecret == null)
                 return _httpBeatsMusicEngine.UriAddressToNavigateForPermissions(ResponseType.Token);
             else
             {
                 return _httpBeatsMusicEngine.UriAddressToNavigateForPermissions(ResponseType.Code);                
             }
+        }
+
+        public void SetReadOnlyAccessTokenFromRedirectUri(string accessToken, int expiresAt)
+        {
+            _authorization.ReadOnlyAccessToken = accessToken;
+            _authorization.SetExpiresAt(expiresAt);
         }
     }
 }

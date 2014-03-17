@@ -86,6 +86,7 @@
     <Compile Include="Data\Tracks\TrackData.cs" />
     <Compile Include="Data\Tracks\TrackRefs.cs" />
     <Compile Include="Data\Users\UserData.cs" />
+    <Compile Include="Endpoints\Enums\AlbumRefType.cs" />
     <Compile Include="Endpoints\Enums\ArtistOrderBy.cs" />
     <Compile Include="Endpoints\ArtistsEndpoint.cs" />
     <Compile Include="Endpoints\Enums\AccessPrivilege.cs" />

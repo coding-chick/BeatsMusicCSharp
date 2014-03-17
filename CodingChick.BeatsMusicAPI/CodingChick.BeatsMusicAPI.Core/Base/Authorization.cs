@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
@@ -7,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace CodingChick.BeatsMusicAPI.Core.Base
 {
-    public class Authorization
+    internal class Authorization
     {
         private readonly ResponseType _responseType;
         private readonly string _redirectUri;
@@ -30,6 +31,10 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         {
             get { return _redirectUri; }
         }
+
+        public int ExpiresAt { get; set; }
+
+        public DateTime ExpiresAtWasSet { get; set; }
 
         public string ClientSecret { get; set; }
 
@@ -83,10 +88,29 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             if (parsedDataResponse.Code.ToLower() == "ok")
             {
                 ReadWriteAccessToken = parsedDataResponse.Result.AccessToken;
+                SetExpiresAt(parsedDataResponse.Result.ExpiresIn);
+
                 return true;
             }
             return false;
         }
+
+        public void SetExpiresAt(int expiresAt)
+        {
+            ExpiresAt = expiresAt;
+
+            ExpiresAt = 10;
+            ExpiresAtWasSet = DateTime.Now;
+        }
+
+        public bool NeedToRenewAccessToken
+        {
+            get
+            {
+                return DateTime.Now > ExpiresAtWasSet.AddSeconds(Convert.ToDouble(ExpiresAt)).AddSeconds(-30);
+            }
+        }
+
     }
 
 

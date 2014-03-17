@@ -42,10 +42,10 @@ namespace CodingChick.BeatsMusic.WPFSample
             //this.ClientSecret = "<your Beats Music app client Secret here>";
             //this.RedirectUrl = "<your Beats Music app Redirect Uri here>";
 
-      
+       
         
 
-            client = new BeatsMusicClient(ClientId, RedirectUrl, ClientSecret);
+            client = new BeatsMusicClient(ClientId, RedirectUrl);
             BeatsMusicWebBrowser.Source = new Uri(client.UriAddressToNavigateForPermissions());
             BeatsMusicWebBrowser.Navigating += BeatsMusicWebBrowser_Navigating;
         }
@@ -71,9 +71,10 @@ namespace CodingChick.BeatsMusic.WPFSample
                     //var result2 = await client.Search.SearchByTrack("What's My Name");
                     //var filters = new StreamabilityFilters() {Streamable = false};
                     var result = await client.Playlists.GetTracksInPlaylist("pl157588227841065472", 0, 20, PlaylistRefType.Artists | PlaylistRefType.Album);
-                    Debug.Assert(true);
 
-                    //beatsAccessor.GetToken()
+                    var result2 = await client.Playlists.GetTracksInPlaylist("pl157588227841065472", 0, 20, PlaylistRefType.Artists | PlaylistRefType.Album);
+
+                    Debug.Assert(true);
                 }
             }
         }

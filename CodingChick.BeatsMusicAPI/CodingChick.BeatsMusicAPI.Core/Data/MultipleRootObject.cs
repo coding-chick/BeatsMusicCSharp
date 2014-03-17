@@ -17,7 +17,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Data
 
         public bool HasErrors
         {
-            get { return Code.ToLower() == "ok"; }
+            get { return Code.ToLower() != "ok"; }
         }
     }
 }
