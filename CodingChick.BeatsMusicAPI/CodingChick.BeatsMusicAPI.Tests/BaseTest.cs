@@ -12,12 +12,11 @@ namespace CodingChick.BeatsMusicAPI.Tests
     {
 
 
-        private const string ClientId = "<your beats music client ID here>";
-        private const string ClientSecret = "<your beats music client secret here> ";
-        private const string RedirectUrl = @"<your beats music redirect uri here> ";
-        private const string Token = @"<to run unit tests you must supply a valid token every 60 minutes>";
-        private const string Code = @"<to run unit tests you must supply a valid token every 60 minutes>";
-
+        //private const string ClientId = "<your beats music client ID here>";
+        //private const string ClientSecret = "<your beats music client secret here> ";
+        //private const string RedirectUrl = @"<your beats music redirect uri here> ";
+        //private const string Token = @"<to run unit tests you must supply a valid token every 60 minutes>";
+        //private const string Code = @"<to run unit tests you must supply a valid token every 60 minutes>";
 
         private BeatsMusicClient _client;
         public BeatsMusicClient Client { get { return _client; }}

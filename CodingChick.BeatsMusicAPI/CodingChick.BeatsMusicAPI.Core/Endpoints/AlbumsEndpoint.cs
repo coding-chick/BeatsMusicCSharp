@@ -35,16 +35,12 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             Contract.Requires<ArgumentOutOfRangeException>(limit >= 0, "limit can only be a positive number");
             Contract.Requires<ArgumentOutOfRangeException>(offset >= 0, "offset can only be a positive number");
 
-            var orderByParamValue = ParamValueAttributeHelper.GetParamValueOfEnumAttribute<AlbumsOrderBy>(albumsOrderBy);
+            var methodParams = new List<KeyValuePair<string, string>>();
+            methodParams = AddOffsetAndLimitParams(methodParams, offset, limit);
+            methodParams = AddOrderByParam<AlbumsOrderBy>(albumsOrderBy, methodParams);
 
-            Dictionary<string, string> searchParams = new Dictionary<string, string>()
-                {
-                    {"order_by", orderByParamValue},
-                    {"limit", limit.ToString()},
-                    {"offset", offset.ToString()}
-                };
-
-            return await BeatsHttpData.GetMultipleParsedResult<AlbumData>("albums", searchParams.ToList());
+            
+            return await BeatsHttpData.GetMultipleParsedResult<AlbumData>("albums", methodParams);
         }
 
         /// <summary>

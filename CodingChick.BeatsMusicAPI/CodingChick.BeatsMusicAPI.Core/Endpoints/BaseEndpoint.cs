@@ -37,16 +37,24 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
         protected List<KeyValuePair<string, string>> CreateMethodParams(int offset, int limit, PlaylistRefType playlistRefType, AlbumsOrderBy orderBy)
         {
-            var methodParams = AddOffsetAndLimitParams(offset, limit);
-            methodParams.Add(new KeyValuePair<string, string>("order_by",
-                                             ParamValueAttributeHelper.GetParamValueOfEnumAttribute<AlbumsOrderBy>(
-                                                 orderBy)));
+            var methodParams = new List<KeyValuePair<string, string>>();
+            methodParams = AddOffsetAndLimitParams(methodParams, offset, limit);
+            methodParams = AddOrderByParam<AlbumsOrderBy>(orderBy, methodParams);
 
             AddFlagedEnumValues<PlaylistRefType>(playlistRefType, methodParams);
             return methodParams;
         }
 
-        protected void AddFlagedEnumValues<T>(Enum enumRefType, List<KeyValuePair<string, string>> methodParams)
+        protected List<KeyValuePair<string, string>> AddOrderByParam<T>(Enum orderBy, List<KeyValuePair<string, string>> methodParams)
+        {
+            methodParams.Add(new KeyValuePair<string, string>("order_by",
+                ParamValueAttributeHelper.GetParamValueOfEnumAttribute<T>(
+                    orderBy)));
+
+            return methodParams;
+        }
+
+        protected List<KeyValuePair<string, string>> AddFlagedEnumValues<T>(Enum enumRefType, List<KeyValuePair<string, string>> methodParams)
         {
             IEnumerable<Enum> refsValues = EnumHelper.GetFlags<T>(enumRefType);
 
@@ -54,16 +62,15 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
                 refsValues.Where(refsValue => !refsValue.HasFlag(PlaylistRefType.AllRefs))
                           .Select(refsValue => new KeyValuePair<string, string>("refs", 
                               ParamValueAttributeHelper.GetParamValueOfEnumAttribute<T>(refsValue))));
+
+            return methodParams;
         }
 
-        protected List<KeyValuePair<string, string>> AddOffsetAndLimitParams(int offset, int limit)
+        protected List<KeyValuePair<string, string>> AddOffsetAndLimitParams(List<KeyValuePair<string, string>> methodParams, 
+            int offset, int limit)
         {
-            var methodParams = new List<KeyValuePair<string, string>>()
-                {
-                    new KeyValuePair<string, string>("offset", offset.ToString()),
-                    new KeyValuePair<string, string>("limit", limit.ToString())
-                   
-                };
+            methodParams.Add(new KeyValuePair<string, string>("offset", offset.ToString()));
+            methodParams.Add(new KeyValuePair<string, string>("limit", limit.ToString()));
             return methodParams;
         }
 

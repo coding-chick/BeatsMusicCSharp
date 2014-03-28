@@ -10,8 +10,6 @@ namespace CodingChick.BeatsMusicAPI.Core
 {
     public class BeatsMusicClient
     {
-   
-
         private Authorization _authorization;
         private IHttpBeatsMusicEngine _httpBeatsMusicEngine;
         private BeatsHttpData _beatsHttpData;
@@ -30,6 +28,7 @@ namespace CodingChick.BeatsMusicAPI.Core
             _search = new Lazy<SearchEndpoint>(() => new SearchEndpoint(_beatsHttpData));
             _playlists = new Lazy<PlaylistsEndpoint>(() => new PlaylistsEndpoint(_beatsHttpData));
             _albums = new Lazy<AlbumsEndpoint>(() => new AlbumsEndpoint(_beatsHttpData));
+            _artists = new Lazy<ArtistsEndpoint>(() => new ArtistsEndpoint(_beatsHttpData));
         }
 
         /// <summary>
@@ -48,6 +47,7 @@ namespace CodingChick.BeatsMusicAPI.Core
 
         private Lazy<PlaylistsEndpoint> _playlists;
         private Lazy<AlbumsEndpoint> _albums;
+        private Lazy<ArtistsEndpoint> _artists;
 
         public AlbumsEndpoint Albums
         {
@@ -75,6 +75,11 @@ namespace CodingChick.BeatsMusicAPI.Core
         {
             get { return _authorization.Code; }
             set { _authorization.Code = value; }
+        }
+
+        public ArtistsEndpoint Artists
+        {
+            get { return _artists.Value; }
         }
 
         public string UriAddressToNavigateForPermissions()

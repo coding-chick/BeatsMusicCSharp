@@ -2,8 +2,10 @@
 
 namespace CodingChick.BeatsMusicAPI.Core.Endpoints.Enums
 {
-    public enum AlbumsOrderBy
+    public enum TracksOrderByData
     {
+        [ParamValue("track_position")]
+        TrackPosition,
         [ParamValue("title asc")]
         TitleAscending,
         [ParamValue("title desc")]
@@ -15,6 +17,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints.Enums
         [ParamValue("release_date asc")]
         ReleaseDateAscending,
         [ParamValue("release_date desc")]
-        ReleaseDateDescending
+        ReleaseDateDescending,
+        [ParamValue("original_release_date")]        
+        OriginalReleaseDateAscending
     }
 }

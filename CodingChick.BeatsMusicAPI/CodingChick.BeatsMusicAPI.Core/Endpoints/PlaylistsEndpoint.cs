@@ -16,7 +16,6 @@ using CodingChick.BeatsMusicAPI.Core.Helpers;
 
 namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 {
-    //TODO: add the rest of the api
     public class PlaylistsEndpoint : BaseEndpoint
     {
 
@@ -99,8 +98,10 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             Contract.Requires<ArgumentNullException>(playlistIds != null, "playlistIds array is null");
 
             ValidateIdOffsetLimit(offset, limit);
-            var methodParams = AddOffsetAndLimitParams(offset, limit);
+            var methodParams = new List<KeyValuePair<string, string>>();
             methodParams.AddRange(playlistIds.Select(playlistId => new KeyValuePair<string, string>("ids", playlistId)));
+            methodParams = AddOffsetAndLimitParams(methodParams, offset, limit);
+            methodParams = AddOrderByParam<PlaylistsOrderBy>(playlistsOrderBy, methodParams);
 
             return await BeatsHttpData.GetMultipleParsedResult<PlaylistData>("playlists", methodParams, true);
         }
@@ -191,10 +192,9 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         {
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(userId), "userId field is null");
             ValidateIdOffsetLimit(offset, limit);
-            var methodParams = AddOffsetAndLimitParams(offset, limit);
-            methodParams.Add(new KeyValuePair<string, string>("order_by",
-                                            ParamValueAttributeHelper.GetParamValueOfEnumAttribute<PlaylistsOrderBy>(
-                                                orderBy)));
+            var methodParams = new List<KeyValuePair<string, string>>();
+            methodParams = AddOffsetAndLimitParams(methodParams, offset, limit);
+            methodParams = AddOrderByParam<PlaylistsOrderBy>(orderBy, methodParams);
 
             return
                 await
@@ -291,10 +291,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             var methodParams = new List<KeyValuePair<string, string>>()
                 {
                     new KeyValuePair<string, string>("offset", offset.ToString()),
-                    new KeyValuePair<string, string>("order_by",
-                                                     ParamValueAttributeHelper
-                                                         .GetParamValueOfEnumAttribute<PlaylistsOrderBy>(orderBy))
                 };
+            methodParams = AddOrderByParam<PlaylistsOrderBy>(orderBy, methodParams);
 
             return
                 await

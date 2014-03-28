@@ -1,18 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingChick.BeatsMusicAPI.Core", "CodingChick.BeatsMusicAPI.Core\CodingChick.BeatsMusicAPI.Core.csproj", "{2FFAEE12-A318-414D-AE3B-C666A4BBB589}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingChick.BeatsMusicAPI.Tests", "CodingChick.BeatsMusicAPI.Tests\CodingChick.BeatsMusicAPI.Tests.csproj", "{9B2CCCCD-AA35-4099-BD15-1CBD85F3E1C8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingChick.BeatsMusic.WPFSample", "CodingChick.BeatsMusic.WPFSample\CodingChick.BeatsMusic.WPFSample.csproj", "{DB560A02-E58B-4BAC-83E7-5FC79C64B7BF}"
-EndProject
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{CAE07E72-EB1A-47F0-8849-248ECC5BF198}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingChick.BeatsMusicAPI.Core", "CodingChick.BeatsMusicAPI.Core\CodingChick.BeatsMusicAPI.Core.csproj", "{2FFAEE12-A318-414D-AE3B-C666A4BBB589}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingChick.BeatsMusicAPI.Tests", "CodingChick.BeatsMusicAPI.Tests\CodingChick.BeatsMusicAPI.Tests.csproj", "{9B2CCCCD-AA35-4099-BD15-1CBD85F3E1C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingChick.BeatsMusic.WPFSample", "CodingChick.BeatsMusic.WPFSample\CodingChick.BeatsMusic.WPFSample.csproj", "{DB560A02-E58B-4BAC-83E7-5FC79C64B7BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
