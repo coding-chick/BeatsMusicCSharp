@@ -42,8 +42,11 @@ namespace CodingChick.BeatsMusic.WPFSample
             //this.ClientSecret = "<your Beats Music app client Secret here>";
             //this.RedirectUrl = "<your Beats Music app Redirect Uri here>";
 
-            client = new BeatsMusicClient(ClientId, RedirectUrl);
-            BeatsMusicWebBrowser.Source = new Uri(client.UriAddressToNavigateForPermissions());
+         
+
+            client = new BeatsMusicClient(ClientId, RedirectUrl, ClientSecret);
+            var addressString = client.UriAddressToNavigateForPermissions();
+            BeatsMusicWebBrowser.Source = new Uri(addressString);
             BeatsMusicWebBrowser.Navigating += BeatsMusicWebBrowser_Navigating;
         }
 
@@ -53,16 +56,16 @@ namespace CodingChick.BeatsMusic.WPFSample
 
         public async void BeatsMusicWebBrowser_Navigating(object sender, NavigatingCancelEventArgs e)
         {
-            if (e.Uri != null && e.Uri.AbsoluteUri.Contains("code"))
+            if (e.Uri != null && e.Uri.AbsoluteUri.Contains("codingchick"))
             {
                 var queryStringParams = HttpUtility.ParseQueryString(e.Uri.Query);
-                //if (queryStringParams.AllKeys.Contains    ("access_token"))
+                //if (queryStringParams.AllKeys.Contains("access_token"))
                 if (queryStringParams.AllKeys.Contains("code"))
                 {
                     BeatsMusicWebBrowser.NavigateToString(@"<html><body style=""background: #F2F3F5"" /></html>");
 
-                    //client.ReadOnlyAccessToken = queryStringParams.GetValues("access_token").FirstOrDefault();
                     client.Code = queryStringParams.GetValues("code").FirstOrDefault();
+                    //client.SetReadAccessTokenFromRedirectUri(queryStringParams.GetValues("access_token").FirstOrDefault(), int.Parse(queryStringParams.GetValues("expires_in").FirstOrDefault()));
 
                     //var result = await client.Albums.GetAlbumById(string.Empty);
                     //var result2 = await client.Search.SearchByTrack("What's My Name");

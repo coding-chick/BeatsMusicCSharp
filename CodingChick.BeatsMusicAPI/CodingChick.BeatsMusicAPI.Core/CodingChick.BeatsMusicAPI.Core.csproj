@@ -106,6 +106,8 @@
     <Compile Include="Data\Tracks\TrackData.cs" />
     <Compile Include="Data\Tracks\TrackRefs.cs" />
     <Compile Include="Data\Users\UserData.cs" />
+    <Compile Include="Data\Content\ContentData.cs" />
+    <Compile Include="Data\Content\ContentRefs.cs" />
     <Compile Include="Endpoints\Enums\AlbumRefType.cs" />
     <Compile Include="Endpoints\Enums\ArtistOrderBy.cs" />
     <Compile Include="Endpoints\ArtistsEndpoint.cs" />
@@ -120,6 +122,7 @@
     <Compile Include="Endpoints\AlbumsEndpoint.cs" />
     <Compile Include="Endpoints\BaseEndpoint.cs" />
     <Compile Include="Endpoints\Enums\TracksRefType.cs" />
+    <Compile Include="Endpoints\HighlightsEndpoint.cs" />
     <Compile Include="Endpoints\PlaylistsEndpoint.cs" />
     <Compile Include="Endpoints\Enums\PlaylistsOrderBy.cs" />
     <Compile Include="Endpoints\Enums\PlaylistRefType.cs" />

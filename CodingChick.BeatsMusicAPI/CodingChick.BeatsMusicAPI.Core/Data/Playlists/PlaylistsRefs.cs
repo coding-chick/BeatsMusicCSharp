@@ -9,7 +9,6 @@ namespace CodingChick.BeatsMusicAPI.Core.Data.Playlists
 {
     public class PlaylistsRefs
     {
-        //TODO: this is not object, get a real result to parse correctly
         [JsonProperty("tracks")]
         public List<RefTypeInfo> Tracks { get; set; }
         [JsonProperty("user")]

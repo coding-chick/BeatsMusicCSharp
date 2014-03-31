@@ -29,6 +29,7 @@ namespace CodingChick.BeatsMusicAPI.Core
             _playlists = new Lazy<PlaylistsEndpoint>(() => new PlaylistsEndpoint(_beatsHttpData));
             _albums = new Lazy<AlbumsEndpoint>(() => new AlbumsEndpoint(_beatsHttpData));
             _artists = new Lazy<ArtistsEndpoint>(() => new ArtistsEndpoint(_beatsHttpData));
+            _highlights = new Lazy<HighlightsEndpoint>(() => new HighlightsEndpoint(_beatsHttpData));
         }
 
         /// <summary>
@@ -48,6 +49,12 @@ namespace CodingChick.BeatsMusicAPI.Core
         private Lazy<PlaylistsEndpoint> _playlists;
         private Lazy<AlbumsEndpoint> _albums;
         private Lazy<ArtistsEndpoint> _artists;
+        private Lazy<HighlightsEndpoint> _highlights;
+
+        public HighlightsEndpoint Highlights
+        {
+            get { return _highlights.Value; }
+        }
 
         public AlbumsEndpoint Albums
         {
@@ -67,7 +74,7 @@ namespace CodingChick.BeatsMusicAPI.Core
         public string ReadWriteAccessToken
         {
             get { return _authorization.ReadWriteAccessToken; }
-            set { _authorization.ReadWriteAccessToken = value; }
+           
         }
 
       
@@ -92,7 +99,7 @@ namespace CodingChick.BeatsMusicAPI.Core
             }
         }
 
-        public void SetReadOnlyAccessTokenFromRedirectUri(string accessToken, int expiresAt)
+        public void SetReadAccessTokenFromRedirectUri(string accessToken, int expiresAt)
         {
             _authorization.ReadOnlyAccessToken = accessToken;
             _authorization.SetExpiresAt(expiresAt);
