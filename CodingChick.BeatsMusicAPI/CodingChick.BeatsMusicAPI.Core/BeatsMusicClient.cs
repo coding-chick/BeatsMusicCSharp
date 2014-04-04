@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using CodingChick.BeatsMusicAPI.Core.Base;
 using CodingChick.BeatsMusicAPI.Core.Endpoints;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
 
+[assembly: InternalsVisibleTo("CodingChick.BeatsMusicAPI.Tests")]
 namespace CodingChick.BeatsMusicAPI.Core
 {
     public class BeatsMusicClient
@@ -71,13 +73,8 @@ namespace CodingChick.BeatsMusicAPI.Core
             get { return _playlists.Value; }
         }
 
-        public string ReadWriteAccessToken
-        {
-            get { return _authorization.ReadWriteAccessToken; }
-           
-        }
 
-      
+
         public string Code
         {
             get { return _authorization.Code; }
@@ -95,7 +92,7 @@ namespace CodingChick.BeatsMusicAPI.Core
                 return _httpBeatsMusicEngine.UriAddressToNavigateForPermissions(ResponseType.Token);
             else
             {
-                return _httpBeatsMusicEngine.UriAddressToNavigateForPermissions(ResponseType.Code);                
+                return _httpBeatsMusicEngine.UriAddressToNavigateForPermissions(ResponseType.Code);
             }
         }
 
@@ -104,5 +101,19 @@ namespace CodingChick.BeatsMusicAPI.Core
             _authorization.ReadOnlyAccessToken = accessToken;
             _authorization.SetExpiresAt(expiresAt);
         }
+
+        //Internal properties exposed for testing purposes only.
+        #region Internal
+        internal string ReadWriteAccessToken
+        {
+            get { return _authorization.ReadWriteAccessToken; }
+            set { _authorization.ReadWriteAccessToken = value; }
+        }
+
+        internal void SetExpiresAt(int seconds)
+        {
+            _authorization.SetExpiresAt(seconds);
+        }
+        #endregion
     }
 }

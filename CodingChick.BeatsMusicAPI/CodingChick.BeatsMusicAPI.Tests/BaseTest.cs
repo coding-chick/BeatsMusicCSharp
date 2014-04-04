@@ -18,9 +18,6 @@ namespace CodingChick.BeatsMusicAPI.Tests
         private const string Token = @"<to run unit tests you must supply a valid token every 60 minutes>";
         private const string Code = @"<to run unit tests you must supply a valid token every 60 minutes>";
 
-
-      
-
         private BeatsMusicClient _client;
         public BeatsMusicClient Client { get { return _client; }}
 
@@ -33,8 +30,9 @@ namespace CodingChick.BeatsMusicAPI.Tests
         public void Setup()
         {
             _client = new BeatsMusicClient(ClientId, RedirectUrl, ClientSecret);
-            _client.SetReadAccessTokenFromRedirectUri(Token, 3600);
+            _client.ReadWriteAccessToken = Token;
             _client.Code = Code;
+            _client.SetExpiresAt(3600);
         }
 
         protected void AssertCollectionHasItems<T>(List<T> list)

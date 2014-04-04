@@ -37,12 +37,12 @@ namespace CodingChick.BeatsMusic.WPFSample
             this.StretchToMaximum();
 
 
-            // *** uncomment the next three lines and fill your Beats Music app details here! *** 
-            //this.ClientId = "<your Beats Music app client ID here>";
-            //this.ClientSecret = "<your Beats Music app client Secret here>";
-            //this.RedirectUrl = "<your Beats Music app Redirect Uri here>";
+            // *** Fill your Beats Music app details here! *** 
+            this.ClientId = "<your Beats Music app client ID here>";
+            this.ClientSecret = "<your Beats Music app client Secret here>";
+            this.RedirectUrl = "<your Beats Music app Redirect Uri here>";
 
-         
+       
 
             client = new BeatsMusicClient(ClientId, RedirectUrl, ClientSecret);
             var addressString = client.UriAddressToNavigateForPermissions();
