@@ -96,8 +96,12 @@
     <Compile Include="BeatsMusicClient.cs" />
     <Compile Include="Data\Albums\AlbumData.cs" />
     <Compile Include="Data\Albums\AlbumRefs.cs" />
+    <Compile Include="Data\BaseData.cs" />
     <Compile Include="Data\Artists\ArtistData.cs" />
     <Compile Include="Data\Artists\ArtistRefs.cs" />
+    <Compile Include="Data\BaseDataConverter.cs" />
+    <Compile Include="Data\Genres\GenreData.cs" />
+    <Compile Include="Data\JsonCreationConverter.cs" />
     <Compile Include="Data\Playlists\PlaylistData.cs" />
     <Compile Include="Data\Playlists\PlaylistsRefs.cs" />
     <Compile Include="Data\RefTypeInfo.cs" />
@@ -121,7 +125,10 @@
     <Compile Include="Base\HttpClientAccessor.cs" />
     <Compile Include="Endpoints\AlbumsEndpoint.cs" />
     <Compile Include="Endpoints\BaseEndpoint.cs" />
+    <Compile Include="Endpoints\Enums\FollowType.cs" />
     <Compile Include="Endpoints\Enums\TracksRefType.cs" />
+    <Compile Include="Endpoints\FollowEndpoint.cs" />
+    <Compile Include="Endpoints\GenreEndpoint.cs" />
     <Compile Include="Endpoints\HighlightsEndpoint.cs" />
     <Compile Include="Endpoints\PlaylistsEndpoint.cs" />
     <Compile Include="Endpoints\Enums\PlaylistsOrderBy.cs" />

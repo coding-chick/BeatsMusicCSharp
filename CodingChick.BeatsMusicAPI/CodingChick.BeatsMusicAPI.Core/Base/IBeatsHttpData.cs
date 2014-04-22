@@ -9,7 +9,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         Task<MultipleRootObject<T>> GetMultipleParsedResult<T>(string methodName, List<KeyValuePair<string, string>> methodParams, bool useToken = false);
         Task<SingleRootObject<T>> GetSingleParsedResult<T>(string methodName, List<KeyValuePair<string, string>> methodParams, bool useToken = false);
         Task<SingleRootObject<T>> PostData<T>(string methodName, List<KeyValuePair<string, string>> dataParams);
-        Task<SingleRootObject<T>> PutData<T>(string methodName, List<KeyValuePair<string, string>> dataParams);
+        Task<SingleRootObject<T>> PutData<T>(string methodName, List<KeyValuePair<string, string>> dataParams, bool addCredentials = true);
         Task<bool> DeleteData(string methodName, List<KeyValuePair<string, string>> dataParams);
     }
 }

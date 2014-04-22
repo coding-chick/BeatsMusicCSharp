@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CodingChick.BeatsMusicAPI.Core.Data;
+using CodingChick.BeatsMusicAPI.Core.Data.Playlists;
 using Newtonsoft.Json;
 
 namespace CodingChick.BeatsMusicAPI.Core.Base
@@ -21,6 +22,16 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             var dataResponse = await GetDataResponse(methodName, methodParams, useToken);
 
             var parsedDataResponse = JsonConvert.DeserializeObject<MultipleRootObject<T>>(dataResponse);
+
+            return parsedDataResponse;
+        }
+
+        public async Task<MultipleRootObject<T>> GetMultipleParsedResultWithConverter<T>(string methodName, List<KeyValuePair<string, string>> methodParams, bool useToken = false)
+        {
+            var dataResponse = await GetDataResponse(methodName, methodParams, useToken);
+
+            var parsedDataResponse = JsonConvert.DeserializeObject<MultipleRootObject<T>>(dataResponse,
+               new BaseDataConverter());
 
             return parsedDataResponse;
         }
@@ -61,13 +72,12 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             return JsonConvert.DeserializeObject<SingleRootObject<T>>(dataResponse);
         }
 
-
-        public async Task<SingleRootObject<T>> PutData<T>(string methodName, List<KeyValuePair<string, string>> dataParams)
+        public async Task<SingleRootObject<T>> PutData<T>(string methodName, List<KeyValuePair<string, string>> dataParams, bool addCredentials = true)
         {
             if (dataParams == null)
                 dataParams = new List<KeyValuePair<string, string>>();
 
-            var httpResponse = await _httpBeatsMusicEngine.PutAsync(methodName, dataParams);
+            var httpResponse = await _httpBeatsMusicEngine.PutAsync(methodName, dataParams, addCredentials);
             var dataResponse = await httpResponse.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<SingleRootObject<T>>(dataResponse);
@@ -85,5 +95,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
                 return true;
             return false;
         }
+
+       
     }
 }

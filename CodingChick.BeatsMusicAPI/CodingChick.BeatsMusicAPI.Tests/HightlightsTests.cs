@@ -14,5 +14,14 @@ namespace CodingChick.BeatsMusicAPI.Tests
             AssertResponseIsOK(result);
             AssertCollectionHasItems(result.Data);
         }
+
+        [Test]
+        public async void GetEditorPicksContentTest()
+        {
+            MultipleRootObject<ContentData> result = await Client.Highlights.GetEditorPicksContent();
+
+            AssertResponseIsOK(result);
+            AssertCollectionHasItems(result.Data);
+        }
     }
 }

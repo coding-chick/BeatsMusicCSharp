@@ -62,9 +62,10 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             return result;
         }
 
-        public async Task<HttpContent> PutAsync(string method, List<KeyValuePair<string, string>> dataParams)
+        public async Task<HttpContent> PutAsync(string method, List<KeyValuePair<string, string>> dataParams, bool addCredentials = true)
         {
-            await AddAccessTokenToCall(dataParams);
+            if (addCredentials)
+                await AddAccessTokenToCall(dataParams);
             var fullAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, dataParams);
             var httpContent = new StringContent(string.Empty);
 

@@ -8,12 +8,8 @@ using Newtonsoft.Json;
 namespace CodingChick.BeatsMusicAPI.Core.Data.Playlists
 {
     [JsonObject("Datum")]    
-    public class PlaylistData
+    public class PlaylistData : BaseData
     {
-        [JsonProperty("type")]
-        public string Type { get; set; }
-        [JsonProperty("id")]
-        public string Id { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("description")]

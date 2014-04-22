@@ -12,7 +12,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         string UriAddressToNavigateForPermissions(ResponseType responseType);
         Task<HttpContent> PostAsync(string method, List<KeyValuePair<string, string>> dataParams);
         Task<HttpContent> GetAsyncWithToken(string method, List<KeyValuePair<string, string>> queryParams);
-        Task<HttpContent> PutAsync(string method, List<KeyValuePair<string, string>> dataParams);
+        Task<HttpContent> PutAsync(string method, List<KeyValuePair<string, string>> dataParams, bool addCredentials = true);
         Task<HttpContent> DeleteAsync(string method, List<KeyValuePair<string, string>> dataParams);
     }
 }

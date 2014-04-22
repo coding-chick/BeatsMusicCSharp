@@ -22,5 +22,12 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         {
             return await BeatsHttpData.GetMultipleParsedResult<ContentData>("discoveries/featured", null);
         }
+
+
+        public async Task<MultipleRootObject<ContentData>> GetEditorPicksContent()
+        {
+            return await BeatsHttpData.GetMultipleParsedResult<ContentData>("discoveries/editor_picks", null);
+            
+        }
     }
 }

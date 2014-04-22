@@ -66,6 +66,8 @@
   <ItemGroup>
     <Compile Include="ArtistsTests.cs" />
     <Compile Include="BaseTest.cs" />
+    <Compile Include="FollowTests.cs" />
+    <Compile Include="GenreTests.cs" />
     <Compile Include="HightlightsTests.cs" />
     <Compile Include="PlaylistTests.cs" />
     <Compile Include="SearchTests.cs" />
