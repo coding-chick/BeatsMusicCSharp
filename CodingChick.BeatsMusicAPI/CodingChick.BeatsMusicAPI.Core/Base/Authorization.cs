@@ -98,8 +98,6 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         public void SetExpiresAt(int expiresAt)
         {
             ExpiresAt = expiresAt;
-
-            ExpiresAt = 10;
             ExpiresAtWasSet = DateTime.Now;
         }
 

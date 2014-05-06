@@ -42,9 +42,12 @@ client.SetClientAccessTokenFromRedirectUri(queryStringParams.GetValues("access_t
 		int.Parse(queryStringParams.GetValues("expires_in").FirstOrDefault())); // For "Client Side applications" type authentication.
 ```
 
-Now you can freely make any API calls.
+Now you can make more API calls, depends on the security level you've chosen.
 ```csharp
+// Works with both permissions
 SingleRootObject<AudioData> result = await client.Audio.GetAudioStreamingInfo("tr61032803", Bitrate.Highest, true);
+// Works only with Web Server applications.
+SingleRootObject<PlaylistData> result = await client.Playlists.CreatePlaylist("testPL", "only works with server side permissions");
 ```
 
 Example

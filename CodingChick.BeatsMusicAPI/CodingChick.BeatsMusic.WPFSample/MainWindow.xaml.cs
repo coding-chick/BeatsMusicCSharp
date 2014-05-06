@@ -20,6 +20,7 @@ using CodingChick.BeatsMusicAPI.Core;
 using CodingChick.BeatsMusicAPI.Core.Base;
 using CodingChick.BeatsMusicAPI.Core.Data;
 using CodingChick.BeatsMusicAPI.Core.Data.Audio;
+using CodingChick.BeatsMusicAPI.Core.Data.Playlists;
 using CodingChick.BeatsMusicAPI.Core.Endpoints;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.DataFilters;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
@@ -43,11 +44,11 @@ namespace CodingChick.BeatsMusic.WPFSample
             //this.ClientSecret = "<your Beats Music app client Secret here>";
             //this.RedirectUrl = "<your Beats Music app Redirect Uri here>";
 
-
+         
             // Create the beats music API client that will call all services, can be called with ClientSecret for enhanced long term security,
             // or without for short term limited security. More infomation on types of security @ https://developer.beatsmusic.com/docs/read/getting_started/Client_Side_Applications
             // and https://developer.beatsmusic.com/docs/read/getting_started/Web_Server_Applications
-            client = new BeatsMusicClient(ClientId, RedirectUrl, ClientSecret);
+            client = new BeatsMusicClient(ClientId, RedirectUrl);
 
             // Get the address the web browser needs to navigate for OAuth 2.0 protocol authentication.
             var addressString = client.UriAddressToNavigateForPermissions();
@@ -63,7 +64,7 @@ namespace CodingChick.BeatsMusic.WPFSample
         public async void BeatsMusicWebBrowser_Navigating(object sender, NavigatingCancelEventArgs e)
         {
             // A check that the OAuth page has redirected to the redirected url provided.
-            if (e.Uri != null && e.Uri.AbsoluteUri.Contains("insert redirected domain here"))
+            if (e.Uri != null && e.Uri.AbsoluteUri.Contains("insert part of redirected url here"))
             {
                 var queryStringParams = HttpUtility.ParseQueryString(e.Uri.Query);
 
@@ -85,7 +86,6 @@ namespace CodingChick.BeatsMusic.WPFSample
                     // Calling this method with the aquire set to true just to make sure this works every time.
                     // more info @https://developer.beatsmusic.com/docs/read/audio/Playback
                     SingleRootObject<AudioData> result = await client.Audio.GetAudioStreamingInfo("tr61032803", Bitrate.Highest, true);
-
 
                     // To demonstrate how the information can be used, I'm using an OS web music player- SoundManager 2 (from @http://www.schillmania.com/projects/soundmanager2/) to play this file.
                     // The files required and the HTML file are included in this project under the SoundManager directory.

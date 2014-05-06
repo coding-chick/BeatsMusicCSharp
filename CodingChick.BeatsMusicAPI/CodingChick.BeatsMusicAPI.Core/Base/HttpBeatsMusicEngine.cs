@@ -99,12 +99,16 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
 
         private async Task AddAccessTokenToCall(List<KeyValuePair<string, string>> dataParams)
         {
-            if (_authorization.ReadWriteAccessToken == null || _authorization.NeedToRenewAccessToken)
+            if (_authorization.ReadOnlyAccessToken != null)
+                dataParams.Add(new KeyValuePair<string, string>("access_token", _authorization.ReadOnlyAccessToken));
+            else
             {
-                var succeed = await RenewReadWriteAccessToken();
+                if (_authorization.ReadWriteAccessToken == null || _authorization.NeedToRenewAccessToken)
+                {
+                    var succeed = await RenewReadWriteAccessToken();
+                }
+                dataParams.Add(new KeyValuePair<string, string>("access_token", _authorization.ReadWriteAccessToken));
             }
-
-            dataParams.Add(new KeyValuePair<string, string>("access_token", _authorization.ReadWriteAccessToken));
         }
 
         private async Task<bool> RenewReadWriteAccessToken()
@@ -116,7 +120,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             HttpContent response =
                 await _clientAccessor.PostAsync(requestTokenUri, new FormUrlEncodedContent(requestParams));
 
-             return await _authorization.ParseAccessToken(response);
+            return await _authorization.ParseAccessToken(response);
         }
     }
 }
