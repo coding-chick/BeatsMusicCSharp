@@ -34,6 +34,8 @@ namespace CodingChick.BeatsMusicAPI.Core
             _highlights = new Lazy<HighlightsEndpoint>(() => new HighlightsEndpoint(_beatsHttpData));
             _follow = new Lazy<FollowEndpoint>(() => new FollowEndpoint(_beatsHttpData));
             _genre = new Lazy<GenreEndpoint>(() => new GenreEndpoint(_beatsHttpData));
+            _audio = new Lazy<AudioEndpoint>(() => new AudioEndpoint(_beatsHttpData));
+
 
         }
 
@@ -57,6 +59,12 @@ namespace CodingChick.BeatsMusicAPI.Core
         private Lazy<HighlightsEndpoint> _highlights;
         private Lazy<FollowEndpoint> _follow;
         private Lazy<GenreEndpoint> _genre;
+        private Lazy<AudioEndpoint> _audio;
+
+        public AudioEndpoint Audio
+        {
+            get { return _audio.Value; }
+        }
 
         public GenreEndpoint Genre
         {

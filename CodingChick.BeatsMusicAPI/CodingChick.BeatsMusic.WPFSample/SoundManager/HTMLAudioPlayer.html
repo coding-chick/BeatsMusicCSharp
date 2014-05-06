@@ -1,0 +1,26 @@
+﻿<script type="text/javascript" src="SoundManager/script/soundmanager2.js"></script>
+<script type="text/javascript">
+    soundManager.flashVersion = 9;
+    soundManager.url = 'SoundManager/swf';
+    soundManager.debugFlash = true;
+    soundManager.preferFlash = true;
+    soundManager.onready(function () {
+        var sound =
+        soundManager.createSound(
+            {
+                id: getParameterByName('trackId'),
+                url: getParameterByName('trackUrl'),
+                serverURL: getParameterByName('serverUrl')
+            });
+        sound.play();
+    });
+
+
+    function getParameterByName(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+</script>
+

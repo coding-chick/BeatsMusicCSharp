@@ -112,6 +112,9 @@
     <Compile Include="Data\Users\UserData.cs" />
     <Compile Include="Data\Content\ContentData.cs" />
     <Compile Include="Data\Content\ContentRefs.cs" />
+    <Compile Include="Data\Audio\AudioData.cs" />
+    <Compile Include="Endpoints\AudioEndpoint.cs" />
+    <Compile Include="Data\Audio\AudioRefs.cs" />
     <Compile Include="Endpoints\Enums\AlbumRefType.cs" />
     <Compile Include="Endpoints\Enums\ArtistOrderBy.cs" />
     <Compile Include="Endpoints\ArtistsEndpoint.cs" />
@@ -194,6 +197,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

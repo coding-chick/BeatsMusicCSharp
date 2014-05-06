@@ -9,6 +9,8 @@ using CodingChick.BeatsMusicAPI.Core.Data;
 using CodingChick.BeatsMusicAPI.Core.Data.Albums;
 using CodingChick.BeatsMusicAPI.Core.Data.Content;
 using CodingChick.BeatsMusicAPI.Core.Data.Genres;
+using CodingChick.BeatsMusicAPI.Core.Data.Playlists;
+using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
 
 namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 {
@@ -53,15 +55,73 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         /// <summary>
         /// You can get a list of editor picks of tracks and albums within the Genres in Find It in the Beats Music app.
         /// </summary>
-        /// <param name="genreId"></param>
-        /// <param name="limit"></param>
-        /// <param name="offset"></param>
-        /// <returns></returns>
+        /// <param name="genreId">The Id of the requested Genre</param>
+        /// <param name="limit">Specifies the maximum number of records to retrieve. The number of results returned will be less than or equal to this value. No results are returned if it is set to zero or less. The maximum permitted value is 200. If a value higher than 200 is specified, no more 200 results will be returned. Default 20.</param>
+        /// <param name="offset">A zero-based integer offset into the results. Default 0.</param>
+        /// <returns>A collection of AlbumData and PlaylistData</returns>
         public async Task<MultipleRootObject<BaseData>> GetEditorPicksInGenre(string genreId, int limit = 20, int offset = 0)
         {
-            var methodParams = ValidateAndCreateLimitOffsetParams(limit, offset);
-            return await BeatsHttpData.GetMultipleParsedResultWithConverter<BaseData>(string.Format("genres/{0}/editors_picks", genreId), methodParams);
+            return await RunMethodOnGenre("editors_picks", genreId, limit, offset);
         }
+
+        private async Task<MultipleRootObject<BaseData>> RunMethodOnGenre(string methodName, string genreId, int limit, int offset)
+        {
+            var methodParams = ValidateAndCreateLimitOffsetParams(limit, offset);
+            return
+                await
+                    BeatsHttpData.GetMultipleParsedResultWithConverter<BaseData>(
+                        string.Format("genres/{0}/{1}", genreId, methodName), methodParams);
+        }
+
+        /// <summary>
+        /// Gets a list of featured, tracks and albums.
+        /// </summary>
+        /// <param name="genreId">The Id of the requested Genre</param>
+        /// <param name="limit">Specifies the maximum number of records to retrieve. The number of results returned will be less than or equal to this value. No results are returned if it is set to zero or less. The maximum permitted value is 200. If a value higher than 200 is specified, no more 200 results will be returned. Default 20.</param>
+        /// <param name="offset">A zero-based integer offset into the results. Default 0.</param>
+        /// <returns>A collection of AlbumData and PlaylistData</returns>
+        public async Task<MultipleRootObject<BaseData>> GetFeaturedInGenre(string genreId, int limit = 20,
+            int offset = 0)
+        {
+            return await RunMethodOnGenre("featured", genreId, limit, offset);
+        }
+
+
+        /// <summary>
+        /// Gets a list of new releases, tracks and albums.
+        /// </summary>
+        /// <param name="genreId">The Id of the requested Genre</param>
+        /// <param name="limit">Specifies the maximum number of records to retrieve. The number of results returned will be less than or equal to this value. No results are returned if it is set to zero or less. The maximum permitted value is 200. If a value higher than 200 is specified, no more 200 results will be returned. Default 20.</param>
+        /// <param name="offset">A zero-based integer offset into the results. Default 0.</param>
+        /// <returns>A collection of AlbumData and PlaylistData</returns>
+        public async Task<MultipleRootObject<BaseData>> GetNewReleasesInGenre(string genreId, int limit = 20,
+            int offset = 0)
+        {
+            return await RunMethodOnGenre("new_releases", genreId, limit, offset);
+        }
+
+        /// <summary>
+        /// Get a list of playlists associated to the genre. 
+        /// </summary>
+        /// <param name="genreId">Unique ID for Genre</param>
+        /// <param name="limit">Specifies the maximum number of records to retrieve. The number of results returned will be less than or equal to this value. No results are returned if it is set to zero or less. The maximum permitted value is 200. If a value higher than 200 is specified, no more 200 results will be returned. Default 20.</param>
+        /// <param name="offset">A zero-based integer offset into the results. Default 0.</param>
+        /// <param name="orderBy">A zero-based integer offset into the results. Default 0.</param>
+        /// <returns></returns>
+        public async Task<MultipleRootObject<PlaylistData>> GetAllPlaylistsInGenre(string genreId, int limit = 20,
+            int offset = 0, PlaylistsOrderBy orderBy = PlaylistsOrderBy.NameAscending)
+        {
+            var methodParams = ValidateAndCreateLimitOffsetParams(limit, offset);
+            methodParams = base.AddOrderByParam<PlaylistsOrderBy>(orderBy, methodParams);
+
+            return
+                await
+                    BeatsHttpData.GetMultipleParsedResult<PlaylistData>(string.Format("genres/{0}/playlists", genreId),
+                        methodParams);
+        }
+
+        //TODO: add bios method
+
     }
 
 

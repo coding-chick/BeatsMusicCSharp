@@ -44,5 +44,18 @@ namespace CodingChick.BeatsMusicAPI.Tests
             AssertResponseIsOK(result);
             AssertCollectionHasItems(result.Data);
         }
+
+        [Test]
+        public async void GetFeaturedInGenreTest()
+        {
+            //Arrange
+
+            //Act
+            var result = await Client.Genre.GetFeaturedInGenre("eg77531656377860096");
+
+            //Assert
+            AssertResponseIsOK(result);
+            AssertCollectionHasItems(result.Data);
+        }
     }
 }
