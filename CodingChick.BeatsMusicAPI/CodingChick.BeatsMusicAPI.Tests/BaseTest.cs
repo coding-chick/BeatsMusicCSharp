@@ -16,7 +16,11 @@ namespace CodingChick.BeatsMusicAPI.Tests
         //private const string RedirectUrl = @"<your beats music redirect uri here> ";
         //private const string Token = @"<to run unit tests you must supply a valid token every 60 minutes>";
         //private const string Code = @"<to run unit tests you must supply a valid token every 60 minutes>";
-
+        const string ClientId = "";
+        const string ClientSecret = "";
+        const string RedirectUrl = @"http://codingchick.net";
+        private const string Code = "";
+        private const string Token = "";
      
         private BeatsMusicClient _client;
         public BeatsMusicClient Client { get { return _client; }}
@@ -31,7 +35,7 @@ namespace CodingChick.BeatsMusicAPI.Tests
         {
             _client = new BeatsMusicClient(ClientId, RedirectUrl, ClientSecret);
             _client.ReadWriteAccessToken = Token;
-            _client.Code = Code;
+            _client.ServerCode = Code;
             _client.SetExpiresAt(3600);
         }
 

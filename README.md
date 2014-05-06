@@ -18,18 +18,34 @@ PM> Install-Package BeatsMusicCSharpAPI
 ```
 
 You will then use the ClientId and optionally the ClientSecret to initialize the BeatsMusicClient object which will serve as gateway to all the API calls (depends on the security level you wish to give your application).
-```c#
+```csharp
 BeatsMusicClient client = new BeatsMusicClient(ClientId, RedirectUrl, ClientSecret); // For "Web Server applications" type authentication. 
 // Or
 BeatsMusicClient client = new BeatsMusicClient(ClientId, RedirectUrl); // For "Client Side applications" type authentication.  
 ```
 
 That's it! You're ready to use API calls which do not require user- specific permissions.
-```c#
+```csharp
 MultipleRootObject<SearchData> result2 = await client.Search.SearchByArtist("Connie");
 ```
 
-To have a user , have your application navigate to 
+If you need to perform actions which would require user specific permissions, have your app navigate to Beats Music's OAuth webpage. You need to obtain the relevant address from the BeatsMusicClient, and have a web browser navigate to this address. 
+```csharp
+string addressToNavigate = client.UriAddressToNavigateForPermissions();
+```
+
+After the user inputs the credentials, the redirected URI's query string parameters contains the relevant authorization information, which your application will need to provide when making API calls. You will need to let the BeatsMusicClient know this information.
+```csharp
+client.Code = queryStringParams.GetValues("code").FirstOrDefault(); // For "Web Server applications" type authentication.
+// Or
+client.SetClientAccessTokenFromRedirectUri(queryStringParams.GetValues("access_token").FirstOrDefault(), 
+		int.Parse(queryStringParams.GetValues("expires_in").FirstOrDefault())); // For "Client Side applications" type authentication.
+```
+
+Now you can freely make any API calls.
+```csharp
+SingleRootObject<AudioData> result = await client.Audio.GetAudioStreamingInfo("tr61032803", Bitrate.Highest, true);
+```
 
 Example
 -------

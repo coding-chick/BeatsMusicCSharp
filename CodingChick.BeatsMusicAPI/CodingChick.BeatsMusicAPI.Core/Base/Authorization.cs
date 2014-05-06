@@ -83,7 +83,6 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         {
             var dataResponse = await response.ReadAsStringAsync();
 
-            //TODO: store this to hd? implement logic for expiration
             var parsedDataResponse = JsonConvert.DeserializeObject<AuthorizationRootObject>(dataResponse);
 
             if (parsedDataResponse.Code.ToLower() == "ok")

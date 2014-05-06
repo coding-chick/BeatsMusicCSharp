@@ -18,6 +18,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CodingChick.BeatsMusicAPI.Core;
 using CodingChick.BeatsMusicAPI.Core.Base;
+using CodingChick.BeatsMusicAPI.Core.Data;
+using CodingChick.BeatsMusicAPI.Core.Data.Audio;
 using CodingChick.BeatsMusicAPI.Core.Endpoints;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.DataFilters;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
@@ -76,13 +78,13 @@ namespace CodingChick.BeatsMusic.WPFSample
                     // The first (commented) if statement is the key required for Client Side application (lower security), 
                     // the second (uncommented) if is for Web Server applications (higher security).
 
-                    //client.SetReadAccessTokenFromRedirectUri(queryStringParams.GetValues("access_token").FirstOrDefault(), int.Parse(queryStringParams.GetValues("expires_in").FirstOrDefault()));
-                    client.Code = queryStringParams.GetValues("code").FirstOrDefault();
+                    //client.SetClientAccessTokenFromRedirectUri(queryStringParams.GetValues("access_token").FirstOrDefault(), int.Parse(queryStringParams.GetValues("expires_in").FirstOrDefault()));
+                    client.ServerCode = queryStringParams.GetValues("code").FirstOrDefault();
 
                     // This is an example of calling the BeatsMusic API, this call will get an audio track info required for streaming. 
                     // Calling this method with the aquire set to true just to make sure this works every time.
                     // more info @https://developer.beatsmusic.com/docs/read/audio/Playback
-                    var result = await client.Audio.GetAudioStreamingInfo("tr61032803", Bitrate.Highest, true);
+                    SingleRootObject<AudioData> result = await client.Audio.GetAudioStreamingInfo("tr61032803", Bitrate.Highest, true);
 
 
                     // To demonstrate how the information can be used, I'm using an OS web music player- SoundManager 2 (from @http://www.schillmania.com/projects/soundmanager2/) to play this file.

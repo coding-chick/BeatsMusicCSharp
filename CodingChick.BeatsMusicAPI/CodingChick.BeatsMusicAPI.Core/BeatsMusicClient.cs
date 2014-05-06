@@ -98,7 +98,7 @@ namespace CodingChick.BeatsMusicAPI.Core
 
 
 
-        public string Code
+        public string ServerCode
         {
             get { return _authorization.Code; }
             set { _authorization.Code = value; }
@@ -119,7 +119,7 @@ namespace CodingChick.BeatsMusicAPI.Core
             }
         }
 
-        public void SetReadAccessTokenFromRedirectUri(string accessToken, int expiresAt)
+        public void SetClientAccessTokenFromRedirectUri(string accessToken, int expiresAt)
         {
             _authorization.ReadOnlyAccessToken = accessToken;
             _authorization.SetExpiresAt(expiresAt);

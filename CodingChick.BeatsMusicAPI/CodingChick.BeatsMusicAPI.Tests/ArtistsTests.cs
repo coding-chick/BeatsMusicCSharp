@@ -7,6 +7,7 @@ using CodingChick.BeatsMusicAPI.Core.Data;
 using CodingChick.BeatsMusicAPI.Core.Data.Artists;
 using CodingChick.BeatsMusicAPI.Core.Data.Audio;
 using CodingChick.BeatsMusicAPI.Core.Data.Playlists;
+using CodingChick.BeatsMusicAPI.Core.Endpoints;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
 using NUnit.Framework;
 
