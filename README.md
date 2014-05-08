@@ -10,23 +10,23 @@ BeatsMusic C# API is a C# facade that accesses the Beats Music Developer API (@[
 
 Getting started
 ---------------
-### H4 Getting Started #1: Get the framework
+#### Getting Started #1: Get the framework
 You can use nuget to get the BeatsMusic C# API
 ```console
 PM> Install-Package BeatsMusicCSharpAPI
 ```
 
-### H4 Getting Start #2: Get Beats Music developer credentials
+#### Getting Start #2: Get Beats Music developer credentials
 You will need to register your software at Beats Music Developer website (@[https://developer.beatsmusic.com/member/register](https://developer.beatsmusic.com/member/register)) to obtain your application's ClientId and an optional ClientSecret.
 
-### H4 Getting Started #3: Initialize a BeatsMusicClient
+#### Getting Started #3: Initialize a BeatsMusicClient
 You will then use the ClientId and optionally the ClientSecret to initialize the BeatsMusicClient object which will serve as gateway to all the API calls (depends on the security level you wish to give your application).
 ```csharp
 BeatsMusicClient client = new BeatsMusicClient(ClientId, RedirectUrl, ClientSecret); // For "Web Server applications" type authentication. 
 // Or
 BeatsMusicClient client = new BeatsMusicClient(ClientId, RedirectUrl); // For "Client Side applications" type authentication.  
 ```
-### H4 Getting Started #4: Do stuff
+#### Getting Started #4: Do stuff
 That's it! You're ready to use API calls which do not require user- specific permissions.
 ```csharp
 var result2 = await client.Search.SearchByArtist("Connie");
