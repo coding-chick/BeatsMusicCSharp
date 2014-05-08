@@ -16,7 +16,7 @@ You can use nuget to get the BeatsMusic C# API
 PM> Install-Package BeatsMusicCSharpAPI
 ```
 
-#### Getting Start #2: Get Beats Music developer credentials
+#### Getting Started #2: Get Beats Music developer credentials
 You will need to register your software at Beats Music Developer website (@[https://developer.beatsmusic.com/member/register](https://developer.beatsmusic.com/member/register)) to obtain your application's ClientId and an optional ClientSecret.
 
 #### Getting Started #3: Initialize a BeatsMusicClient
