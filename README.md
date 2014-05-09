@@ -32,11 +32,14 @@ That's it! You're ready to use API calls which do not require user- specific per
 var result2 = await client.Search.SearchByArtist("Connie");
 ```
 
+#### Getting Started #5: Advanced actions and authentication
+##### Getting the authentication URI
 If you need to perform actions which would require user specific permissions, have your app navigate to Beats Music's OAuth webpage. You need to obtain the relevant address from the BeatsMusicClient, and have a web browser navigate to this address. 
 ```csharp
 string addressToNavigate = client.UriAddressToNavigateForPermissions();
 ```
 
+##### Getting the authentication details from the redirected URI and setting them up 
 After the user inputs the credentials, the redirected URI's query string parameters contains the relevant authorization information, which your application will need to provide when making API calls. You will need to let the BeatsMusicClient know this information.
 ```csharp
 client.Code = queryStringParams.GetValues("code").FirstOrDefault(); // For "Web Server applications" type authentication.
@@ -44,7 +47,7 @@ client.Code = queryStringParams.GetValues("code").FirstOrDefault(); // For "Web 
 client.SetClientAccessTokenFromRedirectUri(queryStringParams.GetValues("access_token").FirstOrDefault(), 
 		int.Parse(queryStringParams.GetValues("expires_in").FirstOrDefault())); // For "Client Side applications" type authentication.
 ```
-
+##### Calling advanced methods
 Now you can make more API calls, depends on the security level you've chosen.
 ```csharp
 // Works with both permissions
