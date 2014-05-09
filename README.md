@@ -35,6 +35,7 @@ var result2 = await client.Search.SearchByArtist("Connie");
 #### Getting Started #5: Advanced actions and authentication
 ##### Getting the authentication URI
 If you need to perform actions which would require user specific permissions, have your app navigate to Beats Music's OAuth webpage. You need to obtain the relevant address from the BeatsMusicClient, and have a web browser navigate to this address. 
+The URI address you recieve from the Beats Music client depends on how you intialized your client.
 ```csharp
 string addressToNavigate = client.UriAddressToNavigateForPermissions();
 ```
@@ -81,6 +82,10 @@ client.Code = queryStringParams.GetValues("code").FirstOrDefault();
 SingleRootObject<AudioData> result = await client.Audio.GetAudioStreamingInfo("tr61032803", Bitrate.Highest, true);
 ```
 
+Authentication levels
+---------------------
 
-
+There are two types of authentication you can give your application: 
+* Client Side Application (@[https://developer.beatsmusic.com/docs/read/getting_started/Client_Side_Applications](https://developer.beatsmusic.com/docs/read/getting_started/Client_Side_Applications)). This authentication requires your application to provide only ClientId when initializing the client. It provides a short- term more limited access that is not renewable.
+* Web Server Application (@[https://developer.beatsmusic.com/docs/read/getting_started/Web_Server_Applications](https://developer.beatsmusic.com/docs/read/getting_started/Web_Server_Applications)). This authentication requires your application to provide ClientId and SecretId when initializing the client. It provides a long- term full access and renews automatically after timing out as long as the application is running.
 
