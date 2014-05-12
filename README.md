@@ -11,15 +11,14 @@ BeatsMusic C# API is a .net framwork that accesses the Beats Music Developer API
 <br/>
 
 # Getting started
----------------
-## Getting Started #1: Get the framework
+### Getting Started #1: Get the framework
 To install BeatsMusicCSharpAPI, run the following command in Visual Studio's Package Manager Console.
 
 <code style="-moz-border-radius:5px;-webkit-border-radius:5px;background-color:#202020;border:4px solid silver;border-radius:5px;box-shadow:2px 2px 3px #6e6e6e;color:#e2e2e2;display:block;font:1.5em 'andale mono','lucida console',monospace;line-height:1.5em;overflow:auto;padding:15px">PM&gt; Install-Package BeatsMusicCSharpAPI</code>
 <br/>
 <br/>
 
-## Getting Started #2: Get Beats Music developer credentials
+### Getting Started #2: Get Beats Music developer credentials
 In order to use this API you'll need to register and get credentials from the Beats Music Developer website (@[https://developer.beatsmusic.com/member/register](https://developer.beatsmusic.com/member/register)). What you need to obtain is your application's ClientId and optionally a ClientSecret.
 <br/><br/>
 ![Beats Music Developer Credentials](http://i.imgur.com/HvRscvX.png)
@@ -27,7 +26,7 @@ In order to use this API you'll need to register and get credentials from the Be
 <br/>
 
 
-## Getting Started #3: Initialize a BeatsMusicClient
+### Getting Started #3: Initialize a BeatsMusicClient
 You will then use the ClientId and optionally the ClientSecret to initialize the BeatsMusicClient object which will serve as gateway to all the API calls. Depending on the security level you wish to give your application you can choose to embed your apps' ClientSecret and gain write access to the Beats Music developer APIs.
 
 <pre style="font-family:Consolas;font-size:15;color:black;background:white;"><span style="color:green;">//&nbsp;Use&nbsp;this&nbsp;c&#39;tor&nbsp;for&nbsp;&quot;Web&nbsp;Server&nbsp;applications&quot;&nbsp;type&nbsp;authentication.&nbsp;</span>
@@ -38,7 +37,7 @@ You will then use the ClientId and optionally the ClientSecret to initialize the
 <span style="color:green;">//&nbsp;&quot;Client&nbsp;Side&nbsp;applications&quot;&nbsp;are&nbsp;mostly&nbsp;apps&nbsp;read-only&nbsp;applications.&nbsp;</span>
 <span style="color:blue;">var</span>&nbsp;client&nbsp;=&nbsp;<span style="color:blue;">new</span>&nbsp;<span style="color:#2b91af;">BeatsMusicClient</span>(ClientId,&nbsp;RedirectUrl);&nbsp;</pre>
 
-## Getting Started #4: Do stuff
+### Getting Started #4: Do stuff
 That's it! You're ready to use API calls which do not require user- specific permissions.
 
 **Sample: Searching by artist**
@@ -69,13 +68,13 @@ That's it! You're ready to use API calls which do not require user- specific per
 }</pre>
 
 # Advanced actions and authentication
-## Getting the authentication URI
+### Getting the authentication URI
 If you need to perform actions which would require user specific permissions you'll need to oauth your user to Beats Music. first, have your app navigate to Beats Music's OAuth webpage. Them, you'll need to obtain the oauth login URL from the BeatsMusicClient. And finally have a web browser navigate to this address. 
 The URI address you recieve from the Beats Music client depends on which c'tor was used to intialize your client.
 <pre style="font-family:Consolas;font-size:15;color:black;background:white;"><span style="color:green;">//&nbsp;navigate&nbsp;a&nbsp;WebBrowser&nbsp;to&nbsp;this&nbsp;Uri&nbsp;to&nbsp;OAuth&nbsp;login&nbsp;users</span>
 <span style="color:blue;">string</span>&nbsp;addressToNavigate&nbsp;=&nbsp;client.UriAddressToNavigateForPermissions();</pre>
 
-## Getting the authentication details from the redirected URI and setting them up 
+### Getting the authentication details from the redirected URI and setting them up 
 After the user inputs their credentials, the WebBrowser will be the redirected to your client's RedirectUri. The URI's query string parameters contain the relevant authorization information. Your application will need to provide that authorization information when making API calls. You will get the query string values and pass those to the BeatsMusicClient instance.
 <pre style="font-family:Consolas;font-size:15;color:black;background:white;"><span style="color:green;">//&nbsp;Used&nbsp;for&nbsp;&quot;Web&nbsp;Server&nbsp;applications&quot;&nbsp;type&nbsp;authentication.</span>
 client.ServerCode&nbsp;=&nbsp;queryStringParams
@@ -87,7 +86,7 @@ client.SetClientAccessTokenFromRedirectUri(
 &nbsp;&nbsp;&nbsp;&nbsp;queryStringParams.GetValues(<span style="color:#a31515;">&quot;access_token&quot;</span>).FirstOrDefault(),
 &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">int</span>.Parse(queryStringParams.GetValues(<span style="color:#a31515;">&quot;expires_in&quot;</span>).FirstOrDefault()));</pre>
 
-##### Calling methods requiring OAuth
+### Calling methods requiring OAuth
 After OAuthing your user you can invoke additional APIs (depends on the c'tor you've used for the BeatsMusicClient).
 <pre style="font-family:Consolas;font-size:15;color:black;background:white;"><span style="color:green;">//&nbsp;Getting&nbsp;Streaming&nbsp;Info&nbsp;work&nbsp;with&nbsp;either&nbsp;BeatsMusicClient&nbsp;c&#39;tor</span>
 <span style="color:blue;">var</span>&nbsp;result&nbsp;=&nbsp;<span style="color:blue;">await</span>&nbsp;client.Audio.GetAudioStreamingInfo(
@@ -103,7 +102,7 @@ After OAuthing your user you can invoke additional APIs (depends on the c'tor yo
 Obligatory Long Code Sample
 -------
 
-```c#
+```csharp
 // Initialize a BeatsMusicClient object which will serve as the endpoint for accessing Beats Music API.
 BeatsMusicClient client = new BeatsMusicClient(ClientId, RedirectUrl, ClientSecret);
 
@@ -125,9 +124,8 @@ client.Code = queryStringParams.GetValues("code").FirstOrDefault();
 SingleRootObject<AudioData> result = await client.Audio.GetAudioStreamingInfo("tr61032803", Bitrate.Highest, true);
 ```
 
-Authentication levels
----------------------
 
+# Authentication levels
 There are two authentication levels you can use in your application: 
 * Client Side Application (@[https://developer.beatsmusic.com/docs/read/getting_started/Client_Side_Applications](https://developer.beatsmusic.com/docs/read/getting_started/Client_Side_Applications)). This authentication requires your application to provide only the ClientId when initializing the client. It provides a short- term more limited access that is not renewable.
 * Web Server Application (@[https://developer.beatsmusic.com/docs/read/getting_started/Web_Server_Applications](https://developer.beatsmusic.com/docs/read/getting_started/Web_Server_Applications)). This authentication requires your application to provide ClientId and SecretId when initializing the client. It provides a long- term full access and renews automatically after timing out as long as the application is running.
