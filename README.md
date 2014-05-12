@@ -25,7 +25,7 @@ In order to use this API you'll need to register and get credentials from the Be
 
 
 ### Getting Started #3: Initialize a BeatsMusicClient
-You will then use the ClientId and optionally the ClientSecret to initialize the BeatsMusicClient object which will serve as gateway to all the API calls. Depending on the security level you wish to give your application you can choose to embed your apps' ClientSecret and gain write access to the Beats Music developer APIs.
+You will then use the ClientId and optionally the ClientSecret to initialize the BeatsMusicClient object which will serve as gateway to all the API calls. Depending on the security level you wish to give your application you can choose to embed your apps' ClientSecret and gain further access to the Beats Music developer APIs.
 
 ![Initialize a BeatsMusicClient](http://i.imgur.com/LL6pqfB.png)
 
@@ -43,12 +43,12 @@ That's it! You're ready to use API calls which do not require user- specific per
 
 # Advanced actions and authentication
 ### Getting the authentication URI
-If you need to perform actions which would require user specific permissions you'll need to oauth your user to Beats Music. first, have your app navigate to Beats Music's OAuth webpage. Them, you'll need to obtain the oauth login URL from the BeatsMusicClient. And finally have a web browser navigate to this address. 
-The URI address you recieve from the Beats Music client depends on which c'tor was used to intialize your client.
+If you need to perform actions which would require user specific permissions you'll need to oauth your user to Beats Music. first, have your app navigate to Beats Music's OAuth webpage, with the OAuth login URL you obtain from the BeatsMusicClient. 
+The URI address you recieve from the Beats Music client depends on which c'tor was used to intialize your client (with or without ClientSecret).
 ![Getting the authentication URI](http://i.imgur.com/oOJrh7M.png)
 
 ### Getting the authentication details from the redirected URI
-After the user inputs their credentials, the WebBrowser will be the redirected to your client's RedirectUri. The URI's query string parameters contain the relevant authorization information. Your application will need to provide that authorization information when making API calls. You will get the query string values and pass those to the BeatsMusicClient instance.
+After the user inputs their credentials, the WebBrowser will be the redirected to your application's RedirectUri (again, the one inserted when creating BeatsMusicClient). The URI's query string parameters contain the relevant authorization information. Your application will need to provide that authorization information when making API calls. You will get the query string values and pass those to the BeatsMusicClient instance. Those values are again different if ClientSecret was provided.
 ![Getting the authentication details from the redirected URI](http://i.imgur.com/63xWRO9.png)
  
 ### Calling methods requiring OAuth
