@@ -38,8 +38,6 @@ That's it! You're ready to use API calls which do not require user- specific per
 **Sample: Fetching an album by ID** 
 ![Fetching an album by ID](http://i.imgur.com/9cxICVJ.png)
 
-**Sample: Get Playlists from the first Genre**
-![Get Playlists from the first Genre](http://i.imgur.com/sBTtugP.png)
 
 # Advanced actions and authentication
 ### Getting the authentication URI
