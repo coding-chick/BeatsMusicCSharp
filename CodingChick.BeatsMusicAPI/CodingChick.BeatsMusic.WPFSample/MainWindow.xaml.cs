@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -66,7 +67,7 @@ namespace CodingChick.BeatsMusic.WPFSample
             // A check that the OAuth page has redirected to the redirected url provided.
             if (e.Uri != null && e.Uri.AbsoluteUri.Contains("insert part of redirected url here"))
             {
-                var queryStringParams = HttpUtility.ParseQueryString(e.Uri.Query);
+                NameValueCollection queryStringParams = HttpUtility.ParseQueryString(e.Uri.Query);
 
                 // The first (commented) if statement is the key required for Client Side application (lower security), 
                 // the second (uncommented) if is for Web Server applications (higher security).

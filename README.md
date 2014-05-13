@@ -7,6 +7,8 @@ BeatsMusic C# API is a .net framwork that accesses the Beats Music Developer API
 * Silverlight 5 (web plguin) 
 * Windows 8 (tablet) 
 * Windows Phone Silverlight 8 (mobile)
+* Xamarin.Android
+* Xamarin.iOS
 
 # Getting started
 ### Getting Started #1: Get the framework
