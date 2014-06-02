@@ -45,6 +45,8 @@ namespace CodingChick.BeatsMusic.WPFSample
             //this.ClientId = "<your Beats Music app client ID here>";
             //this.ClientSecret = "<your Beats Music app client Secret here>";
             //this.RedirectUrl = "<your Beats Music app Redirect Uri here>";
+       
+
 
             // Create the beats music API client that will call all services, can be called with ClientSecret for enhanced long term security,
             // or without for short term limited security. More infomation on types of security @ https://developer.beatsmusic.com/docs/read/getting_started/Client_Side_Applications
