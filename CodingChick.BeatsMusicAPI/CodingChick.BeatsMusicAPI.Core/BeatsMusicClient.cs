@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using CodingChick.BeatsMusicAPI.Core.Base;
 using CodingChick.BeatsMusicAPI.Core.Endpoints;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
+using CodingChick.BeatsMusicAPI.Core.Helpers;
 
 [assembly: InternalsVisibleTo("CodingChick.BeatsMusicAPI.Tests")]
 namespace CodingChick.BeatsMusicAPI.Core
@@ -35,8 +37,7 @@ namespace CodingChick.BeatsMusicAPI.Core
             _follow = new Lazy<FollowEndpoint>(() => new FollowEndpoint(_beatsHttpData));
             _genre = new Lazy<GenreEndpoint>(() => new GenreEndpoint(_beatsHttpData));
             _audio = new Lazy<AudioEndpoint>(() => new AudioEndpoint(_beatsHttpData));
-
-
+            _me = new Lazy<MeEndpoint>(() => new MeEndpoint(_beatsHttpData));
         }
 
         /// <summary>
@@ -51,6 +52,7 @@ namespace CodingChick.BeatsMusicAPI.Core
             _authorization.ClientSecret = clientSecret;
         }
 
+
         private Lazy<SearchEndpoint> _search;
 
         private Lazy<PlaylistsEndpoint> _playlists;
@@ -60,6 +62,12 @@ namespace CodingChick.BeatsMusicAPI.Core
         private Lazy<FollowEndpoint> _follow;
         private Lazy<GenreEndpoint> _genre;
         private Lazy<AudioEndpoint> _audio;
+        private Lazy<MeEndpoint> _me;
+
+        public MeEndpoint Me
+        {
+            get { return _me.Value; }
+        }
 
         public AudioEndpoint Audio
         {
@@ -123,6 +131,29 @@ namespace CodingChick.BeatsMusicAPI.Core
         {
             _authorization.ReadOnlyAccessToken = accessToken;
             _authorization.SetExpiresAt(expiresAt);
+        }
+
+        public async Task<string> GetBeatsMusicPlayerCode(string playableResourceId)
+        {
+            var user = await Me.GetMeInfo();
+            var helper = new FileHelper();
+            string fileContents = helper.GetResourceTextFile("PlayerCode.html");
+            fileContents = fileContents.Replace("myClientId", _authorization.ClientId);
+            fileContents = fileContents.Replace("myAccessToken", AccessToken);
+            fileContents = fileContents.Replace("myUserId", user.Data.UserContext);
+            fileContents = fileContents.Replace("myTrack", playableResourceId);
+            return fileContents;
+        }
+
+        public string ClientId { get { return _authorization.ClientId; } }
+        public string AccessToken {
+            get
+            {
+                if (!string.IsNullOrEmpty(_authorization.ReadOnlyAccessToken))
+                    return _authorization.ReadOnlyAccessToken;
+                else
+                    return _authorization.ReadWriteAccessToken;
+            } 
         }
 
         //Internal properties exposed for testing purposes only.

@@ -1,5 +1,6 @@
 using System;
 using CodingChick.BeatsMusicAPI.Core.Data.Albums;
+using CodingChick.BeatsMusicAPI.Core.Data.Me;
 using CodingChick.BeatsMusicAPI.Core.Data.Playlists;
 using Newtonsoft.Json.Linq;
 

@@ -7,6 +7,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Data
     {
         [JsonProperty("data")]
         public T Data { get; set; }
+        
         [JsonProperty("code")]
         public string Code { get; set; }
 

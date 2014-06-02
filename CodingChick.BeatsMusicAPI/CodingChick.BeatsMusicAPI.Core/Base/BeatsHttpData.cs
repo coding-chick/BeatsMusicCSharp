@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CodingChick.BeatsMusicAPI.Core.Data;
+using CodingChick.BeatsMusicAPI.Core.Data.Me;
 using CodingChick.BeatsMusicAPI.Core.Data.Playlists;
 using Newtonsoft.Json;
 
@@ -39,6 +40,12 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         public async Task<SingleRootObject<T>> GetSingleParsedResult<T>(string methodName, List<KeyValuePair<string, string>> methodParams, bool useToken = false)
         {
             var dataResponse = await GetDataResponse(methodName, methodParams, useToken);
+
+            // This is a very annoying fix to make sure API calls are consistent and all return "data", and since "me" api is different in returning "result" I made sure all return the same.
+            if (typeof (T) == typeof (MeData))
+            {
+                dataResponse = dataResponse.Replace("result", "data");
+            }
 
             var parsedDataResponse = JsonConvert.DeserializeObject<SingleRootObject<T>>(dataResponse);
 

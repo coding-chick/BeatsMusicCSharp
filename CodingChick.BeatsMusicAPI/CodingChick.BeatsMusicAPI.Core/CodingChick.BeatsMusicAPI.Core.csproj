@@ -136,6 +136,7 @@
     <Compile Include="Data\BaseDataConverter.cs" />
     <Compile Include="Data\Genres\GenreData.cs" />
     <Compile Include="Data\JsonCreationConverter.cs" />
+    <Compile Include="Data\Me\MeData.cs" />
     <Compile Include="Data\Playlists\PlaylistData.cs" />
     <Compile Include="Data\Playlists\PlaylistsRefs.cs" />
     <Compile Include="Data\RefTypeInfo.cs" />
@@ -167,12 +168,14 @@
     <Compile Include="Endpoints\FollowEndpoint.cs" />
     <Compile Include="Endpoints\GenreEndpoint.cs" />
     <Compile Include="Endpoints\HighlightsEndpoint.cs" />
+    <Compile Include="Endpoints\MeEndoint.cs" />
     <Compile Include="Endpoints\PlaylistsEndpoint.cs" />
     <Compile Include="Endpoints\Enums\PlaylistsOrderBy.cs" />
     <Compile Include="Endpoints\Enums\PlaylistRefType.cs" />
     <Compile Include="Endpoints\DataFilters\StreamabilityFilters.cs" />
     <Compile Include="Endpoints\Enums\TracksOrderByData.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\HttpUtilityHelper.cs" />
     <Compile Include="Endpoints\Enums\AlbumsOrderBy.cs" />
     <Compile Include="Helpers\ParamValueAttribute.cs" />
@@ -237,7 +240,11 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Player\PlayerCode.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

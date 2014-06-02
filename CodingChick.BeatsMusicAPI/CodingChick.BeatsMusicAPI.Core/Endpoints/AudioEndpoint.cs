@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CodingChick.BeatsMusicAPI.Core.Base;
 using CodingChick.BeatsMusicAPI.Core.Data;
 using CodingChick.BeatsMusicAPI.Core.Data.Audio;
+using CodingChick.BeatsMusicAPI.Core.Helpers;
 
 namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 {
@@ -35,6 +36,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             return await BeatsHttpData.GetSingleParsedResult<AudioData>(string.Format("tracks/{0}/audio", trackId), methodParams,
                 true);
         }
+
+      
     }
 
     public enum Bitrate

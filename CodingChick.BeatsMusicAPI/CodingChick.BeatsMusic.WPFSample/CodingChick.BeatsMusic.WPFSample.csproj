@@ -172,6 +172,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BeatsPlayer\BeatsMusicPlayer.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="SoundManager\HTMLAudioPlayer.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
