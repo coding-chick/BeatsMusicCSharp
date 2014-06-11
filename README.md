@@ -152,6 +152,7 @@ Which returns a string with the basic javascript player with all the parameters 
 ```
 
 Another option is to obtain all the needed parameters yourself and use them however you'd prefer, you will need:
+
 ![All details needed for web player to work](http://i.imgur.com/npWm3i5.jpg)
 
 
@@ -160,10 +161,12 @@ Another option is to obtain all the needed parameters yourself and use them howe
 You can get the basic information needed to give to other players by using the API call GetAudioStreamingInfo in Audio.
 
 ```csharp
-SingleRootObject<AudioData> trackResult = await client.Audio.GetAudioStreamingInfo("tr61032803", Bitrate.Highest, true);
+SingleRootObject<AudioData> trackResult = 
+		await client.Audio.GetAudioStreamingInfo("tr61032803", Bitrate.Highest, true);
 ```
 
 The result has parameters such as Data.Resource and Data.Location that you can provide alongside with the playable resource id to other players in order to play audio.
+
 For example if you want to use the SoundManager 2 (@[http://www.schillmania.com/projects/soundmanager2/](http://www.schillmania.com/projects/soundmanager2)), you will need to supply it those 3 parameters, so your javascript can look similar to this:
 
 ```js
