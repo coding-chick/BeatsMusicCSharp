@@ -86,5 +86,103 @@ There are two authentication levels you can use in your application:
 * Client Side Application (@[https://developer.beatsmusic.com/docs/read/getting_started/Client_Side_Applications](https://developer.beatsmusic.com/docs/read/getting_started/Client_Side_Applications)). This authentication requires your application to provide only the ClientId when initializing the client. It provides a short- term more limited access that is not renewable.
 * Web Server Application (@[https://developer.beatsmusic.com/docs/read/getting_started/Web_Server_Applications](https://developer.beatsmusic.com/docs/read/getting_started/Web_Server_Applications)). This authentication requires your application to provide ClientId and SecretId when initializing the client. It provides a long- term full access and renews automatically after timing out as long as the application is running.
 
+# Playing music
+
+There are two main ways to play music using the C# API, you can use any player that supports RMTP, or alternaitvly, you can use Beats JavaScript web player to play with (@[https://developer.beatsmusic.com/docs/read/web_playback_api/Getting_Started](https://developer.beatsmusic.com/docs/read/web_plIfayback_api/Getting_Started)).
+
+### Working with Beats' javascript web player
+You can get the basic javascript code you need to use in order to play a resource (like a track or a playlist), with all the paramethers you need already set by calling the Client's GetBeatsMusicPlayerCode("playable resource") method, which returns a string containing the basic javascript code needed.
+
+```csharp
+string beatsPlayer = await client.GetBeatsMusicPlayerCode("tr61032803");
+```
+
+Which returns a string with the basic javascript player with all the parameters filled in and ready to play.
+
+```html
+<html>
+<head>
+    <title>My Beats Music Player</title>
+</head>
+<body>
+    <script src="http://bam.cdn.beatsmusic.com/bam-1.0.2.min.js"></script>
+    <script>
+        var bam = new BeatsAudioManager("myBeatsPlayer");
+        bam.on("ready", handleReady);
+        bam.on("error", handleError);
+        function handleReady(value) {
+            bam.clientId = "m7fcvzrgbzsxtafuhmg9ndapq";
+            bam.authentication = {
+                access_token: "zghkjh53mbvap5answqfmau2",
+                user_id: "154703926576640"
+            };
+            bam.identifier = "tr61032803";
+            bam.load();
+        };
+        function handleError(value) {
+            console.log("Error: " + value);
+            switch (value) {
+                case "auth":
+                    // Beats Music API auth error (401)
+                    break;
+                case "connectionfailure":
+                    // audio stream connection failure
+                    break;
+                case "apisecurity":
+                    // Beats Music API crossdomain error
+                    break;
+                case "streamsecurity":
+                    // audio stream crossdomain error
+                    break;
+                case "streamio":
+                    // audio stream io error
+                    break;
+                case "apiio":
+                    // Beats Music API io error getting track data
+                    break;
+                case "flashversion":
+                    // flash version too low or not installed
+                    break;
+            }
+        };
+
+    </script>
+</body>
+</html>
+```
+
+Another option is to obtain all the needed parameters yourself and use them however you'd prefer, you will need:
+![All details needed for web player to work](http://i.imgur.com/npWm3i5.jpg)
 
 
+### Working with other players
+
+You can get the basic information needed to give to other players by using the API call GetAudioStreamingInfo in Audio.
+
+```csharp
+SingleRootObject<AudioData> trackResult = await client.Audio.GetAudioStreamingInfo("tr61032803", Bitrate.Highest, true);
+```
+
+The result has parameters such as Data.Resource and Data.Location that you can provide alongside with the playable resource id to other players in order to play audio.
+For example if you want to use the SoundManager 2 (@[http://www.schillmania.com/projects/soundmanager2/](http://www.schillmania.com/projects/soundmanager2)), you will need to supply it those 3 parameters, so your javascript can look similar to this:
+
+```js
+<script type="text/javascript" src="SoundManager/script/soundmanager2.js"></script>
+<script type="text/javascript">
+    soundManager.flashVersion = 9;
+    soundManager.url = 'SoundManager/swf';
+    soundManager.debugFlash = true;
+    soundManager.preferFlash = true;
+    soundManager.onready(function () {
+        var sound =
+        soundManager.createSound(
+            {
+                id: getParameterByName('playable resource id'),
+                url: getParameterByName('Data.Resource'),
+                serverURL: getParameterByName('Data.Location')
+            });
+        sound.play();
+    });
+</script>
+
+```
