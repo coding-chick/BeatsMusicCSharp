@@ -88,10 +88,12 @@ There are two authentication levels you can use in your application:
 
 # Playing music
 
-There are two main ways to play music using the C# API, you can use any player that supports RMTP, or alternaitvly, you can use Beats JavaScript web player to play with (@[https://developer.beatsmusic.com/docs/read/web_playback_api/Getting_Started](https://developer.beatsmusic.com/docs/read/web_plIfayback_api/Getting_Started)).
+There are two main ways to play music using the C# API, you can use any player that supports RMTP, or alternatively, you can use Beats JavaScript web player to play with (@ 
+[https://developer.beatsmusic.com/docs/read/web_playback_api/Getting_Started](https://developer.beatsmusic.com/docs/read/web_plIfayback_api/Getting_Started)).
 
 ### Working with Beats' javascript web player
-You can get the basic javascript code you need to use in order to play a resource (like a track or a playlist), with all the paramethers you need already set by calling the Client's GetBeatsMusicPlayerCode("playable resource") method, which returns a string containing the basic javascript code needed.
+You can get the basic javascript code you need to use in order to play a resource (like a track or a playlist), with all the parameters you need already set by calling the Client's  
+GetBeatsMusicPlayerCode("playable resource") method, which returns a string containing the basic javascript code needed.
 
 ```csharp
 string beatsPlayer = await client.GetBeatsMusicPlayerCode("tr61032803");
