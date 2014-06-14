@@ -45,7 +45,6 @@ namespace CodingChick.BeatsMusic.WPFSample
             //this.ClientId = "<your Beats Music app client ID here>";
             //this.ClientSecret = "<your Beats Music app client Secret here>";
             //this.RedirectUrl = "<your Beats Music app Redirect Uri here>";
-       
 
 
             // Create the beats music API client that will call all services, can be called with ClientSecret for enhanced long term security,
@@ -89,6 +88,8 @@ namespace CodingChick.BeatsMusic.WPFSample
                     // This is an example of calling the BeatsMusic API, this call will get an information about the user currently logged into this app.
                     SingleRootObject<MeData> meResult = await client.Me.GetMeInfo();
 
+                    var search = await client.Search.SearchByArtist("Cat Stevens");
+                    var searchJson = ((IServerResponseProvider) search).ServerJson;
                     //***************************************************************************************************************
                     // This is an example of using streaming, this call will get an audio track info required for streaming. 
                     // Calling this method with the aquire set to true just to make sure this works every time.

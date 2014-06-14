@@ -89,6 +89,7 @@ namespace CodingChick.BeatsMusicAPI.Tests
             Assert.True(result.Data.Any(r => r.Display.Contains(TrackName)));
             Assert.True(result.Data.Any(r => r.Detail.Contains(TrackDetail)));
             Assert.True(result.Data.Any(r => r.Id.Contains(TrackId)));
+           
         }
 
         private const string UserDetail = "codingchick";
@@ -106,5 +107,6 @@ namespace CodingChick.BeatsMusicAPI.Tests
             Assert.True(result.Data.Any(r => r.Detail.Contains(UserDetail)));
             Assert.True(result.Data.Any(r => r.Id.Contains(UserId)));
         }
+
     }
 }

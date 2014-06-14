@@ -22,8 +22,14 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         {
             var dataResponse = await GetDataResponse(methodName, methodParams, useToken);
 
-            var parsedDataResponse = JsonConvert.DeserializeObject<MultipleRootObject<T>>(dataResponse);
+            var parsedDataResponse = ParsedMultipleDataResponse<T>(dataResponse);
+            return parsedDataResponse;
+        }
 
+        private MultipleRootObject<T> ParsedMultipleDataResponse<T>(string dataResponse)
+        {
+            var parsedDataResponse = JsonConvert.DeserializeObject<MultipleRootObject<T>>(dataResponse);
+            ((IServerResponseProvider) parsedDataResponse).ServerJson = dataResponse;
             return parsedDataResponse;
         }
 
@@ -33,6 +39,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
 
             var parsedDataResponse = JsonConvert.DeserializeObject<MultipleRootObject<T>>(dataResponse,
                new BaseDataConverter());
+            ((IServerResponseProvider)parsedDataResponse).ServerJson = dataResponse;
 
             return parsedDataResponse;
         }
@@ -47,8 +54,15 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
                 dataResponse = dataResponse.Replace("result", "data");
             }
 
-            var parsedDataResponse = JsonConvert.DeserializeObject<SingleRootObject<T>>(dataResponse);
+            var parsedDataResponse = ParsedSingleDataResponse<T>(dataResponse);
 
+            return parsedDataResponse;
+        }
+
+        private SingleRootObject<T> ParsedSingleDataResponse<T>(string dataResponse)
+        {
+            var parsedDataResponse = JsonConvert.DeserializeObject<SingleRootObject<T>>(dataResponse);
+            ((IServerResponseProvider) parsedDataResponse).ServerJson = dataResponse;
             return parsedDataResponse;
         }
 
@@ -76,7 +90,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             var httpResponse = await _httpBeatsMusicEngine.PostAsync(methodName, dataParams);
             var dataResponse = await httpResponse.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<SingleRootObject<T>>(dataResponse);
+            return ParsedSingleDataResponse<T>(dataResponse);
         }
 
         public async Task<SingleRootObject<T>> PutData<T>(string methodName, List<KeyValuePair<string, string>> dataParams, bool addCredentials = true)
@@ -87,7 +101,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             var httpResponse = await _httpBeatsMusicEngine.PutAsync(methodName, dataParams, addCredentials);
             var dataResponse = await httpResponse.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<SingleRootObject<T>>(dataResponse);
+            return ParsedSingleDataResponse<T>(dataResponse);
         }
 
         public async Task<bool> DeleteData(string methodName, List<KeyValuePair<string, string>> dataParams)

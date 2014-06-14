@@ -1,5 +1,7 @@
 ﻿using CodingChick.BeatsMusicAPI.Core.Data;
 using CodingChick.BeatsMusicAPI.Core.Data.Artists;
+using CodingChick.BeatsMusicAPI.Core.Data.Me;
+using CodingChick.BeatsMusicAPI.Core.Endpoints;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
 using NUnit.Framework;
 
@@ -19,7 +21,5 @@ namespace CodingChick.BeatsMusicAPI.Tests
             //Assert
             Assert.IsTrue(result);
         }
-
-        
     }
 }

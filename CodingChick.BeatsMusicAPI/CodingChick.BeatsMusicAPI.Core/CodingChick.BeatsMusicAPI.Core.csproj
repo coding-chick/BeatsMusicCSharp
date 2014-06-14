@@ -135,12 +135,14 @@
     <Compile Include="Data\Artists\ArtistRefs.cs" />
     <Compile Include="Data\BaseDataConverter.cs" />
     <Compile Include="Data\Genres\GenreData.cs" />
+    <Compile Include="Data\IServerResponseProvider.cs" />
     <Compile Include="Data\JsonCreationConverter.cs" />
     <Compile Include="Data\Me\MeData.cs" />
     <Compile Include="Data\Playlists\PlaylistData.cs" />
     <Compile Include="Data\Playlists\PlaylistsRefs.cs" />
     <Compile Include="Data\RefTypeInfo.cs" />
     <Compile Include="Data\Reviews\ReviewData.cs" />
+    <Compile Include="Data\RootObject.cs" />
     <Compile Include="Data\SingleRootObject.cs" />
     <Compile Include="Data\Tracks\TrackData.cs" />
     <Compile Include="Data\Tracks\TrackRefs.cs" />
