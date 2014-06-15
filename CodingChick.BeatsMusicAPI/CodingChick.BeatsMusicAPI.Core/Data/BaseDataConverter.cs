@@ -6,9 +6,9 @@ using Newtonsoft.Json.Linq;
 
 namespace CodingChick.BeatsMusicAPI.Core.Data
 {
-    public class BaseDataConverter : JsonCreationConverter<BaseData>
+    public class BaseDataConverter : JsonCreationConverter<BaseConvertedData>
     {
-        protected override BaseData Create(Type objectType, JObject jObject)
+        protected override BaseConvertedData Create(Type objectType, JObject jObject)
         {
             if (FieldExists("essential", jObject))
             {
@@ -20,7 +20,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Data
             }
             else
             {
-                return new BaseData();
+                return new BaseConvertedData();
             }
         }
 

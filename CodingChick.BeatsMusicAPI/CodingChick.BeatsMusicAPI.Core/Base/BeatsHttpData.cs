@@ -29,7 +29,6 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         private MultipleRootObject<T> ParsedMultipleDataResponse<T>(string dataResponse)
         {
             var parsedDataResponse = JsonConvert.DeserializeObject<MultipleRootObject<T>>(dataResponse);
-            ((IServerResponseProvider) parsedDataResponse).ServerJson = dataResponse;
             return parsedDataResponse;
         }
 
@@ -39,7 +38,6 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
 
             var parsedDataResponse = JsonConvert.DeserializeObject<MultipleRootObject<T>>(dataResponse,
                new BaseDataConverter());
-            ((IServerResponseProvider)parsedDataResponse).ServerJson = dataResponse;
 
             return parsedDataResponse;
         }
@@ -62,7 +60,6 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         private SingleRootObject<T> ParsedSingleDataResponse<T>(string dataResponse)
         {
             var parsedDataResponse = JsonConvert.DeserializeObject<SingleRootObject<T>>(dataResponse);
-            ((IServerResponseProvider) parsedDataResponse).ServerJson = dataResponse;
             return parsedDataResponse;
         }
 

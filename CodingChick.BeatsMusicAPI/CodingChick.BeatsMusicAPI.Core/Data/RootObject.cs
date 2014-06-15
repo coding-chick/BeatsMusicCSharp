@@ -2,7 +2,7 @@
 
 namespace CodingChick.BeatsMusicAPI.Core.Data
 {
-    public abstract class RootObject<T> : IServerResponseProvider
+    public abstract class RootObject<T> 
     {
         [JsonProperty("code")]
         public string Code { get; set; }
@@ -12,6 +12,5 @@ namespace CodingChick.BeatsMusicAPI.Core.Data
             get { return Code.ToLower() != "ok"; }
         }
 
-        string IServerResponseProvider.ServerJson { get; set; }
     }
 }

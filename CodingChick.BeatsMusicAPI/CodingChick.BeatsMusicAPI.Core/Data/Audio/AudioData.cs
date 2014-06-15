@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace CodingChick.BeatsMusicAPI.Core.Data.Audio
 {
     [JsonObject("Datum")]
-    public class AudioData
+    public class AudioData : BaseData
     {
         [JsonProperty("location")]
         public string Location { get; set; }

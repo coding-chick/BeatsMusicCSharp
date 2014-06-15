@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace CodingChick.BeatsMusicAPI.Core.Data.Reviews
 {
     [JsonObject("Datum")]
-    public class ReviewData
+    public class ReviewData : BaseData
     {
         [JsonProperty("type")]
         public string Type { get; set; }

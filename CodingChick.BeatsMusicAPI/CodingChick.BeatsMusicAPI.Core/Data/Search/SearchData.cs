@@ -3,7 +3,7 @@
 namespace CodingChick.BeatsMusicAPI.Core.Data.Search
 {
     [JsonObject("Datum")]
-    public class SearchData
+    public class SearchData : BaseData
     {
         [JsonProperty("type")]
         public string Type { get; set; }

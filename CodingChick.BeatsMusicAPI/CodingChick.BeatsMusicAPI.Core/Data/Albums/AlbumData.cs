@@ -7,10 +7,8 @@ using Newtonsoft.Json;
 namespace CodingChick.BeatsMusicAPI.Core.Data.Albums
 {
     [JsonObject("Datum")]
-    public class AlbumData : BaseData
+    public class AlbumData : BaseConvertedData
     {
-     
-
         [JsonProperty("title")]
         public string Title { get; set; }
 

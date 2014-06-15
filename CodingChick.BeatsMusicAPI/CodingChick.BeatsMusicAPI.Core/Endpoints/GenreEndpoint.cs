@@ -59,17 +59,17 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         /// <param name="limit">Specifies the maximum number of records to retrieve. The number of results returned will be less than or equal to this value. No results are returned if it is set to zero or less. The maximum permitted value is 200. If a value higher than 200 is specified, no more 200 results will be returned. Default 20.</param>
         /// <param name="offset">A zero-based integer offset into the results. Default 0.</param>
         /// <returns>A collection of AlbumData and PlaylistData</returns>
-        public async Task<MultipleRootObject<BaseData>> GetEditorPicksInGenre(string genreId, int limit = 20, int offset = 0)
+        public async Task<MultipleRootObject<BaseConvertedData>> GetEditorPicksInGenre(string genreId, int limit = 20, int offset = 0)
         {
             return await RunMethodOnGenre("editors_picks", genreId, limit, offset);
         }
 
-        private async Task<MultipleRootObject<BaseData>> RunMethodOnGenre(string methodName, string genreId, int limit, int offset)
+        private async Task<MultipleRootObject<BaseConvertedData>> RunMethodOnGenre(string methodName, string genreId, int limit, int offset)
         {
             var methodParams = ValidateAndCreateLimitOffsetParams(limit, offset);
             return
                 await
-                    BeatsHttpData.GetMultipleParsedResultWithConverter<BaseData>(
+                    BeatsHttpData.GetMultipleParsedResultWithConverter<BaseConvertedData>(
                         string.Format("genres/{0}/{1}", genreId, methodName), methodParams);
         }
 
@@ -80,7 +80,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         /// <param name="limit">Specifies the maximum number of records to retrieve. The number of results returned will be less than or equal to this value. No results are returned if it is set to zero or less. The maximum permitted value is 200. If a value higher than 200 is specified, no more 200 results will be returned. Default 20.</param>
         /// <param name="offset">A zero-based integer offset into the results. Default 0.</param>
         /// <returns>A collection of AlbumData and PlaylistData</returns>
-        public async Task<MultipleRootObject<BaseData>> GetFeaturedInGenre(string genreId, int limit = 20,
+        public async Task<MultipleRootObject<BaseConvertedData>> GetFeaturedInGenre(string genreId, int limit = 20,
             int offset = 0)
         {
             return await RunMethodOnGenre("featured", genreId, limit, offset);
@@ -94,7 +94,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         /// <param name="limit">Specifies the maximum number of records to retrieve. The number of results returned will be less than or equal to this value. No results are returned if it is set to zero or less. The maximum permitted value is 200. If a value higher than 200 is specified, no more 200 results will be returned. Default 20.</param>
         /// <param name="offset">A zero-based integer offset into the results. Default 0.</param>
         /// <returns>A collection of AlbumData and PlaylistData</returns>
-        public async Task<MultipleRootObject<BaseData>> GetNewReleasesInGenre(string genreId, int limit = 20,
+        public async Task<MultipleRootObject<BaseConvertedData>> GetNewReleasesInGenre(string genreId, int limit = 20,
             int offset = 0)
         {
             return await RunMethodOnGenre("new_releases", genreId, limit, offset);
