@@ -16,7 +16,7 @@ namespace CodingChick.BeatsMusicAPI.Core
     {
         private Authorization _authorization;
         private IHttpBeatsMusicEngine _httpBeatsMusicEngine;
-        private BeatsHttpData _beatsHttpData;
+        private BeatsMusicManager _beatsMusicManager;
 
         /// <summary>
         /// Initializes a new instance of <see cref="BeatsMusicClient"/> for read-only operations. 
@@ -28,16 +28,16 @@ namespace CodingChick.BeatsMusicAPI.Core
             _authorization = new Authorization(redirectUri, clientId);
 
             _httpBeatsMusicEngine = new HttpBeatsMusicEngine(new HttpClientAccessor(), _authorization);
-            _beatsHttpData = new BeatsHttpData(_httpBeatsMusicEngine);
-            _search = new Lazy<SearchEndpoint>(() => new SearchEndpoint(_beatsHttpData));
-            _playlists = new Lazy<PlaylistsEndpoint>(() => new PlaylistsEndpoint(_beatsHttpData));
-            _albums = new Lazy<AlbumsEndpoint>(() => new AlbumsEndpoint(_beatsHttpData));
-            _artists = new Lazy<ArtistsEndpoint>(() => new ArtistsEndpoint(_beatsHttpData));
-            _highlights = new Lazy<HighlightsEndpoint>(() => new HighlightsEndpoint(_beatsHttpData));
-            _follow = new Lazy<FollowEndpoint>(() => new FollowEndpoint(_beatsHttpData));
-            _genre = new Lazy<GenreEndpoint>(() => new GenreEndpoint(_beatsHttpData));
-            _audio = new Lazy<AudioEndpoint>(() => new AudioEndpoint(_beatsHttpData));
-            _me = new Lazy<MeEndpoint>(() => new MeEndpoint(_beatsHttpData));
+            _beatsMusicManager = new BeatsMusicManager(_httpBeatsMusicEngine, new JsonBeatsMusicEngine());
+            _search = new Lazy<SearchEndpoint>(() => new SearchEndpoint(_beatsMusicManager));
+            _playlists = new Lazy<PlaylistsEndpoint>(() => new PlaylistsEndpoint(_beatsMusicManager));
+            _albums = new Lazy<AlbumsEndpoint>(() => new AlbumsEndpoint(_beatsMusicManager));
+            _artists = new Lazy<ArtistsEndpoint>(() => new ArtistsEndpoint(_beatsMusicManager));
+            _highlights = new Lazy<HighlightsEndpoint>(() => new HighlightsEndpoint(_beatsMusicManager));
+            _follow = new Lazy<FollowEndpoint>(() => new FollowEndpoint(_beatsMusicManager));
+            _genre = new Lazy<GenreEndpoint>(() => new GenreEndpoint(_beatsMusicManager));
+            _audio = new Lazy<AudioEndpoint>(() => new AudioEndpoint(_beatsMusicManager));
+            _me = new Lazy<MeEndpoint>(() => new MeEndpoint(_beatsMusicManager));
         }
 
         /// <summary>

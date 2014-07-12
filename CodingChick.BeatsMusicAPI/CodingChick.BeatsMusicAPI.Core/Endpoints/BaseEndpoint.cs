@@ -11,16 +11,16 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 {
     public class BaseEndpoint
     {
-        private readonly BeatsHttpData _beatsHttpData;
+        private readonly BeatsMusicManager _beatsMusicManager;
 
-        internal BaseEndpoint(BeatsHttpData beatsHttpData)
+        internal BaseEndpoint(BeatsMusicManager beatsMusicManager)
         {
-            _beatsHttpData = beatsHttpData;
+            _beatsMusicManager = beatsMusicManager;
         }
 
-        internal BeatsHttpData BeatsHttpData
+        internal BeatsMusicManager BeatsMusicManager
         {
-            get { return _beatsHttpData; }
+            get { return _beatsMusicManager; }
         }
 
 

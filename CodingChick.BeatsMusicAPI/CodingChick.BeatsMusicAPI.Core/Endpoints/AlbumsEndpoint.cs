@@ -18,8 +18,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
     public class AlbumsEndpoint : BaseEndpoint
     {
 
-        internal AlbumsEndpoint(BeatsHttpData beatsHttpData)
-            : base(beatsHttpData)
+        internal AlbumsEndpoint(BeatsMusicManager beatsMusicManager)
+            : base(beatsMusicManager)
         {
         }
 
@@ -40,7 +40,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             methodParams = AddOrderByParam<AlbumsOrderBy>(albumsOrderBy, methodParams);
 
             
-            return await BeatsHttpData.GetMultipleParsedResult<AlbumData>("albums", methodParams);
+            return await BeatsMusicManager.GetMultipleParsedResult<AlbumData>("albums", methodParams);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             return
                 await
-                    BeatsHttpData.GetSingleParsedResult<AlbumData>(GetSingleFirstLevelMethod(albumId), null);
+                    BeatsMusicManager.GetSingleParsedResult<AlbumData>(GetSingleFirstLevelMethod(albumId), null);
         }
 
         public async Task<MultipleRootObject<ArtistData>> GetArtistsInAlbumId(string albumId)
@@ -64,7 +64,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             return
                 await
-                    BeatsHttpData.GetMultipleParsedResult<ArtistData>(GetSingleFirstLevelMethod(albumId) + "/artists", null);
+                    BeatsMusicManager.GetMultipleParsedResult<ArtistData>(GetSingleFirstLevelMethod(albumId) + "/artists", null);
         }
 
         public async Task<MultipleRootObject<TrackData>> GetTracksInAlbum(string albumId)
@@ -73,7 +73,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             return
                await
-                   BeatsHttpData.GetMultipleParsedResult<TrackData>(GetSingleFirstLevelMethod(albumId) + "/tracks", null);
+                   BeatsMusicManager.GetMultipleParsedResult<TrackData>(GetSingleFirstLevelMethod(albumId) + "/tracks", null);
         }
 
         public async Task<SingleRootObject<ReviewData>> GetReviewDataForAlbum(string albumId)
@@ -82,7 +82,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             return
              await
-                 BeatsHttpData.GetSingleParsedResult<ReviewData>(GetSingleFirstLevelMethod(albumId) + "/review", null);
+                 BeatsMusicManager.GetSingleParsedResult<ReviewData>(GetSingleFirstLevelMethod(albumId) + "/review", null);
         }
 
         public async Task<MultipleRootObject<AlbumData>> GetAllCompanionAlbums(string albumId)
@@ -91,7 +91,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             return
                 await
-                    BeatsHttpData.GetMultipleParsedResult<AlbumData>(GetSingleFirstLevelMethod(albumId) + "/companion_albums", null);
+                    BeatsMusicManager.GetMultipleParsedResult<AlbumData>(GetSingleFirstLevelMethod(albumId) + "/companion_albums", null);
         }
 
         private string GetSingleFirstLevelMethod(string albumId)

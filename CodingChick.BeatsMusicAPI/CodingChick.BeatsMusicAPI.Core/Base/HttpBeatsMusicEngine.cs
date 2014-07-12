@@ -28,7 +28,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             get { return BaseApiAddress + "v1/api/"; }
         }
 
-        public HttpBeatsMusicEngine(HttpClientAccessor clientAccessor, Authorization authorization)
+        public HttpBeatsMusicEngine(IHttpClientAccessor clientAccessor, Authorization authorization)
         {
             _clientAccessor = clientAccessor;
             _authorization = authorization;

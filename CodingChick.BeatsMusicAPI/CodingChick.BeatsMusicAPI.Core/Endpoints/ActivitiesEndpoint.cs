@@ -12,20 +12,20 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
     public class ActivitiesEndpoint : BaseEndpoint
     {
 
-        internal ActivitiesEndpoint(BeatsHttpData beatsHttpData) : base(beatsHttpData)
+        internal ActivitiesEndpoint(BeatsMusicManager beatsMusicManager) : base(beatsMusicManager)
         {
         }
 
         public async Task<MultipleRootObject<ActivityData>> GetAllActivities()
         {
-            return await BeatsHttpData.GetMultipleParsedResult<ActivityData>("activities", null);
+            return await BeatsMusicManager.GetMultipleParsedResult<ActivityData>("activities", null);
         }
 
         public async Task<SingleRootObject<ActivityData>> GetActivityById(string activityId)
         {
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(activityId), "activityId should contain a value");
 
-            return await BeatsHttpData.GetSingleParsedResult<ActivityData>("activities/" + activityId, null);
+            return await BeatsMusicManager.GetSingleParsedResult<ActivityData>("activities/" + activityId, null);
         }
     }
 }

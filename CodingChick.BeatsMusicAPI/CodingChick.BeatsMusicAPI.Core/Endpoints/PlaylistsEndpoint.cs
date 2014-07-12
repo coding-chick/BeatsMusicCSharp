@@ -19,8 +19,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
     public class PlaylistsEndpoint : BaseEndpoint
     {
 
-        internal PlaylistsEndpoint(BeatsHttpData beatsHttpData)
-            : base(beatsHttpData)
+        internal PlaylistsEndpoint(BeatsMusicManager beatsMusicManager)
+            : base(beatsMusicManager)
         {
         }
 
@@ -42,7 +42,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
                     {"access", ParamValueAttributeHelper.GetParamValueOfEnumAttribute<AccessPrivilege>(accessPrivilege)}
                 };
 
-            return await BeatsHttpData.PostData<PlaylistData>("playlists", dataParams.ToList());
+            return await BeatsMusicManager.PostData<PlaylistData>("playlists", dataParams.ToList());
         }
 
         private void ValidetaNameAndDescription(string name, string description)
@@ -63,7 +63,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         {
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(playlistId), "playlistId is null or empty");
 
-            return await BeatsHttpData.GetSingleParsedResult<PlaylistData>("playlists/" + playlistId, null, true);
+            return await BeatsMusicManager.GetSingleParsedResult<PlaylistData>("playlists/" + playlistId, null, true);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             ValidateIdOffsetLimit(offset, limit);
 
 
-            return await BeatsHttpData.GetMultipleParsedResult<UserData>("playlists/" + playlistId + "/subscribers", null, true);
+            return await BeatsMusicManager.GetMultipleParsedResult<UserData>("playlists/" + playlistId + "/subscribers", null, true);
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             methodParams = AddOffsetAndLimitParams(methodParams, offset, limit);
             methodParams = AddOrderByParam<PlaylistsOrderBy>(playlistsOrderBy, methodParams);
 
-            return await BeatsHttpData.GetMultipleParsedResult<PlaylistData>("playlists", methodParams, true);
+            return await BeatsMusicManager.GetMultipleParsedResult<PlaylistData>("playlists", methodParams, true);
         }
 
         
@@ -138,7 +138,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
                 paramsToUpdate.Add(new KeyValuePair<string, string>("description", description));
             }
 
-            return await BeatsHttpData.PutData<PlaylistData>("playlists/" + playlistId, paramsToUpdate.ToList());
+            return await BeatsMusicManager.PutData<PlaylistData>("playlists/" + playlistId, paramsToUpdate.ToList());
         }
 
         //TODO: think if should return bool or error
@@ -151,7 +151,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         {
             Contract.Requires<ArgumentNullException>(playlistId != null, "playlistId field is null");
 
-            return await BeatsHttpData.DeleteData("playlists/" + playlistId, null);
+            return await BeatsMusicManager.DeleteData("playlists/" + playlistId, null);
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             return
                 await
-                BeatsHttpData.GetMultipleParsedResult<TrackData>("playlists/" + playlistId + "/tracks", methodParams, true);
+                BeatsMusicManager.GetMultipleParsedResult<TrackData>("playlists/" + playlistId + "/tracks", methodParams, true);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             return
                 await
-                BeatsHttpData.GetMultipleParsedResult<PlaylistData>("users/" + userId + "/playlists/", methodParams, true);
+                BeatsMusicManager.GetMultipleParsedResult<PlaylistData>("users/" + userId + "/playlists/", methodParams, true);
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             }
 
             var result =
-                await BeatsHttpData.PostData<UserData>(string.Format("users/{0}/playlist_subscriptions", userId), playlistIdsParams);
+                await BeatsMusicManager.PostData<UserData>(string.Format("users/{0}/playlist_subscriptions", userId), playlistIdsParams);
             return (result.Code.ToLower() == "ok");
         }
 
@@ -240,7 +240,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
                 playlistIdsParams.Add(new KeyValuePair<string, string>("ids", playlistId));
             }
 
-            return await BeatsHttpData.DeleteData(string.Format("users/{0}/playlist_subscriptions", userId), playlistIdsParams);
+            return await BeatsMusicManager.DeleteData(string.Format("users/{0}/playlist_subscriptions", userId), playlistIdsParams);
         }
 
         /// <summary>
@@ -254,7 +254,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(userId), "userId field is null");
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(playlistId), "playlistId field is null");
 
-            var result = await BeatsHttpData.PutData<PlaylistData>(string.Format("users/{0}/playlist_subscriptions/{1}", userId, playlistId), null);
+            var result = await BeatsMusicManager.PutData<PlaylistData>(string.Format("users/{0}/playlist_subscriptions/{1}", userId, playlistId), null);
             return (result.Code.ToLower() == "ok");
         }
 
@@ -269,7 +269,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(userId), "userId field is null");
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(playlistId), "playlistId field is null");
 
-            return await BeatsHttpData.DeleteData(string.Format("users/{0}/playlist_subscriptions/{1}", userId, playlistId), null);
+            return await BeatsMusicManager.DeleteData(string.Format("users/{0}/playlist_subscriptions/{1}", userId, playlistId), null);
         }
 
         /// <summary>
@@ -296,7 +296,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             return
                 await
-                BeatsHttpData.GetMultipleParsedResult<PlaylistData>(
+                BeatsMusicManager.GetMultipleParsedResult<PlaylistData>(
                     string.Format("users/{0}/playlist_subscriptions", userId), methodParams, true);
 
         }

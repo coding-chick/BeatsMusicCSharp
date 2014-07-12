@@ -20,8 +20,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 {
     public class ArtistsEndpoint : BaseEndpoint
     {
-        internal ArtistsEndpoint(BeatsHttpData beatsHttpData)
-            : base(beatsHttpData)
+        internal ArtistsEndpoint(BeatsMusicManager beatsMusicManager)
+            : base(beatsMusicManager)
         {
         }
 
@@ -35,7 +35,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             var methodParams = new List<KeyValuePair<string, string>>();
             methodParams.AddRange(from artistId in artistsIds select new KeyValuePair<string, string>("ids", artistId));
 
-            return await BeatsHttpData.GetMultipleParsedResult<ArtistData>("artists", methodParams);
+            return await BeatsMusicManager.GetMultipleParsedResult<ArtistData>("artists", methodParams);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             methodParams = AddOrderByParam<ArtistOrderBy>(orderBy, methodParams);            
             AddStreamabilityFilterParams(filters, methodParams);
 
-            return await BeatsHttpData.GetMultipleParsedResult<ArtistData>("artists", methodParams);
+            return await BeatsMusicManager.GetMultipleParsedResult<ArtistData>("artists", methodParams);
         }
 
 
@@ -68,7 +68,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         {
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(artistId), "artistId field is null");
 
-            return await BeatsHttpData.GetSingleParsedResult<ArtistData>(string.Format("artists/{0}", artistId), null);
+            return await BeatsMusicManager.GetSingleParsedResult<ArtistData>(string.Format("artists/{0}", artistId), null);
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             return
                 await
-                BeatsHttpData.GetMultipleParsedResult<AlbumData>(string.Format("artists/{0}/albums", artistId),
+                BeatsMusicManager.GetMultipleParsedResult<AlbumData>(string.Format("artists/{0}/albums", artistId),
                                                                  methodParams);
         }
 
@@ -111,7 +111,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             return
              await
-             BeatsHttpData.GetMultipleParsedResult<AlbumData>(string.Format("artists/{0}/essential_albums", artistId),
+             BeatsMusicManager.GetMultipleParsedResult<AlbumData>(string.Format("artists/{0}/essential_albums", artistId),
                                                               null);
         }
 
@@ -152,7 +152,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             return
                 await
-                    BeatsHttpData.GetMultipleParsedResult<TrackData>(string.Format("artists/{0}/tracks", artistId),
+                    BeatsMusicManager.GetMultipleParsedResult<TrackData>(string.Format("artists/{0}/tracks", artistId),
                         dataParams);
         }
 
@@ -174,7 +174,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             return
                 await
-                    BeatsHttpData.GetMultipleParsedResult<PlaylistData>(
+                    BeatsMusicManager.GetMultipleParsedResult<PlaylistData>(
                         string.Format("artists/{0}/playlists", artistId), dataParams);
         }
 

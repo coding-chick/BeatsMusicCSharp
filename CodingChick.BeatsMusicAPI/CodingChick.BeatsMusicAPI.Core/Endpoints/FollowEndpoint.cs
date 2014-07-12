@@ -9,7 +9,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
     //TODO: wonder why this enpoint doesn't seem to work
     public class FollowEndpoint : BaseEndpoint
     {
-        internal FollowEndpoint(BeatsHttpData beatsHttpData) : base(beatsHttpData)
+        internal FollowEndpoint(BeatsMusicManager beatsMusicManager) : base(beatsMusicManager)
         {
         }
 
@@ -19,7 +19,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             var result =
                 await
-                    BeatsHttpData.PutData<ContentData>(
+                    BeatsMusicManager.PutData<ContentData>(
                         string.Format("{0}/{1}/follows/{2}", typeToFollow, userId, followId), null);
 
             return result.Code.ToLower() == "ok";

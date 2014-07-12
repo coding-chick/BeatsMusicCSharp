@@ -11,7 +11,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 {
     public class SearchEndpoint : BaseEndpoint
     {
-        internal SearchEndpoint(BeatsHttpData beatsHttpData) : base(beatsHttpData)
+        internal SearchEndpoint(BeatsMusicManager beatsMusicManager) : base(beatsMusicManager)
         {
         }
 
@@ -64,7 +64,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
                     {"type", queryType}
                 };
 
-            return await BeatsHttpData.GetMultipleParsedResult<SearchData>("search", searchParams.ToList());
+            return await BeatsMusicManager.GetMultipleParsedResult<SearchData>("search", searchParams.ToList());
         }
     }
 }
