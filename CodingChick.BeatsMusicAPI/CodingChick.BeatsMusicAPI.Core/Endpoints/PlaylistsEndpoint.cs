@@ -336,6 +336,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
                         string.Format("users/{0}/playlist_subscriptions", userId), methodParams, true);
         }
 
+
         /// <summary>
         /// Adds the tracks with the given ids to the playlist.
         /// A playlist can have a maximum of 500 tracks.
