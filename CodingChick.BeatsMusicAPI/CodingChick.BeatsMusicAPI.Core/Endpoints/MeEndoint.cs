@@ -9,7 +9,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 {
     public class MeEndpoint : BaseEndpoint
     {
-        internal MeEndpoint(BeatsHttpData beatsHttpData) : base(beatsHttpData)
+        internal MeEndpoint(BeatsMusicManager beatsMusicManager) : base(beatsMusicManager)
         {
         }
 
@@ -19,7 +19,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         /// <returns></returns>
         public async Task<SingleRootObject<MeData>> GetMeInfo()
         {
-            return await BeatsHttpData.GetSingleParsedResult<MeData>("me", new List<KeyValuePair<string, string>>(), true);
+            return await BeatsMusicManager.GetSingleParsedResult<MeData>("me", new List<KeyValuePair<string, string>>(), true);
         }
 
         

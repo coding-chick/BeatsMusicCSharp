@@ -16,7 +16,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 {
     public class GenreEndpoint : BaseEndpoint
     {
-        internal GenreEndpoint(BeatsHttpData beatsHttpData) : base(beatsHttpData)
+        internal GenreEndpoint(BeatsMusicManager beatsMusicManager) : base(beatsMusicManager)
         {
         }
 
@@ -29,7 +29,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         {
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(genreId), "genreId field is null or empty");
 
-            return await BeatsHttpData.GetSingleParsedResult<GenreData>(string.Format("genres/{0}", genreId), null, true);
+            return await BeatsMusicManager.GetSingleParsedResult<GenreData>(string.Format("genres/{0}", genreId), null, false);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         {
             var methodParams = ValidateAndCreateLimitOffsetParams(limit, offset);
 
-            return await BeatsHttpData.GetMultipleParsedResult<GenreData>("genres", methodParams);
+            return await BeatsMusicManager.GetMultipleParsedResult<GenreData>("genres", methodParams);
         }
 
         private List<KeyValuePair<string, string>> ValidateAndCreateLimitOffsetParams(int limit, int offset)
@@ -69,7 +69,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             var methodParams = ValidateAndCreateLimitOffsetParams(limit, offset);
             return
                 await
-                    BeatsHttpData.GetMultipleParsedResultWithConverter<BaseConvertedData>(
+                    BeatsMusicManager.GetMultipleParsedResultWithConverter<BaseConvertedData>(
                         string.Format("genres/{0}/{1}", genreId, methodName), methodParams);
         }
 
@@ -116,7 +116,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             return
                 await
-                    BeatsHttpData.GetMultipleParsedResult<PlaylistData>(string.Format("genres/{0}/playlists", genreId),
+                    BeatsMusicManager.GetMultipleParsedResult<PlaylistData>(string.Format("genres/{0}/playlists", genreId),
                         methodParams);
         }
 

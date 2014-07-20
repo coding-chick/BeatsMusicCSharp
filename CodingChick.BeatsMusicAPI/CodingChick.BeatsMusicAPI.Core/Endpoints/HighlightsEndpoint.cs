@@ -10,7 +10,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 {
     public class HighlightsEndpoint : BaseEndpoint
     {
-        internal HighlightsEndpoint(BeatsHttpData beatsHttpData) : base(beatsHttpData)
+        internal HighlightsEndpoint(BeatsMusicManager beatsMusicManager) : base(beatsMusicManager)
         {
         }
 
@@ -20,13 +20,13 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         /// <returns>A collection of ContentData</returns>
         public async Task<MultipleRootObject<ContentData>> GetFeaturedContent()
         {
-            return await BeatsHttpData.GetMultipleParsedResult<ContentData>("discoveries/featured", null);
+            return await BeatsMusicManager.GetMultipleParsedResult<ContentData>("discoveries/featured", null);
         }
 
 
         public async Task<MultipleRootObject<ContentData>> GetEditorPicksContent()
         {
-            return await BeatsHttpData.GetMultipleParsedResult<ContentData>("discoveries/editor_picks", null);
+            return await BeatsMusicManager.GetMultipleParsedResult<ContentData>("discoveries/editor_picks", null);
             
         }
     }

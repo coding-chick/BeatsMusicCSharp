@@ -1,25 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using CodingChick.BeatsMusicAPI.Core.Base;
+using CodingChick.BeatsMusicAPI.Core.Data;
+using CodingChick.BeatsMusicAPI.Core.Data.Me;
 using CodingChick.BeatsMusicAPI.Core.Endpoints;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
 using CodingChick.BeatsMusicAPI.Core.Helpers;
 
 [assembly: InternalsVisibleTo("CodingChick.BeatsMusicAPI.Tests")]
+
 namespace CodingChick.BeatsMusicAPI.Core
 {
     public class BeatsMusicClient
     {
+        private readonly Lazy<AlbumsEndpoint> _albums;
+        private readonly Lazy<ArtistsEndpoint> _artists;
+        private readonly Lazy<AudioEndpoint> _audio;
+        private readonly Lazy<FollowEndpoint> _follow;
+        private readonly Lazy<GenreEndpoint> _genre;
+        private readonly Lazy<HighlightsEndpoint> _highlights;
+        private readonly Lazy<MeEndpoint> _me;
+        private readonly Lazy<PlaylistsEndpoint> _playlists;
+        private readonly Lazy<RatingsEndpoint> _ratings;
+        private readonly Lazy<SearchEndpoint> _search;
         private Authorization _authorization;
         private IHttpBeatsMusicEngine _httpBeatsMusicEngine;
-        private BeatsHttpData _beatsHttpData;
+        private BeatsMusicManager _beatsMusicManager;
 
         /// <summary>
-        /// Initializes a new instance of <see cref="BeatsMusicClient"/> for read-only operations. 
+        ///     Initializes a new instance of <see cref="BeatsMusicClient" /> for read-only operations.
         /// </summary>
         /// <param name="clientId">Beats Music API client ID.</param>
         /// <param name="redirectUri">Beats Music Redirect Uri.</param>
@@ -28,20 +38,22 @@ namespace CodingChick.BeatsMusicAPI.Core
             _authorization = new Authorization(redirectUri, clientId);
 
             _httpBeatsMusicEngine = new HttpBeatsMusicEngine(new HttpClientAccessor(), _authorization);
-            _beatsHttpData = new BeatsHttpData(_httpBeatsMusicEngine);
-            _search = new Lazy<SearchEndpoint>(() => new SearchEndpoint(_beatsHttpData));
-            _playlists = new Lazy<PlaylistsEndpoint>(() => new PlaylistsEndpoint(_beatsHttpData));
-            _albums = new Lazy<AlbumsEndpoint>(() => new AlbumsEndpoint(_beatsHttpData));
-            _artists = new Lazy<ArtistsEndpoint>(() => new ArtistsEndpoint(_beatsHttpData));
-            _highlights = new Lazy<HighlightsEndpoint>(() => new HighlightsEndpoint(_beatsHttpData));
-            _follow = new Lazy<FollowEndpoint>(() => new FollowEndpoint(_beatsHttpData));
-            _genre = new Lazy<GenreEndpoint>(() => new GenreEndpoint(_beatsHttpData));
-            _audio = new Lazy<AudioEndpoint>(() => new AudioEndpoint(_beatsHttpData));
-            _me = new Lazy<MeEndpoint>(() => new MeEndpoint(_beatsHttpData));
+
+            _beatsMusicManager = new BeatsMusicManager(_httpBeatsMusicEngine, new JsonBeatsMusicEngine());
+            _search = new Lazy<SearchEndpoint>(() => new SearchEndpoint(_beatsMusicManager));
+            _playlists = new Lazy<PlaylistsEndpoint>(() => new PlaylistsEndpoint(_beatsMusicManager));
+            _albums = new Lazy<AlbumsEndpoint>(() => new AlbumsEndpoint(_beatsMusicManager));
+            _artists = new Lazy<ArtistsEndpoint>(() => new ArtistsEndpoint(_beatsMusicManager));
+            _highlights = new Lazy<HighlightsEndpoint>(() => new HighlightsEndpoint(_beatsMusicManager));
+            _follow = new Lazy<FollowEndpoint>(() => new FollowEndpoint(_beatsMusicManager));
+            _genre = new Lazy<GenreEndpoint>(() => new GenreEndpoint(_beatsMusicManager));
+            _audio = new Lazy<AudioEndpoint>(() => new AudioEndpoint(_beatsMusicManager));
+            _me = new Lazy<MeEndpoint>(() => new MeEndpoint(_beatsMusicManager));
+
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="BeatsMusicClient"/> for read-write and user specific operations. 
+        ///     Initializes a new instance of <see cref="BeatsMusicClient" /> for read-write and user specific operations.
         /// </summary>
         /// <param name="clientId">Beats Music API client ID.</param>
         /// <param name="redirectUri">Beats Music API Redirect Uri.</param>
@@ -51,18 +63,6 @@ namespace CodingChick.BeatsMusicAPI.Core
         {
             _authorization.ClientSecret = clientSecret;
         }
-
-
-        private Lazy<SearchEndpoint> _search;
-
-        private Lazy<PlaylistsEndpoint> _playlists;
-        private Lazy<AlbumsEndpoint> _albums;
-        private Lazy<ArtistsEndpoint> _artists;
-        private Lazy<HighlightsEndpoint> _highlights;
-        private Lazy<FollowEndpoint> _follow;
-        private Lazy<GenreEndpoint> _genre;
-        private Lazy<AudioEndpoint> _audio;
-        private Lazy<MeEndpoint> _me;
 
         public MeEndpoint Me
         {
@@ -104,7 +104,10 @@ namespace CodingChick.BeatsMusicAPI.Core
             get { return _playlists.Value; }
         }
 
-
+        public RatingsEndpoint Ratings
+        {
+            get { return _ratings.Value; }
+        }
 
         public string ServerCode
         {
@@ -117,47 +120,23 @@ namespace CodingChick.BeatsMusicAPI.Core
             get { return _artists.Value; }
         }
 
-        public string UriAddressToNavigateForPermissions()
+        public string ClientId
         {
-            if (_authorization.ClientSecret == null)
-                return _httpBeatsMusicEngine.UriAddressToNavigateForPermissions(ResponseType.Token);
-            else
-            {
-                return _httpBeatsMusicEngine.UriAddressToNavigateForPermissions(ResponseType.Code);
-            }
+            get { return _authorization.ClientId; }
         }
 
-        public void SetClientAccessTokenFromRedirectUri(string accessToken, int expiresAt)
+        public string AccessToken
         {
-            _authorization.ReadOnlyAccessToken = accessToken;
-            _authorization.SetExpiresAt(expiresAt);
-        }
-
-        public async Task<string> GetBeatsMusicPlayerCode(string playableResourceId)
-        {
-            var user = await Me.GetMeInfo();
-            var helper = new FileHelper();
-            string fileContents = helper.GetResourceTextFile("PlayerCode.html");
-            fileContents = fileContents.Replace("myClientId", _authorization.ClientId);
-            fileContents = fileContents.Replace("myAccessToken", AccessToken);
-            fileContents = fileContents.Replace("myUserId", user.Data.UserContext);
-            fileContents = fileContents.Replace("myTrack", playableResourceId);
-            return fileContents;
-        }
-
-        public string ClientId { get { return _authorization.ClientId; } }
-        public string AccessToken {
             get
             {
                 if (!string.IsNullOrEmpty(_authorization.ReadOnlyAccessToken))
                     return _authorization.ReadOnlyAccessToken;
-                else
-                    return _authorization.ReadWriteAccessToken;
-            } 
+                return _authorization.ReadWriteAccessToken;
+            }
         }
 
-        //Internal properties exposed for testing purposes only.
         #region Internal
+
         internal string ReadWriteAccessToken
         {
             get { return _authorization.ReadWriteAccessToken; }
@@ -168,6 +147,34 @@ namespace CodingChick.BeatsMusicAPI.Core
         {
             _authorization.SetExpiresAt(seconds);
         }
+
         #endregion
+
+        public string UriAddressToNavigateForPermissions()
+        {
+            if (_authorization.ClientSecret == null)
+                return _httpBeatsMusicEngine.UriAddressToNavigateForPermissions(ResponseType.Token);
+            return _httpBeatsMusicEngine.UriAddressToNavigateForPermissions(ResponseType.Code);
+        }
+
+        public void SetClientAccessTokenFromRedirectUri(string accessToken, int expiresAt)
+        {
+            _authorization.ReadOnlyAccessToken = accessToken;
+            _authorization.SetExpiresAt(expiresAt);
+        }
+
+        public async Task<string> GetBeatsMusicPlayerCode(string playableResourceId)
+        {
+            SingleRootObject<MeData> user = await Me.GetMeInfo();
+            var helper = new FileHelper();
+            string fileContents = helper.GetResourceTextFile("PlayerCode.html");
+            fileContents = fileContents.Replace("myClientId", _authorization.ClientId);
+            fileContents = fileContents.Replace("myAccessToken", AccessToken);
+            fileContents = fileContents.Replace("myUserId", user.Data.UserContext);
+            fileContents = fileContents.Replace("myTrack", playableResourceId);
+            return fileContents;
+        }
+
+        //Internal properties exposed for testing purposes only.
     }
 }

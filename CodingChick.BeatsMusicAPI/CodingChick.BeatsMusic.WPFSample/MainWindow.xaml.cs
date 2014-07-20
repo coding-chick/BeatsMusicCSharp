@@ -45,7 +45,9 @@ namespace CodingChick.BeatsMusic.WPFSample
             //this.ClientId = "<your Beats Music app client ID here>";
             //this.ClientSecret = "<your Beats Music app client Secret here>";
             //this.RedirectUrl = "<your Beats Music app Redirect Uri here>";
-
+            this.ClientId = "mdnb2dzhrbzsxtafuhmgyd3q";
+            this.ClientSecret = "u3ZzAGWDUcRHMVx3bvXZR9pv";
+            this.RedirectUrl = @"http://codingchick.net";
             // Create the beats music API client that will call all services, can be called with ClientSecret for enhanced long term security,
             // or without for short term limited security. More infomation on types of security @ https://developer.beatsmusic.com/docs/read/getting_started/Client_Side_Applications
             // and https://developer.beatsmusic.com/docs/read/getting_started/Web_Server_Applications
@@ -100,8 +102,8 @@ namespace CodingChick.BeatsMusic.WPFSample
                     // The files required and the HTML file are included in this project under the SoundManager directory.
                     // SoundManager directory is hosted on local iis due to security issues with flash, js and soundmanager when running the local file.
                     // If SoundManager retunes an exception try refreshing the page and/or update the WebBrowser version to a newer IE version by running the UpgradeBrowserToIE11.reg file included.
-                    BeatsMusicWebBrowser.Navigate(new Uri(String.Format("http://localhost:8081/soundManager/SoundManager/HTMLAudioPlayer.html?&trackId={0}&trackUrl={1}&serverUrl={2}",
-                        trackResult.Data.Refs.Track.Id, trackResult.Data.Resource, trackResult.Data.Location)));
+                    //BeatsMusicWebBrowser.Navigate(new Uri(String.Format("http://localhost:8081/soundManager/SoundManager/HTMLAudioPlayer.html?&trackId={0}&trackUrl={1}&serverUrl={2}",
+                    //    trackResult.Data.Refs.Track.Id, trackResult.Data.Resource, trackResult.Data.Location)));
 
                     //***************************************************************************************************************
                     // Alternatly, you can use the BeatsMusic default web player, and play a track with it (@https://developer.beatsmusic.com/docs/read/web_playback_api/Getting_Started)

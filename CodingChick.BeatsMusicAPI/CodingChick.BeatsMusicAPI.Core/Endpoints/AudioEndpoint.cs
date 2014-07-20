@@ -12,7 +12,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 {
     public class AudioEndpoint : BaseEndpoint
     {
-        internal AudioEndpoint(BeatsHttpData beatsHttpData) : base(beatsHttpData)
+        internal AudioEndpoint(BeatsMusicManager beatsMusicManager) : base(beatsMusicManager)
         {
         }
 
@@ -33,7 +33,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
                 new KeyValuePair<string, string>("aquire", Convert.ToInt32(aquire).ToString())
             };
 
-            return await BeatsHttpData.GetSingleParsedResult<AudioData>(string.Format("tracks/{0}/audio", trackId), methodParams,
+            return await BeatsMusicManager.GetSingleParsedResult<AudioData>(string.Format("tracks/{0}/audio", trackId), methodParams,
                 true);
         }
 
