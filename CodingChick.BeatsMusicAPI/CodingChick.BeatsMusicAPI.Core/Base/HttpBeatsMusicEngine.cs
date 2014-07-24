@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
@@ -52,6 +53,28 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             return result;
         }
 
+        public async Task<HttpResponseHeaders> HeadAsyncWithNoToken(string method,
+            List<KeyValuePair<string, string>> queryParams)
+        {
+            queryParams.Add(new KeyValuePair<string, string>("client_id", _authorization.ClientId));
+
+            var result = await CallHeadAsync(method, queryParams);
+
+            return result;
+
+        }
+
+        public async Task<HttpResponseHeaders> HeadAsyncWithToken(string method,
+        List<KeyValuePair<string, string>> queryParams)
+        {
+            await AddAccessTokenToCall(queryParams);
+
+            var result = await CallHeadAsync(method, queryParams);
+
+            return result;
+
+        }
+
         public async Task<HttpContent> PostAsync(string method, List<KeyValuePair<string, string>> dataParams)
         {
             await AddAccessTokenToCall(dataParams);
@@ -94,6 +117,14 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         {
             string finalAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, queryParams);
             var result = await _clientAccessor.GetAsync(finalAddress);
+            return result;
+        }
+
+        private async Task<HttpResponseHeaders> CallHeadAsync(string method,
+            List<KeyValuePair<string, string>> queryParams)
+        {
+            string finalAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, queryParams);
+            var result = await _clientAccessor.HeadAsync(finalAddress);
             return result;
         }
 

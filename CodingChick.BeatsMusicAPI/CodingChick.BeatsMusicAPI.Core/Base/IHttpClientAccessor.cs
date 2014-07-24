@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace CodingChick.BeatsMusicAPI.Core.Base
@@ -20,6 +21,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
 
         Task<HttpContent> DeleteAsync(string address);
         Task<HttpContent> DeleteAsync(string address, IDictionary<string, IEnumerable<string>> headers);
+        Task<HttpResponseHeaders> HeadAsync(string finalAddress);
     }
 
 

@@ -167,12 +167,14 @@
     <Compile Include="Base\HttpClientAccessor.cs" />
     <Compile Include="Endpoints\AlbumsEndpoint.cs" />
     <Compile Include="Endpoints\BaseEndpoint.cs" />
+    <Compile Include="Endpoints\Enums\ImageSize.cs" />
     <Compile Include="Endpoints\Enums\Rating.cs" />
     <Compile Include="Endpoints\Enums\FollowType.cs" />
     <Compile Include="Endpoints\Enums\TracksRefType.cs" />
     <Compile Include="Endpoints\FollowEndpoint.cs" />
     <Compile Include="Endpoints\GenreEndpoint.cs" />
     <Compile Include="Endpoints\HighlightsEndpoint.cs" />
+    <Compile Include="Endpoints\ImagesEndpoint.cs" />
     <Compile Include="Endpoints\MeEndoint.cs" />
     <Compile Include="Endpoints\PlaylistsEndpoint.cs" />
     <Compile Include="Endpoints\Enums\PlaylistsOrderBy.cs" />

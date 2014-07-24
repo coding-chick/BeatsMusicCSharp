@@ -17,16 +17,17 @@ namespace CodingChick.BeatsMusicAPI.Core
         private readonly Lazy<AlbumsEndpoint> _albums;
         private readonly Lazy<ArtistsEndpoint> _artists;
         private readonly Lazy<AudioEndpoint> _audio;
+        private readonly Authorization _authorization;
+        private readonly BeatsMusicManager _beatsMusicManager;
         private readonly Lazy<FollowEndpoint> _follow;
         private readonly Lazy<GenreEndpoint> _genre;
         private readonly Lazy<HighlightsEndpoint> _highlights;
+        private readonly IHttpBeatsMusicEngine _httpBeatsMusicEngine;
+        private readonly Lazy<ImagesEndpoint> _images;
         private readonly Lazy<MeEndpoint> _me;
         private readonly Lazy<PlaylistsEndpoint> _playlists;
         private readonly Lazy<RatingsEndpoint> _ratings;
         private readonly Lazy<SearchEndpoint> _search;
-        private Authorization _authorization;
-        private IHttpBeatsMusicEngine _httpBeatsMusicEngine;
-        private BeatsMusicManager _beatsMusicManager;
 
         /// <summary>
         ///     Initializes a new instance of <see cref="BeatsMusicClient" /> for read-only operations.
@@ -49,7 +50,7 @@ namespace CodingChick.BeatsMusicAPI.Core
             _genre = new Lazy<GenreEndpoint>(() => new GenreEndpoint(_beatsMusicManager));
             _audio = new Lazy<AudioEndpoint>(() => new AudioEndpoint(_beatsMusicManager));
             _me = new Lazy<MeEndpoint>(() => new MeEndpoint(_beatsMusicManager));
-
+            _images = new Lazy<ImagesEndpoint>(() => new ImagesEndpoint(_beatsMusicManager));
         }
 
         /// <summary>
@@ -107,6 +108,11 @@ namespace CodingChick.BeatsMusicAPI.Core
         public RatingsEndpoint Ratings
         {
             get { return _ratings.Value; }
+        }
+
+        public ImagesEndpoint Images
+        {
+            get { return _images.Value; }
         }
 
         public string ServerCode

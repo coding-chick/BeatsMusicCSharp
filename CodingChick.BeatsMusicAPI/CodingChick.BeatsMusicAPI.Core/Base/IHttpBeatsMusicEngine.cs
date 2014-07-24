@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
 
@@ -12,7 +13,16 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         string UriAddressToNavigateForPermissions(ResponseType responseType);
         Task<HttpContent> PostAsync(string method, List<KeyValuePair<string, string>> dataParams);
         Task<HttpContent> GetAsyncWithToken(string method, List<KeyValuePair<string, string>> queryParams);
-        Task<HttpContent> PutAsync(string method, List<KeyValuePair<string, string>> dataParams, bool addCredentials = true);
+
+        Task<HttpContent> PutAsync(string method, List<KeyValuePair<string, string>> dataParams,
+            bool addCredentials = true);
+
         Task<HttpContent> DeleteAsync(string method, List<KeyValuePair<string, string>> dataParams);
+
+        Task<HttpResponseHeaders> HeadAsyncWithNoToken(string method,
+            List<KeyValuePair<string, string>> queryParams);
+
+        Task<HttpResponseHeaders> HeadAsyncWithToken(string method,
+            List<KeyValuePair<string, string>> queryParams);
     }
 }

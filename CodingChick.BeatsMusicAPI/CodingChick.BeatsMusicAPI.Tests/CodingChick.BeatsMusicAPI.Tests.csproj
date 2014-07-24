@@ -80,6 +80,7 @@
     <Compile Include="FollowTests.cs" />
     <Compile Include="GenreTests.cs" />
     <Compile Include="HightlightsTests.cs" />
+    <Compile Include="ImagesTests.cs" />
     <Compile Include="PlaylistTests.cs" />
     <Compile Include="RatingTests.cs" />
     <Compile Include="SearchTests.cs" />

@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace CodingChick.BeatsMusicAPI.Core.Base
 {
     public class HttpClientAccessor : IHttpClientAccessor
     {
-        private HttpClient _httpClient;
+        private readonly HttpClient _httpClient;
 
         public HttpClientAccessor()
         {
-            _httpClient = new HttpClient();
+            var httpClientHandler = new HttpClientHandler();
+            httpClientHandler.AllowAutoRedirect = false;
+            _httpClient = new HttpClient(httpClientHandler);
         }
 
         public async Task<HttpContent> GetAsync(string address)
@@ -47,6 +50,15 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             return response.Content;
         }
 
+        public async Task<HttpResponseHeaders> HeadAsync(string finalAddress)
+        {
+            //Would rather make this a true Head call, but the method isn't allowed so I am faking it
+            var request = new HttpRequestMessage(HttpMethod.Get, new Uri(finalAddress, UriKind.Absolute));
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
+
+            return response.Headers;
+        }
+
         public async Task<HttpContent> PutAsync(string address, HttpContent content, string charSet = "",
             string mediaType = "")
         {
@@ -68,25 +80,15 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
                 var client = new HttpClient();
                 HttpResponseMessage response = await client.PostAsync(address, content);
                 return response.Content;
-
             }
             catch (Exception ex)
             {
-                
                 throw;
             }
         }
 
-        private static void AddHeadersToContent(HttpContent content, string charSet, string mediaType)
-        {
-            if (charSet != string.Empty && mediaType != string.Empty)
-            {
-                content.Headers.ContentType.CharSet = charSet;
-                content.Headers.ContentType.MediaType = mediaType;
-            }
-        }
-
-        public async Task<HttpContent> GetWithHeaderAsync(string address, IDictionary<string, IEnumerable<string>> headers)
+        public async Task<HttpContent> GetWithHeaderAsync(string address,
+            IDictionary<string, IEnumerable<string>> headers)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, new Uri(address, UriKind.Absolute));
             foreach (var httpRequestHeader in headers)
@@ -94,7 +96,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
                 request.Headers.Add(httpRequestHeader.Key, httpRequestHeader.Value);
             }
 
-            var response = await _httpClient.SendAsync(request);
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
             return response.Content;
         }
 
@@ -106,8 +108,18 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
                 request.Headers.Add(httpRequestHeader.Key, httpRequestHeader.Value);
             }
 
-            var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+            HttpResponseMessage response =
+                await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
             return response.Content;
+        }
+
+        private static void AddHeadersToContent(HttpContent content, string charSet, string mediaType)
+        {
+            if (charSet != string.Empty && mediaType != string.Empty)
+            {
+                content.Headers.ContentType.CharSet = charSet;
+                content.Headers.ContentType.MediaType = mediaType;
+            }
         }
     }
 }

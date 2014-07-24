@@ -16,7 +16,6 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 {
     public class PlaylistsEndpoint : BaseEndpoint
     {
-
         internal PlaylistsEndpoint(BeatsMusicManager beatsMusicManager)
             : base(beatsMusicManager)
         {
@@ -86,7 +85,10 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             ValidateIdOffsetLimit(offset, limit);
 
 
-            return await BeatsMusicManager.GetMultipleParsedResult<UserData>("playlists/" + playlistId + "/subscribers", null, true);
+            return
+                await
+                    BeatsMusicManager.GetMultipleParsedResult<UserData>("playlists/" + playlistId + "/subscribers", null,
+                        true);
         }
 
         /// <summary>
@@ -203,7 +205,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             return
                 await
-                BeatsMusicManager.GetMultipleParsedResult<TrackData>("playlists/" + playlistId + "/tracks", methodParams, true);
+                    BeatsMusicManager.GetMultipleParsedResult<TrackData>("playlists/" + playlistId + "/tracks",
+                        methodParams, true);
         }
 
         /// <summary>
@@ -234,7 +237,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
             return
                 await
-                BeatsMusicManager.GetMultipleParsedResult<PlaylistData>("users/" + userId + "/playlists/", methodParams, true);
+                    BeatsMusicManager.GetMultipleParsedResult<PlaylistData>("users/" + userId + "/playlists/",
+                        methodParams, true);
         }
 
         /// <summary>
@@ -254,8 +258,10 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
                 playlistIdsParams.Add(new KeyValuePair<string, string>("ids", playlistId));
             }
 
-            var result =
-                await BeatsMusicManager.PostData<UserData>(string.Format("users/{0}/playlist_subscriptions", userId), playlistIdsParams);
+            SingleRootObject<UserData> result =
+                await
+                    BeatsMusicManager.PostData<UserData>(string.Format("users/{0}/playlist_subscriptions", userId),
+                        playlistIdsParams);
             return (result.Code.ToLower() == "ok");
         }
 
@@ -276,7 +282,10 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
                 playlistIdsParams.Add(new KeyValuePair<string, string>("ids", playlistId));
             }
 
-            return await BeatsMusicManager.DeleteData(string.Format("users/{0}/playlist_subscriptions", userId), playlistIdsParams);
+            return
+                await
+                    BeatsMusicManager.DeleteData(string.Format("users/{0}/playlist_subscriptions", userId),
+                        playlistIdsParams);
         }
 
         /// <summary>
@@ -290,7 +299,10 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(userId), "userId field is null");
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(playlistId), "playlistId field is null");
 
-            var result = await BeatsMusicManager.PutData<PlaylistData>(string.Format("users/{0}/playlist_subscriptions/{1}", userId, playlistId), null);
+            SingleRootObject<PlaylistData> result =
+                await
+                    BeatsMusicManager.PutData<PlaylistData>(
+                        string.Format("users/{0}/playlist_subscriptions/{1}", userId, playlistId), null);
             return (result.Code.ToLower() == "ok");
         }
 
@@ -305,7 +317,10 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(userId), "userId field is null");
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(playlistId), "playlistId field is null");
 
-            return await BeatsMusicManager.DeleteData(string.Format("users/{0}/playlist_subscriptions/{1}", userId, playlistId), null);
+            return
+                await
+                    BeatsMusicManager.DeleteData(
+                        string.Format("users/{0}/playlist_subscriptions/{1}", userId, playlistId), null);
         }
 
         /// <summary>
@@ -338,8 +353,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
 
 
         /// <summary>
-        /// Adds the tracks with the given ids to the playlist.
-        /// A playlist can have a maximum of 500 tracks.
+        ///     Adds the tracks with the given ids to the playlist.
+        ///     A playlist can have a maximum of 500 tracks.
         /// </summary>
         /// <param name="playlistId">Id of the playlist to have additional tracks</param>
         /// <param name="trackIds">Ids of tracks to be added to the playlist</param>
@@ -361,6 +376,14 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             return tracksAdded;
         }
 
+        /// <summary>
+        ///     Updates the track list on a playlist with the tracks with the given ids.
+        ///     Will remove all tracks if no ids are past.
+        ///     A playlist can have a maximum of 500 tracks.
+        /// </summary>
+        /// <param name="playlistId">Id of the playlist to have additional tracks</param>
+        /// <param name="trackIds">Ids of tracks to be update the playlist</param>
+        /// <returns>True if tracks were updated, false otherwise</returns>
         public async Task<bool> UpdateTracksInPlaylist(string playlistId, IEnumerable<string> trackIds)
         {
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(playlistId), "playlistId field is null");
