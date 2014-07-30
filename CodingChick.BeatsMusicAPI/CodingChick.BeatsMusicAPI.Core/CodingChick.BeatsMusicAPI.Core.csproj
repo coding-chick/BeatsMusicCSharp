@@ -182,6 +182,7 @@
     <Compile Include="Endpoints\DataFilters\StreamabilityFilters.cs" />
     <Compile Include="Endpoints\Enums\TracksOrderByData.cs" />
     <Compile Include="Endpoints\RatingsEndpoint.cs" />
+    <Compile Include="Endpoints\TracksEndpoint.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\HttpUtilityHelper.cs" />
