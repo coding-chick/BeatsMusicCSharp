@@ -50,6 +50,7 @@ namespace CodingChick.BeatsMusicAPI.Core
             _follow = new Lazy<FollowEndpoint>(() => new FollowEndpoint(_beatsMusicManager));
             _genre = new Lazy<GenreEndpoint>(() => new GenreEndpoint(_beatsMusicManager));
             _audio = new Lazy<AudioEndpoint>(() => new AudioEndpoint(_beatsMusicManager));
+            _ratings = new Lazy<RatingsEndpoint>(()=> new RatingsEndpoint(_beatsMusicManager));
             _me = new Lazy<MeEndpoint>(() => new MeEndpoint(_beatsMusicManager));
             _images = new Lazy<ImagesEndpoint>(() => new ImagesEndpoint(_beatsMusicManager));
             _tracks = new Lazy<TracksEndpoint>(() => new TracksEndpoint(_beatsMusicManager));
