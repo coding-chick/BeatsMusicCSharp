@@ -29,7 +29,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
                 _httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
             }
 
-            HttpResponseMessage response = await _httpClient.GetAsync(address);
+            var response = await _httpClient.GetAsync(address);
             return response.Content;
         }
 
@@ -46,7 +46,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
                 _httpClient.DefaultRequestHeaders.Add(header.Key, header.Value);
             }
 
-            HttpResponseMessage response = await _httpClient.DeleteAsync(address);
+            var response = await _httpClient.DeleteAsync(address);
             return response.Content;
         }
 
@@ -54,7 +54,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         {
             //Would rather make this a true Head call, but the method isn't allowed so I am faking it
             var request = new HttpRequestMessage(HttpMethod.Get, new Uri(finalAddress, UriKind.Absolute));
-            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            var response = await _httpClient.SendAsync(request);
 
             return response.Headers;
         }
@@ -64,7 +64,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         {
             AddHeadersToContent(content, charSet, mediaType);
 
-            HttpResponseMessage response = await _httpClient.PutAsync(address, content);
+            var response = await _httpClient.PutAsync(address, content);
             return response.Content;
         }
 
@@ -78,7 +78,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             try
             {
                 var client = new HttpClient();
-                HttpResponseMessage response = await client.PostAsync(address, content);
+                var response = await client.PostAsync(address, content);
                 return response.Content;
             }
             catch (Exception ex)
@@ -96,7 +96,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
                 request.Headers.Add(httpRequestHeader.Key, httpRequestHeader.Value);
             }
 
-            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            var response = await _httpClient.SendAsync(request);
             return response.Content;
         }
 
@@ -108,10 +108,10 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
                 request.Headers.Add(httpRequestHeader.Key, httpRequestHeader.Value);
             }
 
-            HttpResponseMessage response =
+            var response =
                 await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
             return response.Content;
-        }
+        }y
 
         private static void AddHeadersToContent(HttpContent content, string charSet, string mediaType)
         {

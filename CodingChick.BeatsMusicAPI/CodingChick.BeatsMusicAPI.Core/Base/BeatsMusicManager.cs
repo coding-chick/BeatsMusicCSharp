@@ -21,16 +21,16 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         public async Task<MultipleRootObject<T>> GetMultipleParsedResult<T>(string methodName,
             List<KeyValuePair<string, string>> methodParams, bool useToken = false)
         {
-            string dataResponse = await GetDataResponse(methodName, methodParams, useToken);
-            MultipleRootObject<T> parsedDataResponse = _jsonBeatsMusicEngine.ParseMultipleDataResponse<T>(dataResponse);
+            var dataResponse = await GetDataResponse(methodName, methodParams, useToken);
+            var parsedDataResponse = _jsonBeatsMusicEngine.ParseMultipleDataResponse<T>(dataResponse);
             return parsedDataResponse;
         }
 
         public async Task<SingleRootObject<T>> GetSingleParsedResult<T>(string methodName,
             List<KeyValuePair<string, string>> methodParams, bool useToken = false)
         {
-            string dataResponse = await GetDataResponse(methodName, methodParams, useToken);
-            SingleRootObject<T> parsedDataResponse = _jsonBeatsMusicEngine.ParseSingleDataResponse<T>(dataResponse);
+            var dataResponse = await GetDataResponse(methodName, methodParams, useToken);
+            var parsedDataResponse = _jsonBeatsMusicEngine.ParseSingleDataResponse<T>(dataResponse);
             return parsedDataResponse;
         }
 
@@ -40,8 +40,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             if (dataParams == null)
                 dataParams = new List<KeyValuePair<string, string>>();
 
-            HttpContent httpResponse = await _httpBeatsMusicEngine.PostAsync(methodName, dataParams);
-            string dataResponse = await httpResponse.ReadAsStringAsync();
+            var httpResponse = await _httpBeatsMusicEngine.PostAsync(methodName, dataParams);
+            var dataResponse = await httpResponse.ReadAsStringAsync();
 
             return _jsonBeatsMusicEngine.ParseSingleDataResponse<T>(dataResponse);
         }
@@ -52,8 +52,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             if (dataParams == null)
                 dataParams = new List<KeyValuePair<string, string>>();
 
-            HttpContent httpResponse = await _httpBeatsMusicEngine.PutAsync(methodName, dataParams, addCredentials);
-            string dataResponse = await httpResponse.ReadAsStringAsync();
+            var httpResponse = await _httpBeatsMusicEngine.PutAsync(methodName, dataParams, addCredentials);
+            var dataResponse = await httpResponse.ReadAsStringAsync();
 
             return _jsonBeatsMusicEngine.ParseSingleDataResponse<T>(dataResponse);
         }
@@ -63,8 +63,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             if (dataParams == null)
                 dataParams = new List<KeyValuePair<string, string>>();
 
-            HttpContent httpResponse = await _httpBeatsMusicEngine.DeleteAsync(methodName, dataParams);
-            string dataResponse = await httpResponse.ReadAsStringAsync();
+            var httpResponse = await _httpBeatsMusicEngine.DeleteAsync(methodName, dataParams);
+            var dataResponse = await httpResponse.ReadAsStringAsync();
 
             if (dataResponse.ToLower().Contains("ok"))
                 return true;
@@ -74,8 +74,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         public async Task<MultipleRootObject<T>> GetMultipleParsedResultWithConverter<T>(string methodName,
             List<KeyValuePair<string, string>> methodParams, bool useToken = false)
         {
-            string dataResponse = await GetDataResponse(methodName, methodParams, useToken);
-            MultipleRootObject<T> parsedDataResponse =
+            var dataResponse = await GetDataResponse(methodName, methodParams, useToken);
+            var parsedDataResponse =
                 _jsonBeatsMusicEngine.ParseMultipleDataResponseWithConverter<T>(dataResponse);
             return parsedDataResponse;
         }
@@ -83,7 +83,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         public async Task<Uri> GetDataUri(string methodName, List<KeyValuePair<string, string>> methodParams,
             bool useToken)
         {
-            HttpResponseHeaders dataResponse =
+            var dataResponse =
                 await _httpBeatsMusicEngine.HeadAsyncWithNoToken(methodName, methodParams);
             return dataResponse.Location;
         }
@@ -100,7 +100,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             else
                 contentResult = await _httpBeatsMusicEngine.GetAsyncNoToken(methodName, methodParams);
 
-            string dataResponse = await contentResult.ReadAsStringAsync();
+            var dataResponse = await contentResult.ReadAsStringAsync();
             return dataResponse;
         }
 
@@ -110,8 +110,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             if (dataParams == null)
                 dataParams = new List<KeyValuePair<string, string>>();
 
-            HttpContent httpResponse = await _httpBeatsMusicEngine.PostAsync(methodName, dataParams);
-            string dataResponse = await httpResponse.ReadAsStringAsync();
+            var httpResponse = await _httpBeatsMusicEngine.PostAsync(methodName, dataParams);
+            var dataResponse = await httpResponse.ReadAsStringAsync();
 
             if (dataResponse.ToLower().Contains("ok"))
                 return true;
@@ -124,8 +124,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             if (dataParams == null)
                 dataParams = new List<KeyValuePair<string, string>>();
 
-            HttpContent httpResponse = await _httpBeatsMusicEngine.PutAsync(methodName, dataParams, addCredentials);
-            string dataResponse = await httpResponse.ReadAsStringAsync();
+            var httpResponse = await _httpBeatsMusicEngine.PutAsync(methodName, dataParams, addCredentials);
+            var dataResponse = await httpResponse.ReadAsStringAsync();
 
             if (dataResponse.ToLower().Contains("ok"))
                 return true;

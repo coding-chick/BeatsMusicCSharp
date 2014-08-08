@@ -18,19 +18,19 @@ namespace CodingChick.BeatsMusicAPI.Tests
             const string PlaylistName = "foo";
             const string PlaylistDescription = "bar";
 
-            SingleRootObject<PlaylistData> originalPlaylist =
+            var originalPlaylist =
                 await Client.Playlists.CreatePlaylist(PlaylistName, PlaylistDescription);
 
             AssertResponseIsOK(originalPlaylist);
 
             var trackIds = new List<string> {"tr58141709", "tr63366021", "tr50508231"};
-            bool tracksAdded = await Client.Playlists.AddTracksToPlaylist(originalPlaylist.Data.Id, trackIds);
+            var tracksAdded = await Client.Playlists.AddTracksToPlaylist(originalPlaylist.Data.Id, trackIds);
 
             Assert.IsTrue(tracksAdded);
-            SingleRootObject<PlaylistData> updatedPlaylistData =
+            var updatedPlaylistData =
                 await Client.Playlists.GetPlaylist(originalPlaylist.Data.Id);
             AssertResponseIsOK(updatedPlaylistData);
-            PlaylistData updatedPlaylist = updatedPlaylistData.Data;
+            var updatedPlaylist = updatedPlaylistData.Data;
             Assert.AreEqual(trackIds.Count, updatedPlaylist.TotalTracks);
             DeletePlaylist(originalPlaylist.Data.Id);
         }
@@ -41,19 +41,19 @@ namespace CodingChick.BeatsMusicAPI.Tests
             const string PlaylistName = "foo";
             const string PlaylistDescription = "bar";
 
-            SingleRootObject<PlaylistData> originalPlaylist =
+            var originalPlaylist =
                 await Client.Playlists.CreatePlaylist(PlaylistName, PlaylistDescription);
 
             AssertResponseIsOK(originalPlaylist);
 
             var trackIds = new List<string> { "tr58141709", "tr63366021", "tr50508231" };
-            bool tracksUpdated = await Client.Playlists.UpdateTracksInPlaylist(originalPlaylist.Data.Id, trackIds);
+            var tracksUpdated = await Client.Playlists.UpdateTracksInPlaylist(originalPlaylist.Data.Id, trackIds);
 
             Assert.IsTrue(tracksUpdated);
-            SingleRootObject<PlaylistData> updatedPlaylistData =
+            var updatedPlaylistData =
                 await Client.Playlists.GetPlaylist(originalPlaylist.Data.Id);
             AssertResponseIsOK(updatedPlaylistData);
-            PlaylistData updatedPlaylist = updatedPlaylistData.Data;
+            var updatedPlaylist = updatedPlaylistData.Data;
             Assert.AreEqual(trackIds.Count, updatedPlaylist.TotalTracks);
             DeletePlaylist(originalPlaylist.Data.Id);
         }
@@ -64,7 +64,7 @@ namespace CodingChick.BeatsMusicAPI.Tests
             const string PlaylistName = "foo";
             const string PlaylistDescription = "bar";
 
-            SingleRootObject<PlaylistData> result =
+            var result =
                 await Client.Playlists.CreatePlaylist(PlaylistName, PlaylistDescription);
 
             AssertResponseIsOK(result);

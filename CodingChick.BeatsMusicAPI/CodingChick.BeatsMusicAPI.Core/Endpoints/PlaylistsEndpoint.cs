@@ -199,7 +199,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         {
             Contract.Requires<ArgumentNullException>(playlistId != null, "playlistId field is null");
 
-            List<KeyValuePair<string, string>> methodParams = CreateMethodParams(offset, limit, playlistRefType, orderBy);
+            var methodParams = CreateMethodParams(offset, limit, playlistRefType, orderBy);
 
             AddStreamabilityFilterParams(filters, methodParams);
 
@@ -258,7 +258,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
                 playlistIdsParams.Add(new KeyValuePair<string, string>("ids", playlistId));
             }
 
-            SingleRootObject<UserData> result =
+            var result =
                 await
                     BeatsMusicManager.PostData<UserData>(string.Format("users/{0}/playlist_subscriptions", userId),
                         playlistIdsParams);
@@ -299,7 +299,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(userId), "userId field is null");
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(playlistId), "playlistId field is null");
 
-            SingleRootObject<PlaylistData> result =
+            var result =
                 await
                     BeatsMusicManager.PutData<PlaylistData>(
                         string.Format("users/{0}/playlist_subscriptions/{1}", userId, playlistId), null);
@@ -371,7 +371,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             {
                 trackIdParameters.Add(new KeyValuePair<string, string>("track_ids", trackId));
             }
-            bool tracksAdded =
+            var tracksAdded =
                 await BeatsMusicManager.PostData(string.Format("playlists/{0}/tracks", playlistId), trackIdParameters);
             return tracksAdded;
         }
@@ -396,7 +396,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             {
                 trackIdParameters.Add(new KeyValuePair<string, string>("track_ids", trackId));
             }
-            bool TracksUpdated =
+            var TracksUpdated =
                 await BeatsMusicManager.PutData(string.Format("playlists/{0}/tracks", playlistId), trackIdParameters);
 
             return TracksUpdated;

@@ -179,9 +179,9 @@ namespace CodingChick.BeatsMusicAPI.Core
 
         public async Task<string> GetBeatsMusicPlayerCode(string playableResourceId)
         {
-            SingleRootObject<MeData> user = await Me.GetMeInfo();
+            var user = await Me.GetMeInfo();
             var helper = new FileHelper();
-            string fileContents = helper.GetResourceTextFile("PlayerCode.html");
+            var fileContents = helper.GetResourceTextFile("PlayerCode.html");
             fileContents = fileContents.Replace("myClientId", _authorization.ClientId);
             fileContents = fileContents.Replace("myAccessToken", AccessToken);
             fileContents = fileContents.Replace("myUserId", user.Data.UserContext);

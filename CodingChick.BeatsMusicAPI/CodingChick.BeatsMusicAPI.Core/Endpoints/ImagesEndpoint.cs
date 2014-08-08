@@ -25,10 +25,10 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         {
             ValidateResourceId(artistId);
 
-            string method = string.Format("artists/{0}/images/default",
+            var method = string.Format("artists/{0}/images/default",
                 artistId);
 
-            Uri response = await GetResourceImageUri(method, size);
+            var response = await GetResourceImageUri(method, size);
 
             return response;
         }
@@ -43,9 +43,9 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         {
             ValidateResourceId(albumId);
 
-            string method = string.Format("albums/{0}/images/default", albumId);
+            var method = string.Format("albums/{0}/images/default", albumId);
 
-            Uri response = await GetResourceImageUri(method, size);
+            var response = await GetResourceImageUri(method, size);
 
             return response;
         }
@@ -60,9 +60,9 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
         {
             ValidateResourceId(trackId);
 
-            string method = string.Format("tracks/{0}/images/default", trackId);
+            var method = string.Format("tracks/{0}/images/default", trackId);
 
-            Uri response = await GetResourceImageUri(method, size);
+            var response = await GetResourceImageUri(method, size);
 
             return response;
         }
@@ -81,7 +81,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
                     ParamValueAttributeHelper.GetParamValueOfEnumAttribute<ImageSize>(size))
             };
 
-            Uri response =
+            var response =
                 await
                     BeatsMusicManager.GetDataUri(method, dataParams, false);
             return response;

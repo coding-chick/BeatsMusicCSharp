@@ -109,13 +109,13 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         public string UriAddressToNavigateForPermissions(ResponseType responseType)
         {
             _authorization.ResponseType = responseType;
-            List<KeyValuePair<string, string>> authParams = _authorization.CreateAuthorizatioUriParams(responseType);
+            var authParams = _authorization.CreateAuthorizatioUriParams(responseType);
             return BaseApiAddress + _authorization.AuthorizatioUri + HttpUtilityHelper.ToQueryString(authParams);
         }
 
         private async Task<HttpContent> CallGetAsync(string method, List<KeyValuePair<string, string>> queryParams)
         {
-            string finalAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, queryParams);
+            var finalAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, queryParams);
             var result = await _clientAccessor.GetAsync(finalAddress);
             return result;
         }
@@ -123,7 +123,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         private async Task<HttpResponseHeaders> CallHeadAsync(string method,
             List<KeyValuePair<string, string>> queryParams)
         {
-            string finalAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, queryParams);
+            var finalAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, queryParams);
             var result = await _clientAccessor.HeadAsync(finalAddress);
             return result;
         }
@@ -144,11 +144,11 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
 
         private async Task<bool> RenewReadWriteAccessToken()
         {
-            string requestTokenUri = BaseApiAddress + _authorization.TokenUri;
+            var requestTokenUri = BaseApiAddress + _authorization.TokenUri;
             var requestParams =
              _authorization.GetAuthorizationTokenParams();
 
-            HttpContent response =
+            var response =
                 await _clientAccessor.PostAsync(requestTokenUri, new FormUrlEncodedContent(requestParams));
 
             return await _authorization.ParseAccessToken(response);
