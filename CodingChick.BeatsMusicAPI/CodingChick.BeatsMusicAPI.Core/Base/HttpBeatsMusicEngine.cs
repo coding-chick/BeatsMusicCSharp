@@ -39,7 +39,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         {
             queryParams.Add(new KeyValuePair<string, string>("client_id", _authorization.ClientId));
 
-            var result = await CallGetAsync(method, queryParams);
+            var result = await GetAsync(method, queryParams);
 
             return result;
         }
@@ -48,28 +48,28 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         {
             await AddAccessTokenToCall(queryParams);
 
-            var result = await CallGetAsync(method, queryParams);
+            var result = await GetAsync(method, queryParams);
 
             return result;
         }
 
-        public async Task<HttpResponseHeaders> HeadAsyncWithNoToken(string method,
+        public async Task<HttpResponseHeaders> GetHeaderAsyncWithNoToken(string method,
             List<KeyValuePair<string, string>> queryParams)
         {
             queryParams.Add(new KeyValuePair<string, string>("client_id", _authorization.ClientId));
 
-            var result = await CallHeadAsync(method, queryParams);
+            var result = await GetHeaderAsync(method, queryParams);
 
             return result;
 
         }
 
-        public async Task<HttpResponseHeaders> HeadAsyncWithToken(string method,
+        public async Task<HttpResponseHeaders> GetHeadAsyncWithToken(string method,
         List<KeyValuePair<string, string>> queryParams)
         {
             await AddAccessTokenToCall(queryParams);
 
-            var result = await CallHeadAsync(method, queryParams);
+            var result = await GetHeaderAsync(method, queryParams);
 
             return result;
 
@@ -113,18 +113,18 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             return BaseApiAddress + _authorization.AuthorizatioUri + HttpUtilityHelper.ToQueryString(authParams);
         }
 
-        private async Task<HttpContent> CallGetAsync(string method, List<KeyValuePair<string, string>> queryParams)
+        private async Task<HttpContent> GetAsync(string method, List<KeyValuePair<string, string>> queryParams)
         {
             var finalAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, queryParams);
             var result = await _clientAccessor.GetAsync(finalAddress);
             return result;
         }
 
-        private async Task<HttpResponseHeaders> CallHeadAsync(string method,
+        private async Task<HttpResponseHeaders> GetHeaderAsync(string method,
             List<KeyValuePair<string, string>> queryParams)
         {
             var finalAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, queryParams);
-            var result = await _clientAccessor.HeadAsync(finalAddress);
+            var result = await _clientAccessor.GetHeaderAsync(finalAddress);
             return result;
         }
 

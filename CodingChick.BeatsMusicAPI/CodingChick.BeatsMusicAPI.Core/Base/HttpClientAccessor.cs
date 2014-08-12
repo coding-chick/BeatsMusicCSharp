@@ -50,7 +50,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             return response.Content;
         }
 
-        public async Task<HttpResponseHeaders> HeadAsync(string finalAddress)
+        public async Task<HttpResponseHeaders> GetHeaderAsync(string finalAddress)
         {
             //Would rather make this a true Head call, but the method isn't allowed so I am faking it
             var request = new HttpRequestMessage(HttpMethod.Get, new Uri(finalAddress, UriKind.Absolute));
@@ -86,32 +86,6 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
                 throw;
             }
         }
-
-        public async Task<HttpContent> GetWithHeaderAsync(string address,
-            IDictionary<string, IEnumerable<string>> headers)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, new Uri(address, UriKind.Absolute));
-            foreach (var httpRequestHeader in headers)
-            {
-                request.Headers.Add(httpRequestHeader.Key, httpRequestHeader.Value);
-            }
-
-            var response = await _httpClient.SendAsync(request);
-            return response.Content;
-        }
-
-        public async Task<HttpContent> GetHeaderAsync(string address, IDictionary<string, IEnumerable<string>> headers)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, new Uri(address, UriKind.Absolute));
-            foreach (var httpRequestHeader in headers)
-            {
-                request.Headers.Add(httpRequestHeader.Key, httpRequestHeader.Value);
-            }
-
-            var response =
-                await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-            return response.Content;
-        }y
 
         private static void AddHeadersToContent(HttpContent content, string charSet, string mediaType)
         {

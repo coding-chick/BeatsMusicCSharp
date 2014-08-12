@@ -13,15 +13,11 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         Task<HttpContent> PostAsync(string address, HttpContent content,
                                     string charSet = "",
                                     string mediaType = "");
-
-        Task<HttpContent> GetWithHeaderAsync(string address, IDictionary<string, IEnumerable<string>> headers);
-        Task<HttpContent> GetHeaderAsync(string address, IDictionary<string, IEnumerable<string>> headers);
         Task<HttpContent> PutAsync(string address, HttpContent content, string charSet = "",
                                     string mediaType = "");
-
         Task<HttpContent> DeleteAsync(string address);
         Task<HttpContent> DeleteAsync(string address, IDictionary<string, IEnumerable<string>> headers);
-        Task<HttpResponseHeaders> HeadAsync(string finalAddress);
+        Task<HttpResponseHeaders> GetHeaderAsync(string finalAddress);
     }
 
 

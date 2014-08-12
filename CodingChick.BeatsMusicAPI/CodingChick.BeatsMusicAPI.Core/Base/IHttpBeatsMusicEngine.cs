@@ -19,10 +19,10 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
 
         Task<HttpContent> DeleteAsync(string method, List<KeyValuePair<string, string>> dataParams);
 
-        Task<HttpResponseHeaders> HeadAsyncWithNoToken(string method,
+        Task<HttpResponseHeaders> GetHeaderAsyncWithNoToken(string method,
             List<KeyValuePair<string, string>> queryParams);
 
-        Task<HttpResponseHeaders> HeadAsyncWithToken(string method,
+        Task<HttpResponseHeaders> GetHeadAsyncWithToken(string method,
             List<KeyValuePair<string, string>> queryParams);
     }
 }

@@ -84,7 +84,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             bool useToken)
         {
             var dataResponse =
-                await _httpBeatsMusicEngine.HeadAsyncWithNoToken(methodName, methodParams);
+                await _httpBeatsMusicEngine.GetHeaderAsyncWithNoToken(methodName, methodParams);
             return dataResponse.Location;
         }
 
