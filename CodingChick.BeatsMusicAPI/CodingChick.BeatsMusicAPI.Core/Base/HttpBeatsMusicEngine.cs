@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
@@ -38,7 +39,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         {
             queryParams.Add(new KeyValuePair<string, string>("client_id", _authorization.ClientId));
 
-            var result = await CallGetAsync(method, queryParams);
+            var result = await GetAsync(method, queryParams);
 
             return result;
         }
@@ -47,9 +48,31 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         {
             await AddAccessTokenToCall(queryParams);
 
-            var result = await CallGetAsync(method, queryParams);
+            var result = await GetAsync(method, queryParams);
 
             return result;
+        }
+
+        public async Task<HttpResponseHeaders> GetHeaderAsyncWithNoToken(string method,
+            List<KeyValuePair<string, string>> queryParams)
+        {
+            queryParams.Add(new KeyValuePair<string, string>("client_id", _authorization.ClientId));
+
+            var result = await GetHeaderAsync(method, queryParams);
+
+            return result;
+
+        }
+
+        public async Task<HttpResponseHeaders> GetHeadAsyncWithToken(string method,
+        List<KeyValuePair<string, string>> queryParams)
+        {
+            await AddAccessTokenToCall(queryParams);
+
+            var result = await GetHeaderAsync(method, queryParams);
+
+            return result;
+
         }
 
         public async Task<HttpContent> PostAsync(string method, List<KeyValuePair<string, string>> dataParams)
@@ -86,14 +109,22 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
         public string UriAddressToNavigateForPermissions(ResponseType responseType)
         {
             _authorization.ResponseType = responseType;
-            List<KeyValuePair<string, string>> authParams = _authorization.CreateAuthorizatioUriParams(responseType);
+            var authParams = _authorization.CreateAuthorizatioUriParams(responseType);
             return BaseApiAddress + _authorization.AuthorizatioUri + HttpUtilityHelper.ToQueryString(authParams);
         }
 
-        private async Task<HttpContent> CallGetAsync(string method, List<KeyValuePair<string, string>> queryParams)
+        private async Task<HttpContent> GetAsync(string method, List<KeyValuePair<string, string>> queryParams)
         {
-            string finalAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, queryParams);
+            var finalAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, queryParams);
             var result = await _clientAccessor.GetAsync(finalAddress);
+            return result;
+        }
+
+        private async Task<HttpResponseHeaders> GetHeaderAsync(string method,
+            List<KeyValuePair<string, string>> queryParams)
+        {
+            var finalAddress = HttpUtilityHelper.CreateFullAddess(MethodsApiAddress, method, queryParams);
+            var result = await _clientAccessor.GetHeaderAsync(finalAddress);
             return result;
         }
 
@@ -113,11 +144,11 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
 
         private async Task<bool> RenewReadWriteAccessToken()
         {
-            string requestTokenUri = BaseApiAddress + _authorization.TokenUri;
+            var requestTokenUri = BaseApiAddress + _authorization.TokenUri;
             var requestParams =
              _authorization.GetAuthorizationTokenParams();
 
-            HttpContent response =
+            var response =
                 await _clientAccessor.PostAsync(requestTokenUri, new FormUrlEncodedContent(requestParams));
 
             return await _authorization.ParseAccessToken(response);

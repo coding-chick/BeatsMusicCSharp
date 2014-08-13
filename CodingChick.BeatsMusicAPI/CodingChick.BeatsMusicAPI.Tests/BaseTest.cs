@@ -18,7 +18,7 @@ namespace CodingChick.BeatsMusicAPI.Tests
         //private const string Code = @"<to run unit tests you must supply a valid token every 60 minutes>";
         const string ClientId = "";
         const string ClientSecret = "";
-        const string RedirectUrl = @"http://codingchick.net";
+        const string RedirectUrl = @"";
         private const string Code = "";
         private const string Token = "";
      

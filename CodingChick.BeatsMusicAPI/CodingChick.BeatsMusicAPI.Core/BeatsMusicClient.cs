@@ -1,25 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using CodingChick.BeatsMusicAPI.Core.Base;
+using CodingChick.BeatsMusicAPI.Core.Data;
+using CodingChick.BeatsMusicAPI.Core.Data.Me;
 using CodingChick.BeatsMusicAPI.Core.Endpoints;
 using CodingChick.BeatsMusicAPI.Core.Endpoints.Enums;
 using CodingChick.BeatsMusicAPI.Core.Helpers;
 
 [assembly: InternalsVisibleTo("CodingChick.BeatsMusicAPI.Tests")]
+
 namespace CodingChick.BeatsMusicAPI.Core
 {
     public class BeatsMusicClient
     {
-        private Authorization _authorization;
-        private IHttpBeatsMusicEngine _httpBeatsMusicEngine;
-        private BeatsMusicManager _beatsMusicManager;
+        private readonly Lazy<AlbumsEndpoint> _albums;
+        private readonly Lazy<ArtistsEndpoint> _artists;
+        private readonly Lazy<AudioEndpoint> _audio;
+        private readonly Authorization _authorization;
+        private readonly BeatsMusicManager _beatsMusicManager;
+        private readonly Lazy<FollowEndpoint> _follow;
+        private readonly Lazy<GenreEndpoint> _genre;
+        private readonly Lazy<HighlightsEndpoint> _highlights;
+        private readonly IHttpBeatsMusicEngine _httpBeatsMusicEngine;
+        private readonly Lazy<ImagesEndpoint> _images;
+        private readonly Lazy<MeEndpoint> _me;
+        private readonly Lazy<PlaylistsEndpoint> _playlists;
+        private readonly Lazy<RatingsEndpoint> _ratings;
+        private readonly Lazy<SearchEndpoint> _search;
+        private readonly Lazy<TracksEndpoint> _tracks;
 
         /// <summary>
-        /// Initializes a new instance of <see cref="BeatsMusicClient"/> for read-only operations. 
+        ///     Initializes a new instance of <see cref="BeatsMusicClient" /> for read-only operations.
         /// </summary>
         /// <param name="clientId">Beats Music API client ID.</param>
         /// <param name="redirectUri">Beats Music Redirect Uri.</param>
@@ -28,6 +40,7 @@ namespace CodingChick.BeatsMusicAPI.Core
             _authorization = new Authorization(redirectUri, clientId);
 
             _httpBeatsMusicEngine = new HttpBeatsMusicEngine(new HttpClientAccessor(), _authorization);
+
             _beatsMusicManager = new BeatsMusicManager(_httpBeatsMusicEngine, new JsonBeatsMusicEngine());
             _search = new Lazy<SearchEndpoint>(() => new SearchEndpoint(_beatsMusicManager));
             _playlists = new Lazy<PlaylistsEndpoint>(() => new PlaylistsEndpoint(_beatsMusicManager));
@@ -37,11 +50,14 @@ namespace CodingChick.BeatsMusicAPI.Core
             _follow = new Lazy<FollowEndpoint>(() => new FollowEndpoint(_beatsMusicManager));
             _genre = new Lazy<GenreEndpoint>(() => new GenreEndpoint(_beatsMusicManager));
             _audio = new Lazy<AudioEndpoint>(() => new AudioEndpoint(_beatsMusicManager));
+            _ratings = new Lazy<RatingsEndpoint>(()=> new RatingsEndpoint(_beatsMusicManager));
             _me = new Lazy<MeEndpoint>(() => new MeEndpoint(_beatsMusicManager));
+            _images = new Lazy<ImagesEndpoint>(() => new ImagesEndpoint(_beatsMusicManager));
+            _tracks = new Lazy<TracksEndpoint>(() => new TracksEndpoint(_beatsMusicManager));
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="BeatsMusicClient"/> for read-write and user specific operations. 
+        ///     Initializes a new instance of <see cref="BeatsMusicClient" /> for read-write and user specific operations.
         /// </summary>
         /// <param name="clientId">Beats Music API client ID.</param>
         /// <param name="redirectUri">Beats Music API Redirect Uri.</param>
@@ -51,18 +67,6 @@ namespace CodingChick.BeatsMusicAPI.Core
         {
             _authorization.ClientSecret = clientSecret;
         }
-
-
-        private Lazy<SearchEndpoint> _search;
-
-        private Lazy<PlaylistsEndpoint> _playlists;
-        private Lazy<AlbumsEndpoint> _albums;
-        private Lazy<ArtistsEndpoint> _artists;
-        private Lazy<HighlightsEndpoint> _highlights;
-        private Lazy<FollowEndpoint> _follow;
-        private Lazy<GenreEndpoint> _genre;
-        private Lazy<AudioEndpoint> _audio;
-        private Lazy<MeEndpoint> _me;
 
         public MeEndpoint Me
         {
@@ -104,7 +108,20 @@ namespace CodingChick.BeatsMusicAPI.Core
             get { return _playlists.Value; }
         }
 
+        public RatingsEndpoint Ratings
+        {
+            get { return _ratings.Value; }
+        }
 
+        public ImagesEndpoint Images
+        {
+            get { return _images.Value; }
+        }
+
+        public TracksEndpoint Tracks
+        {
+            get { return _tracks.Value; }
+        }
 
         public string ServerCode
         {
@@ -117,14 +134,41 @@ namespace CodingChick.BeatsMusicAPI.Core
             get { return _artists.Value; }
         }
 
+        public string ClientId
+        {
+            get { return _authorization.ClientId; }
+        }
+
+        public string AccessToken
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_authorization.ReadOnlyAccessToken))
+                    return _authorization.ReadOnlyAccessToken;
+                return _authorization.ReadWriteAccessToken;
+            }
+        }
+
+        #region Internal
+
+        internal string ReadWriteAccessToken
+        {
+            get { return _authorization.ReadWriteAccessToken; }
+            set { _authorization.ReadWriteAccessToken = value; }
+        }
+
+        internal void SetExpiresAt(int seconds)
+        {
+            _authorization.SetExpiresAt(seconds);
+        }
+
+        #endregion
+
         public string UriAddressToNavigateForPermissions()
         {
             if (_authorization.ClientSecret == null)
                 return _httpBeatsMusicEngine.UriAddressToNavigateForPermissions(ResponseType.Token);
-            else
-            {
-                return _httpBeatsMusicEngine.UriAddressToNavigateForPermissions(ResponseType.Code);
-            }
+            return _httpBeatsMusicEngine.UriAddressToNavigateForPermissions(ResponseType.Code);
         }
 
         public void SetClientAccessTokenFromRedirectUri(string accessToken, int expiresAt)
@@ -137,7 +181,7 @@ namespace CodingChick.BeatsMusicAPI.Core
         {
             var user = await Me.GetMeInfo();
             var helper = new FileHelper();
-            string fileContents = helper.GetResourceTextFile("PlayerCode.html");
+            var fileContents = helper.GetResourceTextFile("PlayerCode.html");
             fileContents = fileContents.Replace("myClientId", _authorization.ClientId);
             fileContents = fileContents.Replace("myAccessToken", AccessToken);
             fileContents = fileContents.Replace("myUserId", user.Data.UserContext);
@@ -145,29 +189,6 @@ namespace CodingChick.BeatsMusicAPI.Core
             return fileContents;
         }
 
-        public string ClientId { get { return _authorization.ClientId; } }
-        public string AccessToken {
-            get
-            {
-                if (!string.IsNullOrEmpty(_authorization.ReadOnlyAccessToken))
-                    return _authorization.ReadOnlyAccessToken;
-                else
-                    return _authorization.ReadWriteAccessToken;
-            } 
-        }
-
         //Internal properties exposed for testing purposes only.
-        #region Internal
-        internal string ReadWriteAccessToken
-        {
-            get { return _authorization.ReadWriteAccessToken; }
-            set { _authorization.ReadWriteAccessToken = value; }
-        }
-
-        internal void SetExpiresAt(int seconds)
-        {
-            _authorization.SetExpiresAt(seconds);
-        }
-        #endregion
     }
 }

@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CodingChick.BeatsMusicAPI.Core.Data;
 using CodingChick.BeatsMusicAPI.Core.Data.Me;
-using CodingChick.BeatsMusicAPI.Core.Data.Playlists;
 using Newtonsoft.Json;
 
 namespace CodingChick.BeatsMusicAPI.Core.Base
@@ -18,12 +16,66 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             _httpBeatsMusicEngine = httpBeatsMusicEngine;
         }
 
-        public async Task<MultipleRootObject<T>> GetMultipleParsedResult<T>(string methodName, List<KeyValuePair<string, string>> methodParams, bool useToken = false)
+        public async Task<MultipleRootObject<T>> GetMultipleParsedResult<T>(string methodName,
+            List<KeyValuePair<string, string>> methodParams, bool useToken = false)
         {
-            var dataResponse = await GetDataResponse(methodName, methodParams, useToken);
+            string dataResponse = await GetDataResponse(methodName, methodParams, useToken);
 
-            var parsedDataResponse = ParsedMultipleDataResponse<T>(dataResponse);
+            MultipleRootObject<T> parsedDataResponse = ParsedMultipleDataResponse<T>(dataResponse);
             return parsedDataResponse;
+        }
+
+        public async Task<SingleRootObject<T>> GetSingleParsedResult<T>(string methodName,
+            List<KeyValuePair<string, string>> methodParams, bool useToken = false)
+        {
+            string dataResponse = await GetDataResponse(methodName, methodParams, useToken);
+
+            // This is a very annoying fix to make sure API calls are consistent and all return "data", and since "me" api is different in returning "result" I made sure all return the same.
+            if (typeof (T) == typeof (MeData))
+            {
+                dataResponse = dataResponse.Replace("result", "data");
+            }
+
+            SingleRootObject<T> parsedDataResponse = ParsedSingleDataResponse<T>(dataResponse);
+
+            return parsedDataResponse;
+        }
+
+        public async Task<SingleRootObject<T>> PostData<T>(string methodName,
+            List<KeyValuePair<string, string>> dataParams)
+        {
+            if (dataParams == null)
+                dataParams = new List<KeyValuePair<string, string>>();
+
+            HttpContent httpResponse = await _httpBeatsMusicEngine.PostAsync(methodName, dataParams);
+            string dataResponse = await httpResponse.ReadAsStringAsync();
+
+            return ParsedSingleDataResponse<T>(dataResponse);
+        }
+
+        public async Task<SingleRootObject<T>> PutData<T>(string methodName,
+            List<KeyValuePair<string, string>> dataParams, bool addCredentials = true)
+        {
+            if (dataParams == null)
+                dataParams = new List<KeyValuePair<string, string>>();
+
+            HttpContent httpResponse = await _httpBeatsMusicEngine.PutAsync(methodName, dataParams, addCredentials);
+            string dataResponse = await httpResponse.ReadAsStringAsync();
+
+            return ParsedSingleDataResponse<T>(dataResponse);
+        }
+
+        public async Task<bool> DeleteData(string methodName, List<KeyValuePair<string, string>> dataParams)
+        {
+            if (dataParams == null)
+                dataParams = new List<KeyValuePair<string, string>>();
+
+            HttpContent httpResponse = await _httpBeatsMusicEngine.DeleteAsync(methodName, dataParams);
+            string dataResponse = await httpResponse.ReadAsStringAsync();
+
+            if (dataResponse.ToLower().Contains("ok"))
+                return true;
+            return false;
         }
 
         private MultipleRootObject<T> ParsedMultipleDataResponse<T>(string dataResponse)
@@ -32,27 +84,13 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             return parsedDataResponse;
         }
 
-        public async Task<MultipleRootObject<T>> GetMultipleParsedResultWithConverter<T>(string methodName, List<KeyValuePair<string, string>> methodParams, bool useToken = false)
+        public async Task<MultipleRootObject<T>> GetMultipleParsedResultWithConverter<T>(string methodName,
+            List<KeyValuePair<string, string>> methodParams, bool useToken = false)
         {
-            var dataResponse = await GetDataResponse(methodName, methodParams, useToken);
+            string dataResponse = await GetDataResponse(methodName, methodParams, useToken);
 
             var parsedDataResponse = JsonConvert.DeserializeObject<MultipleRootObject<T>>(dataResponse,
-               new BaseDataConverter());
-
-            return parsedDataResponse;
-        }
-
-        public async Task<SingleRootObject<T>> GetSingleParsedResult<T>(string methodName, List<KeyValuePair<string, string>> methodParams, bool useToken = false)
-        {
-            var dataResponse = await GetDataResponse(methodName, methodParams, useToken);
-
-            // This is a very annoying fix to make sure API calls are consistent and all return "data", and since "me" api is different in returning "result" I made sure all return the same.
-            if (typeof (T) == typeof (MeData))
-            {
-                dataResponse = dataResponse.Replace("result", "data");
-            }
-
-            var parsedDataResponse = ParsedSingleDataResponse<T>(dataResponse);
+                new BaseDataConverter());
 
             return parsedDataResponse;
         }
@@ -63,7 +101,8 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             return parsedDataResponse;
         }
 
-        private async Task<string> GetDataResponse(string methodName, List<KeyValuePair<string, string>> methodParams, bool useToken = false)
+        private async Task<string> GetDataResponse(string methodName, List<KeyValuePair<string, string>> methodParams,
+            bool useToken = false)
         {
             if (methodParams == null)
                 methodParams = new List<KeyValuePair<string, string>>();
@@ -74,46 +113,22 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
             else
                 contentResult = await _httpBeatsMusicEngine.GetAsyncNoToken(methodName, methodParams);
 
-            var dataResponse = await contentResult.ReadAsStringAsync();
+            string dataResponse = await contentResult.ReadAsStringAsync();
             return dataResponse;
         }
 
 
-        public async Task<SingleRootObject<T>> PostData<T>(string methodName, List<KeyValuePair<string, string>> dataParams)
+        public async Task<bool> PostData(string methodName, List<KeyValuePair<string, string>> dataParams)
         {
             if (dataParams == null)
                 dataParams = new List<KeyValuePair<string, string>>();
 
-            var httpResponse = await _httpBeatsMusicEngine.PostAsync(methodName, dataParams);
-            var dataResponse = await httpResponse.ReadAsStringAsync();
-
-            return ParsedSingleDataResponse<T>(dataResponse);
-        }
-
-        public async Task<SingleRootObject<T>> PutData<T>(string methodName, List<KeyValuePair<string, string>> dataParams, bool addCredentials = true)
-        {
-            if (dataParams == null)
-                dataParams = new List<KeyValuePair<string, string>>();
-
-            var httpResponse = await _httpBeatsMusicEngine.PutAsync(methodName, dataParams, addCredentials);
-            var dataResponse = await httpResponse.ReadAsStringAsync();
-
-            return ParsedSingleDataResponse<T>(dataResponse);
-        }
-
-        public async Task<bool> DeleteData(string methodName, List<KeyValuePair<string, string>> dataParams)
-        {
-            if (dataParams == null)
-                dataParams = new List<KeyValuePair<string, string>>();
-
-            var httpResponse = await _httpBeatsMusicEngine.DeleteAsync(methodName, dataParams);
-            var dataResponse = await httpResponse.ReadAsStringAsync();
+            HttpContent httpResponse = await _httpBeatsMusicEngine.PostAsync(methodName, dataParams);
+            string dataResponse = await httpResponse.ReadAsStringAsync();
 
             if (dataResponse.ToLower().Contains("ok"))
                 return true;
             return false;
         }
-
-       
     }
 }
