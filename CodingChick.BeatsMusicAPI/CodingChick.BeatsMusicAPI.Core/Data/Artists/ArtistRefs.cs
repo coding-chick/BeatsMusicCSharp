@@ -4,6 +4,6 @@ namespace CodingChick.BeatsMusicAPI.Core.Data.Artists
 {
     public class ArtistRefs
     {
-        public List<object> similars { get; set; }
+        public List<ArtistData> Similars { get; set; }
     }
 }

@@ -29,7 +29,9 @@ namespace CodingChick.BeatsMusicAPI.Tests
         [Test]
         public async void GetAudioStreamingInfoTest()
         {
-            SingleRootObject<AudioData> result = await Client.Audio.GetAudioStreamingInfo("tr61032803", Bitrate.Highest, true);
+            SingleRootObject<AudioData> result = await Client.Audio.GetAudioStreamingInfo("tr61032803", Bitrate.Highest, false);
+            base.AssertResponseIsOK(result); 
+            Assert.IsTrue(result.Data.Refs.Track.Id == "tr61032803"); 
 
         }
     }

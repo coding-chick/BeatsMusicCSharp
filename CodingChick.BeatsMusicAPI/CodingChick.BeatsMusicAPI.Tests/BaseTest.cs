@@ -11,16 +11,11 @@ namespace CodingChick.BeatsMusicAPI.Tests
     public class BaseTest
     {
 
-        //private const string ClientId = "<your beats music client ID here>";
-        //private const string ClientSecret = "<your beats music client secret here> ";
-        //private const string RedirectUrl = @"<your beats music redirect uri here> ";
-        //private const string Token = @"<to run unit tests you must supply a valid token every 60 minutes>";
-        //private const string Code = @"<to run unit tests you must supply a valid token every 60 minutes>";
-        const string ClientId = "";
-        const string ClientSecret = "";
-        const string RedirectUrl = @"";
-        private const string Code = "";
-        private const string Token = "";
+        private const string ClientId = "<your beats music client ID here>";
+        private const string ClientSecret = "<your beats music client secret here> ";
+        private const string RedirectUrl = @"<your beats music redirect uri here> ";
+        private const string Token = @"<to run unit tests you must supply a valid token every 60 minutes>";
+        private const string Code = @"<to run unit tests you must supply a valid token every 60 minutes>";
      
         private BeatsMusicClient _client;
         public BeatsMusicClient Client { get { return _client; }}

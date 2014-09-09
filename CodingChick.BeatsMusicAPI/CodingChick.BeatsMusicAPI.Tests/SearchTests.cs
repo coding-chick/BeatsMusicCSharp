@@ -20,7 +20,7 @@ namespace CodingChick.BeatsMusicAPI.Tests
         [Test]
         public async void SearchByAlbum()
         {
-            var result = await Client.Search.SearchByAlbum(AlbumName);
+            MultipleRootObject<SearchData> result = await Client.Search.SearchByAlbum(AlbumName);
 
             AssertResponseIsOK(result);
             AssertCollectionHasItems(result.Data);

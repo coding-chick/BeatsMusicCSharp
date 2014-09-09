@@ -1,3 +1,4 @@
+using CodingChick.BeatsMusicAPI.Core.Base.JsonHelpers;
 using CodingChick.BeatsMusicAPI.Core.Data;
 using CodingChick.BeatsMusicAPI.Core.Data.Me;
 using Newtonsoft.Json;
@@ -8,14 +9,13 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
     {
         public MultipleRootObject<T> ParseMultipleDataResponse<T>(string dataResponse)
         {
-            var parsedDataResponse = JsonConvert.DeserializeObject<MultipleRootObject<T>>(dataResponse);
+            var parsedDataResponse = JsonConvert.DeserializeObject<MultipleRootObject<T>>(dataResponse, new JsonSerializerSettings() { ContractResolver = new UnderscoreResolver() });
             return parsedDataResponse;
         }
 
         public MultipleRootObject<T> ParseMultipleDataResponseWithConverter<T>(string dataResponse)
         {
-            var parsedDataResponse = JsonConvert.DeserializeObject<MultipleRootObject<T>>(dataResponse,
-                new BaseDataConverter());
+            var parsedDataResponse = JsonConvert.DeserializeObject<MultipleRootObject<T>>(dataResponse, new JsonSerializerSettings() { ContractResolver = new UnderscoreResolver(), Converters = new[] { new BaseDataConverter() } });
             return parsedDataResponse;
         }
 
@@ -28,7 +28,7 @@ namespace CodingChick.BeatsMusicAPI.Core.Base
                 dataResponse = dataResponse.Replace("result", "data");
             }
 
-            var parsedDataResponse = JsonConvert.DeserializeObject<SingleRootObject<T>>(dataResponse);
+            var parsedDataResponse = JsonConvert.DeserializeObject<SingleRootObject<T>>(dataResponse, new JsonSerializerSettings() { ContractResolver = new UnderscoreResolver() });
             return parsedDataResponse;
         }
     }

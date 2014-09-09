@@ -1,10 +1,10 @@
 using System;
+using CodingChick.BeatsMusicAPI.Core.Data;
 using CodingChick.BeatsMusicAPI.Core.Data.Albums;
-using CodingChick.BeatsMusicAPI.Core.Data.Me;
 using CodingChick.BeatsMusicAPI.Core.Data.Playlists;
 using Newtonsoft.Json.Linq;
 
-namespace CodingChick.BeatsMusicAPI.Core.Data
+namespace CodingChick.BeatsMusicAPI.Core.Base.JsonHelpers
 {
     public class BaseDataConverter : JsonCreationConverter<BaseConvertedData>
     {

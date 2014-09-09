@@ -10,7 +10,7 @@ namespace CodingChick.BeatsMusicAPI.Tests
         [Test]
         public async void RetrieveRatings()
         {
-            var result = await Client.Ratings.GetAllRatings("195706866226036992");
+            var result = await Client.Ratings.GetAllRatings("154708885926576640");
 
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Data);

@@ -1,9 +1,8 @@
 using System;
-using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace CodingChick.BeatsMusicAPI.Core.Data
+namespace CodingChick.BeatsMusicAPI.Core.Base.JsonHelpers
 {
     public abstract class JsonCreationConverter<T> : JsonConverter
     {
