@@ -67,6 +67,23 @@ namespace CodingChick.BeatsMusicAPI.Core.Endpoints
             return response;
         }
 
+        /// <summary>
+        ///     Gets the Uri to the playlist's image at the given size
+        /// </summary>
+        /// <param name="playlistId">Id representing the playlist with the desired image</param>
+        /// <param name="size">Size of the image desired</param>
+        /// <returns>Uri to the playlist's image at the given size</returns>
+        public async Task<Uri> GetPlaylistImageUri(string playlistId, ImageSize size = ImageSize.Medium)
+        {
+            ValidateResourceId(playlistId);
+
+            var method = string.Format("playlists/{0}/images/default", playlistId);
+
+            var response = await GetResourceImageUri(method, size);
+
+            return response;
+        }
+
         private static void ValidateResourceId(string resourceId)
         {
             Contract.Requires<ArgumentNullException>(!string.IsNullOrWhiteSpace(resourceId),
