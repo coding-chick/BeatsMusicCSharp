@@ -26,5 +26,12 @@ namespace CodingChick.BeatsMusicAPI.Tests
             var imageUri = await Client.Images.GetTrackImageUri("tr82071543", ImageSize.Large);
             Assert.IsNotNull(imageUri);
         }
+
+        [Test]
+        public async void GetPlaylistImage()
+        {
+            var imageUri = await Client.Images.GetPlaylistImageUri("pl266636933575344128", ImageSize.Large);
+            Assert.IsNotNull(imageUri);
+        }
     }
 }
